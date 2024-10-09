@@ -1,0 +1,125 @@
+{
+  "usuarios": [
+    {
+      "_id": { "$oid": "OBJECT_ID" },
+      "nombre": "String",
+      "rol": "String",
+      "email": "String",
+      "contraseña": "String",
+      "foto_perfil": { "$oid": "OBJECT_ID" },
+      "lineas_investigacion": ["String"],
+      "creado_en": { "$date": "DATE" },
+      "actualizado_en": { "$date": "DATE" },
+      "token_jwt": "String"
+    }
+  ],
+  "practicas_investigacion": [
+    {
+      "_id": { "$oid": "OBJECT_ID" },
+      "titulo": "String",
+      "estudiante_responsable": {
+        "nombre": "String",
+        "email": "String"
+      },
+      "profesores_responsables": ["String"],
+      "descripcion": "String",
+      "enlace_proyecto": "String",
+      "documentos_adjuntos": [
+        {
+          "nombre": "String",
+          "tipo": "String",
+          "archivo": { "$oid": "OBJECT_ID" }
+        }
+      ],
+      "creado_en": { "$date": "DATE" },
+      "actualizado_en": { "$date": "DATE" },
+      "creado_por": { "$oid": "OBJECT_ID" },
+      "permiso": "String"
+    }
+  ],
+  "trabajos_grado": [
+    {
+      "_id": { "$oid": "OBJECT_ID" },
+      "titulo": "String",
+      "estudiantes": ["String"],
+      "directores": ["String"],
+      "mencion": "String",
+      "descripcion": "String",
+      "enlace_proyecto": "String",
+      "documentos_adjuntos": [
+        {
+          "nombre": "String",
+          "tipo": "String",
+          "archivo": { "$oid": "OBJECT_ID" }
+        }
+      ],
+      "creado_en": { "$date": "DATE" },
+      "actualizado_en": { "$date": "DATE" },
+      "creado_por": { "$oid": "OBJECT_ID" },
+      "permiso": "String"
+    }
+  ],
+  "proyectos_investigacion": [
+    {
+      "_id": { "$oid": "OBJECT_ID" },
+      "titulo": "String",
+      "objetivos": ["String"],
+      "resultados": ["String"],
+      "produccion_academica": ["String"],
+      "directores": [
+        {
+          "nombre": "String",
+          "foto": { "$oid": "OBJECT_ID" },
+          "enlace_cv": "String"
+        }
+      ],
+      "profesionales": ["String"],
+      "estudiantes": ["String"],
+      "fecha_inicio": { "$date": "DATE" },
+      "fecha_fin": { "$date": "DATE" },
+      "documentos_adjuntos": [
+        {
+          "nombre": "String",
+          "tipo": "String",
+          "archivo": { "$oid": "OBJECT_ID" }
+        }
+      ],
+      "creado_en": { "$date": "DATE" },
+      "actualizado_en": { "$date": "DATE" },
+      "creado_por": { "$oid": "OBJECT_ID" },
+      "permiso": "String"
+    }
+  ],
+  "miembros_grupo": [
+    {
+      "_id": { "$oid": "OBJECT_ID" },
+      "nombre_completo": "String",
+      "lineas_investigacion": ["String"],
+      "foto": { "$oid": "OBJECT_ID" },
+      "enlace_cv": "String",
+      "creado_en": { "$date": "DATE" },
+      "actualizado_en": { "$date": "DATE" },
+      "creado_por": { "$oid": "OBJECT_ID" },
+      "permiso": "String"
+    }
+  ],
+  "convenios_alianzas": [
+    {
+      "_id": { "$oid": "OBJECT_ID" },
+      "institucion": "String",
+      "objetivos": ["String"],
+      "resultados": ["String"],
+      "enlace_institucion": "String",
+      "documentos_adjuntos": [
+        {
+          "nombre": "String",
+          "tipo": "String",
+          "archivo": { "$oid": "OBJECT_ID" }
+        }
+      ],
+      "creado_en": { "$date": "DATE" },
+      "actualizado_en": { "$date": "DATE" }
+    }
+  ]
+}
+
