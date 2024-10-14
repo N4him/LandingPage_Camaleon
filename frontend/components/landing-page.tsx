@@ -2,33 +2,53 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Slider from "react-slick";
+import logo from "@/app/images/logo.png"; 
+import { FaFacebookF, FaTwitter, FaYoutube } from 'react-icons/fa';
+import Tab from "@/components/ui/tab";
 
 const initialMembers = [
   {
     id: 1,
-    name: "John Doe",
-    role: "Lead Researcher",
+    name: "Deison Cardona",
+    role: "Scrum Master",
     image: "path/to/john_doe.jpg",
   },
   {
     id: 2,
-    name: "Jane Smith",
-    role: "Data Scientist",
+    name: "Santiago Gutierrez",
+    role: "Product Owner",
     image: "path/to/jane_smith.jpg",
   },
   {
     id: 3,
-    name: "Alice Johnson",
-    role: "Software Engineer",
+    name: "Esteban Hernadez",
+    role: "Developer Scrum",
     image: "path/to/alice_johnson.jpg",
   },
   {
     id: 4,
-    name: "Bob Brown",
-    role: "Product Manager",
+    name: "Brayan Urrea",
+    role: "Developer Scrum",
     image: "path/to/bob_brown.jpg",
   },
-  // Add more members as needed
+  {
+    id: 5,
+    name: "Santiago",
+    role: "Developer Scrum",
+    image: "path/to/bob_brown.jpg",
+  },
+  {
+    id: 6,
+    name: "Ervin Caravali",
+    role: "Developer Scrum",
+    image: "path/to/bob_brown.jpg",
+  },
+  {
+    id: 7,
+    name: "Miguel Moreno",
+    role: "Testing",
+    image: "path/to/bob_brown.jpg",
+  },
 ];
 
 export function LandingPageComponent() {
@@ -104,7 +124,7 @@ export function LandingPageComponent() {
             </button>
           </div>
         </section>
-
+        <Tab />
         <section className="py-12">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
@@ -156,7 +176,7 @@ export function LandingPageComponent() {
                           />
                           <h3 className="text-xl font-semibold">
                             <a
-                              href={member.name} // Using name as the URL link
+                              href={member.name} 
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-blue-600 underline"
@@ -178,11 +198,67 @@ export function LandingPageComponent() {
         </section>
       </main>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <p>&copy; 2024 Research Group. All rights reserved.</p>
+  <footer className="bg-[#d51b23] text-white py-8">
+    <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-start text-sm">
+      <div className="flex items-start md:w-1/4">
+        <img
+          src={logo}
+          alt="Logo Universidad del Valle"
+          className="w-20 mb-4 md:mb-0"
+        />
+      </div>
+      <div className="md:w-1/4 flex flex-col items-start space-y-1"> 
+        <p className="font-bold">UNIVERSIDAD DEL VALLE</p>
+        <p>Cali - Colombia</p>
+        <p>© 1994 - 2024</p>
+      </div>
+      <div className="md:w-1/4 flex flex-col items-start space-y-1">
+        <p className="font-bold">Dirección:</p>
+        <p>Ciudad Universitaria Meléndez</p>
+        <p>Calle 13 # 100-00</p>
+        <p className="font-bold">Sede San Fernando</p>
+        <p>Calle 4B N° 36-00</p>
+      </div>
+      <div className="md:w-1/4 flex flex-col items-start space-y-1"> 
+        <p className="font-bold">PBX:</p>
+        <p>+57 602 3212100</p>
+        <p className="font-bold">Línea gratuita PQRS:</p>
+        <p>018000 220021</p>
+        <p className="font-bold">Apartado Aéreo:</p>
+        <p>25360</p>
+      </div>
+      <div className="hidden md:block w-px bg-white h-20 mx-4"></div> 
+      <div className="md:w-1/4 flex flex-col items-start">
+        <p className="font-bold">Redes Sociales:</p>
+        <div className="flex space-x-3">
+          <a
+            href="https://www.facebook.com/universidaddelvalle" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white"
+          >
+            <FaFacebookF />
+          </a>
+          <a
+            href="https://x.com/univallecol?mx=2" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white"
+          >
+            <FaTwitter />
+          </a>
+          <a
+            href="https://www.youtube.com/user/universidaddelvalle1" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white"
+          >
+            <FaYoutube />
+          </a>
         </div>
-      </footer>
+      </div>
     </div>
+  </footer>
+  </div>
   );
 }
