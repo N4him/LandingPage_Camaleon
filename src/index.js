@@ -1,5 +1,4 @@
 import express from 'express';
-import db from './config.js';
 import practicasRoutes from './routes/practicas.js';
 import trabajosGradoRoutes from './routes/trabajosGrado.js';
 import proyectosInvestigacionRoutes from './routes/proyectosInvestigacion.js';
