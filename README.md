@@ -47,7 +47,7 @@ Esta API está diseñada para interactuar con una base de datos en Firebase Fire
 
 4. Inicia el servidor:
    ```bash
-   npm start
+   npm run dev
    ```
 
 El servidor estará disponible en `http://localhost:3000`.
