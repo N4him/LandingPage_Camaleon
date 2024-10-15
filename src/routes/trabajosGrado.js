@@ -1,7 +1,6 @@
 import express from 'express';
 import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
-import db from '../config.js';
-
+import { db } from '../config.js';
 const router = express.Router();
 
 // Rutas para "Trabajos de Grado"
