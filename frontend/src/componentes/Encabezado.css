@@ -1,0 +1,111 @@
+.encabezado {
+  background-color: var(--color-primario);
+  color: var(--color-secundario);
+  padding: 20px 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.encabezado.scrolled {
+  background-color: rgba(255, 51, 51, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
+}
+
+.encabezado-contenido {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.encabezado h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--color-secundario);
+}
+
+.menu-escritorio ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+}
+
+.menu-escritorio li {
+  margin-left: 20px;
+}
+
+.menu-escritorio a {
+  color: var(--color-secundario);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.menu-escritorio a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--color-secundario);
+  transition: width 0.3s ease;
+}
+
+.menu-escritorio a:hover::after {
+  width: 100%;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-secundario);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.menu-movil {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .menu-escritorio {
+    display: none;
+  }
+
+  .menu-movil {
+    display: block;
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background-color: var(--color-primario);
+    padding: 20px;
+  }
+
+  .menu-movil ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .menu-movil li {
+    margin: 20px 0;
+  }
+
+  .menu-movil a {
+    color: var(--color-secundario);
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}

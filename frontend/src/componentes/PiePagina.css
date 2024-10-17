@@ -1,0 +1,77 @@
+.pie-pagina {
+  background-color: var(--color-primario);
+  color: var(--color-secundario);
+  padding: 60px 0 20px;
+}
+
+.pie-contenido {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+}
+
+.pie-pagina h3, .pie-pagina h4 {
+  color: var(--color-secundario);
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.pie-pagina p {
+  margin: 10px 0;
+  font-size: 0.9rem;
+}
+
+.pie-pagina ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pie-pagina li {
+  margin-bottom: 10px;
+}
+
+.pie-pagina a {
+  color: var(--color-secundario);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.pie-pagina a:hover {
+  opacity: 0.8;
+}
+
+.iconos-redes {
+  display: flex;
+  gap: 15px;
+}
+
+.red-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.red-social:hover {
+  background-color: var(--color-secundario);
+  color: var(--color-primario);
+}
+
+.derechos {
+  margin-top: 40px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .pie-contenido {
+    grid-template-columns: 1fr;
+  }
+}

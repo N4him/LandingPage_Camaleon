@@ -1,0 +1,45 @@
+.practicas {
+  padding: 100px 0;
+  background-color: #f9f9f9;
+}
+
+.lista-practicas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.practica-item {
+  background-color: var(--color-secundario);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.practica-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.practica-item h3 {
+  color: var(--color-primario);
+  margin-top: 0;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.practica-item p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.practica-item strong {
+  color: var(--color-primario);
+}
+
+@media (max-width: 768px) {
+  .lista-practicas {
+    grid-template-columns: 1fr;
+  }
+}
