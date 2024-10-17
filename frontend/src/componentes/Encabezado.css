@@ -3,8 +3,9 @@
   color: var(--color-secundario);
   padding: 20px 0;
   position: fixed;
-  width: 100%;
+  width: 100vw; /* Asegura que cubra el ancho completo de la pantalla */
   top: 0;
+  left: 0;
   z-index: 1000;
   transition: all 0.3s ease;
 }
@@ -16,9 +17,12 @@
 }
 
 .encabezado-contenido {
+  max-width: 1200px; /* Define un ancho máximo para el contenido */
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px; /* Añade un pequeño margen lateral */
 }
 
 .encabezado h1 {
@@ -83,10 +87,12 @@
     position: fixed;
     top: 80px;
     left: 0;
-    width: 100%;
-    height: calc(100vh - 80px);
+    width: 100vw; /* Ocupa todo el ancho de la pantalla */
+    height: calc(100vh - 80px); /* Ocupa toda la altura restante */
     background-color: var(--color-primario);
     padding: 20px;
+    z-index: 999;
+    overflow-y: auto; /* Añade scroll si es necesario */
   }
 
   .menu-movil ul {

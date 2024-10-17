@@ -1,6 +1,7 @@
 .informacion-grupo {
   background-color: var(--color-fondo);
-  padding: 120px 0 80px;
+  padding: 120px 0 80px; /* Ajusta si es necesario */
+  margin-top: 60px; /* Ajusta según la altura de la navbar */
 }
 
 .presentacion {

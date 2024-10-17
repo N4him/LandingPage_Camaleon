@@ -6,6 +6,7 @@ import './Encabezado.css';
 const Encabezado = () => {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [modoAdmin, setModoAdmin] = useState(false); // Estado para manejar el modo
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +25,10 @@ const Encabezado = () => {
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
+  };
+
+  const toggleModo = () => {
+    setModoAdmin(!modoAdmin); // Cambia el modo
   };
 
   const menuVariants = {
@@ -77,6 +82,17 @@ const Encabezado = () => {
             <li><a href="#lineas">Líneas de Investigación</a></li>
             <li><a href="#miembros">Miembros</a></li>
             <li><a href="#convenios">Convenios</a></li>
+            {/* Botón de switch para modo admin/user */}
+            <li>
+  <button 
+    className="modo-switch" // Aplicando la clase de estilo
+    onClick={toggleModo}
+    style={{ marginLeft: 'auto' }} // Para alinear a la derecha
+  >
+    {modoAdmin ? 'Modo Admin' : 'Modo User'}
+  </button>
+</li>
+
           </ul>
         </nav>
         <button className="menu-toggle" onClick={toggleMenu}>

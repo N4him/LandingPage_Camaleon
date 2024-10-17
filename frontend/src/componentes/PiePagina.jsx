@@ -50,12 +50,12 @@ const PiePagina = () => {
           </motion.div>
           <motion.div className="enlaces-rapidos" variants={itemVariants}>
             <h4>Enlaces Rápidos:</h4>
-            <ul>
-              <li><a href="#">Consejo Superior</a></li>
-              <li><a href="#">Consejo Académico</a></li>
-              <li><a href="#">Rectoría</a></li>
-              <li><a href="#">Nuestros Símbolos</a></li>
-              <li><a href="#">Acerca de Univalle</a></li>
+            <ul className="enlaces-rapidos">
+              <li><a className="enlaces" href="#">Consejo Superior</a></li>
+              <li><a className="enlaces" href="#">Consejo Académico</a></li>
+              <li><a className="enlaces" href="#">Rectoría</a></li>
+              <li><a className="enlaces" href="#">Nuestros Símbolos</a></li>
+              <li><a className="enlaces" href="#">Acerca de Univalle</a></li>
             </ul>
           </motion.div>
           <motion.div className="redes-sociales" variants={itemVariants}>
