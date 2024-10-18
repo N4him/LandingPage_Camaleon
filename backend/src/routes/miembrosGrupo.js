@@ -1,27 +1,29 @@
 import express from 'express';
 import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
-import { db, storage } from '../config.js'; // Importa el almacenamiento
-import multer from 'multer'; // Importa multer
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'; // Importa funciones de Firebase Storage
+import { db, storage } from '../config.js';
+import multer from 'multer';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid'; // Importa la librería para generar IDs únicos
 
 const router = express.Router();
 
-// Configurar multer para aceptar cualquier tipo de archivo de imagen
+// Configurar multer
 const storageMulter = multer({
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de tamaño del archivo a 5 MB (ajusta según lo necesario)
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const mimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/tiff'];
     if (mimeTypes.includes(file.mimetype)) {
-      cb(null, true); // Acepta el archivo
+      cb(null, true);
     } else {
-      cb(new Error('Formato de archivo no válido. Solo se aceptan imágenes.'), false); // Rechaza el archivo
+      cb(new Error('Formato de archivo no válido. Solo se aceptan imágenes.'), false);
     }
   },
 });
 
-const upload = storageMulter.single('foto'); // Middleware para subir una sola imagen
+const upload = storageMulter.single('foto');
 
 // Rutas para "Miembros del Grupo"
+
 router.get('/', async (req, res) => {
   try {
     const collectionRef = collection(db, 'Miembros del Grupo');
@@ -34,27 +36,19 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Ruta para crear un nuevo miembro del grupo, incluyendo la subida de fotos
 router.post('/', upload, async (req, res) => {
   const data = req.body;
 
   if (req.file) {
     try {
-      // Referencia al almacenamiento de Firebase
-      const storageRef = ref(storage, `fotos/${req.file.filename}`);
-      
-      // Establecer el tipo de contenido
+      const uniqueFileName = `${uuidv4()}-${req.file.originalname}`; // Genera un nombre único
+      const storageRef = ref(storage, `fotos/${uniqueFileName}`);
       const metadata = {
-        contentType: req.file.mimetype, // Usa el tipo MIME del archivo
+        contentType: req.file.mimetype,
       };
 
-      // Subir la foto a Firebase Storage
       const snapshot = await uploadBytes(storageRef, req.file.buffer, metadata);
-      
-      // Obtener la URL de descarga de la foto
       const photoURL = await getDownloadURL(snapshot.ref);
-
-      // Agregar la URL de la foto a los datos
       data.foto = photoURL;
     } catch (error) {
       console.error('Error al subir la foto:', error);
@@ -72,7 +66,7 @@ router.post('/', upload, async (req, res) => {
   }
 });
 
-// Ruta para obtener un miembro específico del grupo
+// Obtener un miembro específico del grupo
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -90,10 +84,28 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Ruta para actualizar un miembro del grupo
-router.put('/:id', async (req, res) => {
+// Actualizar un miembro del grupo
+router.put('/:id', upload, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
+
+  if (req.file) {
+    try {
+      const uniqueFileName = `${uuidv4()}-${req.file.originalname}`; // Genera un nombre único
+      const storageRef = ref(storage, `fotos/${uniqueFileName}`);
+      const metadata = {
+        contentType: req.file.mimetype,
+      };
+
+      const snapshot = await uploadBytes(storageRef, req.file.buffer, metadata);
+      const photoURL = await getDownloadURL(snapshot.ref);
+      data.foto = photoURL;
+    } catch (error) {
+      console.error('Error al subir la nueva foto:', error);
+      return res.status(500).json({ error: 'Error al subir la nueva foto' });
+    }
+  }
+
   try {
     const docRef = doc(db, 'Miembros del Grupo', id);
     await updateDoc(docRef, data);
@@ -104,7 +116,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Ruta para eliminar un miembro del grupo
+// Eliminar un miembro del grupo
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -113,15 +125,13 @@ router.delete('/:id', async (req, res) => {
 
     if (snapshot.exists()) {
       const data = snapshot.data();
-      const photoURL = data.foto; // Obtiene la URL de la foto
+      const photoURL = data.foto;
 
-      // Elimina el documento de Firestore
       await deleteDoc(docRef);
 
-      // Elimina la imagen de Firebase Storage
       if (photoURL) {
-        const photoRef = ref(storage, photoURL); // Crea una referencia a la imagen en Storage
-        await deleteObject(photoRef); // Elimina la imagen
+        const photoRef = ref(storage, photoURL);
+        await deleteObject(photoRef);
       }
 
       res.status(204).send();
