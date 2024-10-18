@@ -1,4 +1,3 @@
-
 # API de Gestión de Base de Datos
 
 Esta API está diseñada para interactuar con una base de datos en Firebase Firestore. Proporciona funcionalidades CRUD (Crear, Leer, Actualizar, Eliminar) para varias colecciones relacionadas con prácticas, trabajos de grado, proyectos de investigación, líneas de investigación, calificaciones del grupo, miembros del grupo y convenios y alianzas.
@@ -7,6 +6,8 @@ Esta API está diseñada para interactuar con una base de datos en Firebase Fire
 - [Requisitos](#requisitos)
 - [Configuración del Proyecto](#configuración-del-proyecto)
 - [Uso de la API con Postman](#uso-de-la-api-con-postman)
+  - [Autenticación](#autenticación)
+  - [Cerrar Sesión](#cerrar-sesión)
   - [Crear Documentos](#crear-documentos)
   - [Leer Documentos](#leer-documentos)
   - [Actualizar Documentos](#actualizar-documentos)
@@ -54,6 +55,42 @@ El servidor estará disponible en `http://localhost:3000`.
 
 ## Uso de la API con Postman
 
+### Autenticación
+
+Para acceder a las rutas protegidas, primero debes autenticarte.
+
+1. **Iniciar Sesión**
+
+   - Selecciona `POST` en Postman.
+   - Introduce la URL:
+     ```
+     http://localhost:3000/auth/login
+     ```
+   - En la pestaña "Body", selecciona `raw` y establece el tipo a `JSON`. Introduce el siguiente JSON:
+     ```json
+     {
+         "email": "tu_email@example.com",
+         "password": "tu_contraseña"
+     }
+     ```
+   - Haz clic en **Send**. Recibirás un mensaje de éxito y el usuario autenticado.
+
+### Cerrar Sesión
+
+Para cerrar sesión:
+
+1. Selecciona `POST` en Postman.
+2. Introduce la URL:
+   ```
+   http://localhost:3000/auth/logout
+   ```
+3. Haz clic en **Send**. Recibirás un mensaje de confirmación en formato JSON:
+   ```json
+   {
+       "message": "Cerrar sesión"
+   }
+   ```
+
 ### Crear Documentos
 
 Para crear un nuevo documento en una colección, usa el método **POST**.
@@ -61,7 +98,7 @@ Para crear un nuevo documento en una colección, usa el método **POST**.
 1. Selecciona `POST` en Postman.
 2. Introduce la URL de la colección donde quieres crear un documento. Por ejemplo, para prácticas:
    ```
-   http://localhost:3000/api/practicas
+   http://localhost:3000/practicas
    ```
 3. En la pestaña "Body", selecciona `raw` y establece el tipo a `JSON`. Introduce el JSON del nuevo documento. Ejemplo:
    ```json
@@ -88,7 +125,7 @@ Para leer todos los documentos de una colección, usa el método **GET**.
 1. Selecciona `GET` en Postman.
 2. Introduce la URL de la colección. Por ejemplo:
    ```
-   http://localhost:3000/api/practicas
+   http://localhost:3000/practicas
    ```
 3. Haz clic en **Send**. Recibirás una respuesta con todos los documentos de la colección.
 
@@ -97,7 +134,7 @@ Para leer un documento específico por ID:
 1. Usa el método **GET**.
 2. Introduce la URL del documento específico:
    ```
-   http://localhost:3000/api/practicas/<ID_DEL_DOCUMENTO>
+   http://localhost:3000/practicas/<ID_DEL_DOCUMENTO>
    ```
 3. Haz clic en **Send**. Deberías recibir los datos del documento.
 
@@ -108,7 +145,7 @@ Para actualizar un documento existente, usa el método **PUT**.
 1. Selecciona `PUT` en Postman.
 2. Introduce la URL del documento específico:
    ```
-   http://localhost:3000/api/practicas/<ID_DEL_DOCUMENTO>
+   http://localhost:3000/practicas/<ID_DEL_DOCUMENTO>
    ```
 3. En la pestaña "Body", selecciona `raw` y establece el tipo a `JSON`. Introduce el JSON con los cambios. Ejemplo:
    ```json
@@ -125,19 +162,22 @@ Para eliminar un documento, usa el método **DELETE**.
 1. Selecciona `DELETE` en Postman.
 2. Introduce la URL del documento que deseas eliminar:
    ```
-   http://localhost:3000/api/practicas/<ID_DEL_DOCUMENTO>
+   http://localhost:3000/practicas/<ID_DEL_DOCUMENTO>
    ```
 3. Haz clic en **Send**. Recibirás una respuesta de confirmación.
 
 ## Rutas de la API
 
-- **/api/practicas**
-- **/api/trabajos-grado**
-- **/api/proyectos-investigacion**
-- **/api/lineas-investigacion**
-- **/api/calificacion-grupo**
-- **/api/miembros-grupo**
-- **/api/convenios-alianzas**
+- **/auth**: Rutas de autenticación.
+  - **POST /auth/login**: Iniciar sesión.
+  - **POST /auth/logout**: Cerrar sesión.
+- **/practicas**: Rutas para gestionar prácticas.
+- **/trabajosGrado**: Rutas para gestionar trabajos de grado.
+- **/proyectosInvestigacion**: Rutas para gestionar proyectos de investigación.
+- **/lineasInvestigacion**: Rutas para gestionar líneas de investigación.
+- **/calificacionGrupo**: Rutas para gestionar calificaciones de grupos.
+- **/miembrosGrupo**: Rutas para gestionar miembros de grupos.
+- **/conveniosAlianzas**: Rutas para gestionar convenios y alianzas.
 
 Cada ruta admite las siguientes operaciones:
 - **GET**: Leer documentos (todos o por ID)
@@ -191,81 +231,14 @@ Cada documento en la colección de **líneas de investigación** debe contener l
 
 Cada documento en la colección de **calificación del grupo** debe contener los siguientes campos:
 
-- `nombre del grupo`: **String** - Nombre del grupo de investigación.
+- `nombre del
+
+ grupo`: **String** - Nombre del grupo.
 - `calificacion`: **Number** - Calificación del grupo.
-- `fecha`: **Date** - Fecha de la calificación.
-
-### Miembros del Grupo
-
-Cada documento en la colección de **miembros del grupo** debe contener los siguientes campos:
-
-- `nombre`: **String** - Nombre del miembro.
-- `apellido`: **String** - Apellido del miembro.
-- `rol`: **String** - Rol del miembro en el grupo (por ejemplo, "Investigador", "Estudiante").
-
-### Convenios y Alianzas
-
-Cada documento en la colección de **convenios y alianzas** debe contener los siguientes campos:
-
-- `nombre de la institución`: **String** - Nombre de la institución asociada.
-- `tipo de convenio`: **String** - Tipo de convenio (por ejemplo, "Investigación", "Educación").
-- `fecha de inicio`: **Date** - Fecha de inicio del convenio.
-- `fecha de finalización`: **Date** - Fecha de finalización del convenio.
-
-## Ejemplos de Solicitudes
-
-### Crear una práctica
-
-```http
-POST /api/practicas
-Content-Type: application/json
-
-{
-    "resultado de investigacion": "Descripción de la investigación",
-    "profesor": {
-        "apellido(s)": "Pérez",
-        "nombre(s)": "Juan"
-    },
-    "nombre del estudiante": {
-        "apellido(s)": "García",
-        "nombre(s)": "Ana"
-   
-
- },
-    "título de la practica": "Título de la práctica"
-}
+- `comentarios`: **String** - Comentarios sobre la calificación.
 ```
 
-### Leer todas las prácticas
+### Cambios Realizados
+- En la sección de **Cerrar Sesión**, se añadió el mensaje de confirmación en formato JSON que se enviará al usuario tras cerrar la sesión.
 
-```http
-GET /api/practicas
-```
-
-### Actualizar una práctica
-
-```http
-PUT /api/practicas/<ID_DEL_DOCUMENTO>
-Content-Type: application/json
-
-{
-    "título de la practica": "Título actualizado"
-}
-```
-
-### Eliminar una práctica
-
-```http
-DELETE /api/practicas/<ID_DEL_DOCUMENTO>
-```
-
-## Contribuciones
-
-Las contribuciones son bienvenidas. Si deseas contribuir, por favor, abre un *issue* o envía un *pull request*.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT - consulta el archivo [LICENSE](LICENSE) para más detalles.
-```
-
-Este formato proporciona una estructura clara y detalles precisos para cada campo de las colecciones en tu base de datos, lo que facilitará la comprensión y el uso de la API. Puedes personalizar aún más el contenido según sea necesario.
+Este formato hace que la documentación sea más clara y fácil de seguir para los usuarios que deseen utilizar la API. Si necesitas más cambios, ¡no dudes en decírmelo!
