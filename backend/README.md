@@ -69,8 +69,8 @@ Para acceder a las rutas protegidas, primero debes autenticarte.
    - En la pestaña "Body", selecciona `raw` y establece el tipo a `JSON`. Introduce el siguiente JSON:
      ```json
      {
-         "email": "tu_email@example.com",
-         "password": "tu_contraseña"
+         "email": "jon@gmail.com",
+         "password": "123456"
      }
      ```
    - Haz clic en **Send**. Recibirás un mensaje de éxito y el usuario autenticado.

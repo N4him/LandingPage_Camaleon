@@ -3,7 +3,7 @@ import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc } from '
 import { db, storage } from '../config.js';
 import multer from 'multer';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { v4 as uuidv4 } from 'uuid'; // Importa la librería para generar IDs únicos
+import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
@@ -22,8 +22,26 @@ const storageMulter = multer({
 
 const upload = storageMulter.single('foto');
 
+// Middleware de validación para comprobar campos vacíos
+const validateFields = (req, res, next) => {
+  const { nombre_completo, linea_de_investigacion, cvlac } = req.body.miembro_del_grupo || {}; // Cambiado para acceder al objeto correcto
+
+  // Comprobar si algún campo está vacío
+  if (!nombre_completo || !linea_de_investigacion || !cvlac) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+  }
+
+  // Validar que si se está subiendo una foto, el campo foto no esté vacío
+  if (req.file && !req.file.buffer) {
+    return res.status(400).json({ error: 'El campo foto no debe estar vacío.' });
+  }
+
+  next(); // Si la validación pasa, continuar con la siguiente función
+};
+
 // Rutas para "Miembros del Grupo"
 
+// Obtener todos los miembros del grupo
 router.get('/', async (req, res) => {
   try {
     const collectionRef = collection(db, 'Miembros del Grupo');
@@ -36,8 +54,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', upload, async (req, res) => {
-  const data = req.body;
+// Crear un nuevo miembro del grupo
+router.post('/', upload, validateFields, async (req, res) => {
+  const { miembro_del_grupo } = req.body; // Extraemos el objeto del miembro del grupo
 
   if (req.file) {
     try {
@@ -49,7 +68,7 @@ router.post('/', upload, async (req, res) => {
 
       const snapshot = await uploadBytes(storageRef, req.file.buffer, metadata);
       const photoURL = await getDownloadURL(snapshot.ref);
-      data.foto = photoURL;
+      miembro_del_grupo.foto = photoURL; // Asignamos la URL de la foto al objeto
     } catch (error) {
       console.error('Error al subir la foto:', error);
       return res.status(500).json({ error: 'Error al subir la foto' });
@@ -58,8 +77,8 @@ router.post('/', upload, async (req, res) => {
 
   try {
     const collectionRef = collection(db, 'Miembros del Grupo');
-    const docRef = await addDoc(collectionRef, data);
-    res.status(201).json({ id: docRef.id, ...data });
+    const docRef = await addDoc(collectionRef, miembro_del_grupo); // Usamos el objeto extraído
+    res.status(201).json({ id: docRef.id, ...miembro_del_grupo });
   } catch (error) {
     console.error('Error al crear el miembro del grupo:', error);
     res.status(500).json({ error: 'Error al crear el miembro del grupo' });
@@ -85,9 +104,9 @@ router.get('/:id', async (req, res) => {
 });
 
 // Actualizar un miembro del grupo
-router.put('/:id', upload, async (req, res) => {
+router.put('/:id', upload, validateFields, async (req, res) => {
   const { id } = req.params;
-  const data = req.body;
+  const { miembro_del_grupo } = req.body; // Extraemos el objeto del miembro del grupo
 
   if (req.file) {
     try {
@@ -99,7 +118,7 @@ router.put('/:id', upload, async (req, res) => {
 
       const snapshot = await uploadBytes(storageRef, req.file.buffer, metadata);
       const photoURL = await getDownloadURL(snapshot.ref);
-      data.foto = photoURL;
+      miembro_del_grupo.foto = photoURL; // Asignamos la URL de la foto al objeto
     } catch (error) {
       console.error('Error al subir la nueva foto:', error);
       return res.status(500).json({ error: 'Error al subir la nueva foto' });
@@ -108,8 +127,8 @@ router.put('/:id', upload, async (req, res) => {
 
   try {
     const docRef = doc(db, 'Miembros del Grupo', id);
-    await updateDoc(docRef, data);
-    res.json({ id, ...data });
+    await updateDoc(docRef, miembro_del_grupo); // Usamos el objeto extraído
+    res.json({ id, ...miembro_del_grupo });
   } catch (error) {
     console.error('Error al actualizar el miembro del grupo:', error);
     res.status(500).json({ error: 'Error al actualizar el miembro del grupo' });
