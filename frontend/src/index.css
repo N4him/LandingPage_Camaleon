@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+  --color-primario: #ff3333;
+  --color-secundario: #ffffff;
+  --color-texto: #333333;
+  --color-fondo: #f8f8f8;
+  --color-acento: #ff9999;
+  --fuente-principal: 'Poppins', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--fuente-principal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-texto);
+  background-color: var(--color-fondo);
+  line-height: 1.6;
+}
+
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-primario);
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--color-primario);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-acento);
+}
+
+.seccion {
+  padding: 100px 0;
+}
+
+.titulo-seccion {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.titulo-seccion::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background-color: var(--color-primario);
+  margin: 10px auto 0;
+}
+
+.subtitulo {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.texto {
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.boton {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--color-primario);
+  color: var(--color-secundario);
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(255, 51, 51, 0.2);
+}
+
+.boton:hover {
+  background-color: var(--color-acento);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(255, 51, 51, 0.3);
+}
+
+.tarjeta {
+  background-color: var(--color-secundario);
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.lista {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.lista li {
+  margin-bottom: 10px;
+  padding-left: 25px;
+  position: relative;
+}
+
+.lista li::before {
+  content: '•';
+  color: var(--color-primario);
+  position: absolute;
+  left: 0;
+  font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+  .titulo-seccion {
+    font-size: 2rem;
+  }
+
+  .subtitulo {
+    font-size: 1.5rem;
+  }
+
+  .seccion {
+    padding: 80px 0;
+  }
+}

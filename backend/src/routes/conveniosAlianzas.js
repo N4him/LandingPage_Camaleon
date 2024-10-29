@@ -4,7 +4,19 @@ import { db } from '../config.js';
 
 const router = express.Router();
 
-// Rutas para "Calificación del Grupo"
+// Middleware de validación para comprobar campos vacíos o incompletos
+const validateConvenioFields = (req, res, next) => {
+  const { objetivo, 'institucion asociada': institucionAsociada } = req.body['Convenio y Alianza'] || {};
+
+  // Comprobar si los campos necesarios están presentes y no vacíos
+  if (!objetivo || !institucionAsociada) {
+    return res.status(400).json({ error: 'Los campos "objetivo" e "institucion asociada" son obligatorios.' });
+  }
+
+  next(); // Si la validación pasa, continuar con la siguiente función
+};
+
+// Rutas para "Convenios y Alianzas"
 router.get('/', async (req, res) => {
   try {
     const collectionRef = collection(db, 'Convenios y Alianzas');
@@ -12,12 +24,13 @@ router.get('/', async (req, res) => {
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     res.json(data);
   } catch (error) {
-    console.error('Error al obtener el Convenios y Alianza:', error);
-    res.status(500).json({ error: 'Convenios y Alianzas' });
+    console.error('Error al obtener los Convenios y Alianzas:', error);
+    res.status(500).json({ error: 'Error al obtener los Convenios y Alianzas' });
   }
 });
 
-router.post('/', async (req, res) => {
+// Crear un nuevo Convenio y Alianza
+router.post('/', validateConvenioFields, async (req, res) => {
   const data = req.body;
   try {
     const collectionRef = collection(db, 'Convenios y Alianzas');
@@ -29,6 +42,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Obtener un Convenio y Alianza específico
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -38,15 +52,16 @@ router.get('/:id', async (req, res) => {
     if (snapshot.exists()) {
       res.json({ id: snapshot.id, ...snapshot.data() });
     } else {
-      res.status(404).json({ error: ' Convenios y Alianzas no encontrados' });
+      res.status(404).json({ error: 'Convenios y Alianzas no encontrados' });
     }
   } catch (error) {
-    console.error('Error al obtener los Convenios y Alianzas :', error);
+    console.error('Error al obtener los Convenios y Alianzas:', error);
     res.status(500).json({ error: 'Error al obtener los Convenios y Alianzas' });
   }
 });
 
-router.put('/:id', async (req, res) => {
+// Actualizar un Convenio y Alianza
+router.put('/:id', validateConvenioFields, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -59,6 +74,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Eliminar un Convenio y Alianza
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {

@@ -4,6 +4,21 @@ import { db } from '../config.js';
 
 const router = express.Router();
 
+// Middleware para validar los datos de la línea de investigación
+const validarLineaInvestigacion = (req, res, next) => {
+  const { nombre, descripcion } = req.body['Linea de Investigacion'];
+
+  // Validación de campos vacíos o inexistentes
+  if (!nombre || nombre.trim() === '') {
+    return res.status(400).json({ error: 'El nombre de la línea de investigación es obligatorio.' });
+  }
+  if (!descripcion || descripcion.trim() === '') {
+    return res.status(400).json({ error: 'La descripción de la línea de investigación es obligatoria.' });
+  }
+
+  next();
+};
+
 // Rutas para "Líneas de Investigación"
 router.get('/', async (req, res) => {
   try {
@@ -17,7 +32,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validarLineaInvestigacion, async (req, res) => {
   const data = req.body;
   try {
     const collectionRef = collection(db, 'Líneas de Investigacion');
@@ -46,7 +61,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validarLineaInvestigacion, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {

@@ -1,0 +1,42 @@
+/* PiePagina.css */
+.pie-pagina {
+  width: 100%;
+  margin: 0;
+  color: white;
+  background-color: var(--color-primario);
+  padding: 20px 0; /* Ajusta el padding para el diseño */
+  position: relative;
+  bottom: 0;
+}
+
+.contenedor {
+  max-width: 1200px; /* Ancho máximo del contenido */
+  margin: 0 auto; /* Centrar contenido */
+  padding: 0 20px; /* Espacio en los laterales */
+}
+.enlaces {
+  color: white;
+}
+
+.pie-contenido {
+  display: flex; /* Usar flexbox para organizar los elementos */
+  justify-content: space-between; /* Espacio entre los elementos */
+  flex-wrap: wrap; /* Permitir que los elementos se envuelvan en pantallas pequeñas */
+}
+
+.derechos {
+  text-align: center; /* Centrar el texto de derechos reservados */
+  padding-top: 10px; /* Espacio arriba del texto de derechos reservados */
+}
+/* Estilos para el botón de modo switch */
+/* Estilos para el botón de modo switch */
+.modo-switch {
+  background-color: transparent; /* Fondo transparente */
+  color: white; /* Letra blanca */
+  border: none; /* Sin borde */
+  cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+  padding: 10px; /* Espaciado interno opcional */
+  font-size: 16px; /* Tamaño de la fuente opcional */
+  font-weight: bold; /* Letra en negrita */
+  transition: color 0.3s; /* Transición suave para el color */
+}

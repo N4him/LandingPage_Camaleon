@@ -1,0 +1,77 @@
+.convenios {
+  background-color: #ffffff;
+  padding: 100px 0;
+}
+
+.lista-convenios {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.convenio-item {
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.convenio-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.convenio-icono {
+  font-size: 3rem;
+  color: var(--color-primario);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.convenio-item h3 {
+  color: var(--color-primario);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.convenio-contenido {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.convenio-seccion h4 {
+  color: var(--color-primario);
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.convenio-seccion ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.convenio-seccion li {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 25px;
+  line-height: 1.6;
+}
+
+.convenio-seccion li::before {
+  content: "•";
+  color: var(--color-primario);
+  position: absolute;
+  left: 0;
+  font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+  .convenio-contenido {
+    grid-template-columns: 1fr;
+  }
+}

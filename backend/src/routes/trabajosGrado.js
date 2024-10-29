@@ -1,9 +1,68 @@
 import express from 'express';
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import { 
+  collection, getDocs, addDoc, doc, updateDoc, deleteDoc, getDoc 
+} from 'firebase/firestore';
 import { db } from '../config.js';
+
 const router = express.Router();
 
+// Middleware de validación para Trabajo de Grado
+const validarTrabajoDeGrado = (req, res, next) => {
+  const { 
+    descripcion, 
+    titulo, 
+    mencion, 
+    estudiantes, 
+    "director(es)": directores 
+  } = req.body["Trabajo de Grado"];
+
+  // Validar que la descripción y el título no estén vacíos
+  if (!descripcion || descripcion.trim() === '') {
+    return res.status(400).json({ error: 'La descripción es obligatoria.' });
+  }
+
+  if (!titulo || titulo.trim() === '') {
+    return res.status(400).json({ error: 'El título es obligatorio.' });
+  }
+
+  // Validar mención: solo puede ser "meritoria" o "laureada"
+  if (
+    !Array.isArray(mencion) || 
+    mencion.some(opcion => opcion !== 'meritoria' && opcion !== 'laureada')
+  ) {
+    return res.status(400).json({ 
+      error: 'Las menciones deben ser "meritoria" o "laureada".' 
+    });
+  }
+
+  // Validar estudiantes: debe ser un array con al menos un objeto válido
+  if (
+    !Array.isArray(estudiantes) || 
+    estudiantes.length === 0 || 
+    estudiantes.some(e => !e["nombre(s)"] || !e["apellido(s)"])
+  ) {
+    return res.status(400).json({ 
+      error: 'Debe haber al menos un estudiante con nombre y apellido.' 
+    });
+  }
+
+  // Validar directores: debe ser un array con al menos un objeto válido
+  if (
+    !Array.isArray(directores) || 
+    directores.length === 0 || 
+    directores.some(d => !d["nombre(s)"] || !d["apellido(s)"])
+  ) {
+    return res.status(400).json({ 
+      error: 'Debe haber al menos un director con nombre y apellido.' 
+    });
+  }
+
+  next();
+};
+
 // Rutas para "Trabajos de Grado"
+
+// Obtener todos los trabajos de grado
 router.get('/', async (req, res) => {
   try {
     const collectionRef = collection(db, 'Trabajos de Grado');
@@ -16,7 +75,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+// Crear un nuevo trabajo de grado
+router.post('/', validarTrabajoDeGrado, async (req, res) => {
   const data = req.body;
   try {
     const collectionRef = collection(db, 'Trabajos de Grado');
@@ -28,6 +88,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Obtener un trabajo de grado por ID
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -45,7 +106,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+// Actualizar un trabajo de grado por ID
+router.put('/:id', validarTrabajoDeGrado, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -58,6 +120,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Eliminar un trabajo de grado por ID
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
