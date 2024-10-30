@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaHandshake, FaGraduationCap } from 'react-icons/fa';
-import './Convenios.css';
+import '../assets/styles/Convenios.css';
 
 const Convenios = () => {
   const convenios = [

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import "./Encabezado.css";
+import "../assets/styles/Encabezado.css";
 import LogoCamaleon from "./../../public/Group.svg";
 import LogoUnivalle from "./../../public/LogoUnivalle.svg";
 import Menuburger from "./../assets/burger_menu.svg";

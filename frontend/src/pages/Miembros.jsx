@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import './Miembros.css';
+import '../assets/styles/Miembros.css';
 
 const Miembros = () => {
   const miembros = [

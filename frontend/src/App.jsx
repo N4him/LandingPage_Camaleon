@@ -1,14 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Encabezado from './componentes/Encabezado';
-import InformacionGrupo from './componentes/InformacionGrupo';
-import Practicas from './componentes/Practicas';
-import TrabajosGrado from './componentes/TrabajosGrado';
-import ProyectosInvestigacion from './componentes/ProyectosInvestigacion';
-import LineasInvestigacion from './componentes/LineasInvestigacion';
-import Miembros from './componentes/Miembros';
-import Convenios from './componentes/Convenios';
-import PiePagina from './componentes/PiePagina';
+import Encabezado from './pages/Encabezado';
+import Hero from './pages/hero'; 
+import InformacionGrupo from './pages/InformacionGrupo';
+import Practicas from './pages/Practicas';
+import TrabajosGrado from './pages/TrabajosGrado';
+import ProyectosInvestigacion from './pages/ProyectosInvestigacion';
+import LineasInvestigacion from './pages/LineasInvestigacion';
+import Miembros from './pages/Miembros';
+import Convenios from './pages/Convenios';
+import PiePagina from './pages/PiePagina';
 import './App.css';
 
 const sectionVariants = {
@@ -24,6 +25,7 @@ function App() {
   return (
     <div className="App">
       <Encabezado />
+      <Hero /> 
       <main>
         <motion.div
           initial="hidden"

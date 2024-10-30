@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import './ProyectosInvestigacion.css';
+import '../assets/styles/ProyectosInvestigacion.css';
 
 const ProyectosInvestigacion = () => {
   const proyectos = [
