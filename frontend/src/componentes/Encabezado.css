@@ -1,117 +1,138 @@
-.encabezado {
-  background-color: var(--color-primario);
-  color: var(--color-secundario);
-  padding: 20px 0;
-  position: fixed;
-  width: 100vw; /* Asegura que cubra el ancho completo de la pantalla */
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
-
-.encabezado.scrolled {
-  background-color: rgba(255, 51, 51, 0.95);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 15px 0;
-}
-
-.encabezado-contenido {
-  max-width: 1200px; /* Define un ancho máximo para el contenido */
-  margin: 0 auto;
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px; /* Añade un pequeño margen lateral */
+  padding: 1rem 2rem;
+  background-color: #c41e3a;
+  color: white;
+  position: relative; /* Asegura que el menú se posicione correctamente */
 }
 
-.encabezado h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: var(--color-secundario);
-}
-
-.menu-escritorio ul {
-  list-style-type: none;
-  padding: 0;
+.nav-brand {
   display: flex;
+  margin-right: auto;
+  flex-direction: column;
+  align-items: center;
 }
 
-.menu-escritorio li {
-  margin-left: 20px;
-}
-
-.menu-escritorio a {
-  color: var(--color-secundario);
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  position: relative;
+  color: white;
 }
 
-.menu-escritorio a::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 0;
-  background-color: var(--color-secundario);
-  transition: width 0.3s ease;
+.logo-encima {
+  height: 80px; /* Ajusta el tamaño del logo */
+  display: flex; /* Habilita el modo flex */
+  justify-content: center; /* Espacio entre el logo y la palabra "Camaleón" */
 }
 
-.menu-escritorio a:hover::after {
-  width: 100%;
+.nav-menu {
+  position: relative; /* Necesario para posicionar el indicador */
+  display: flex;
+  gap: 1.5rem; /* Espaciado entre los botones */
 }
 
-.menu-toggle {
+
+.nav-link {
+  color: white; /* Color inicial del texto */
+  text-decoration: none;
+  font-size: 1rem;
+  z-index: 1;
+  padding: 10px 20px; /* Espaciado interno para hacer más grande el área clickeable */
+  border-radius: 5px; /* Bordes redondeados */
+}
+@media screen and (min-width: 1024px) {
+  .nav-link.active {
+    color: #c41e3a; /* Cambia el color del texto a rojo cuando está activo */
+  }
+}
+
+
+.nav-link.active:hover {
+  border-radius: 30px;
+  background-color: white; /* Mantiene el fondo blanco */
+  color: #c41e3a; /* Mantiene el color rojo */
+}
+
+.nav-toggle {
   display: none;
   background: none;
   border: none;
-  color: var(--color-secundario);
-  font-size: 1.5rem;
   cursor: pointer;
+  padding: 0.5rem;
 }
 
-.menu-movil {
-  display: none;
+.nav-end-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  height: 90px;
+  margin-left: auto; /* Empuja el logo hacia la derecha */
+  display: flex; /* Habilita el modo flex */
+  justify-content: center; /* Centra el contenido horizontalmente */
 }
 
+.indicator {
+  position: absolute;
+  bottom: 0; /* Coloca el indicador en la parte inferior */
+  left: 0; /* Alinea el indicador al inicio */
+  height: 100%; /* Alto del indicador igual al del enlace */
+  background-color: white; /* Color del fondo activo */
+  transition: transform 0.1s ease, width 0.2s ease; /* Transiciones suaves para el movimiento */
+  border-radius: 30px; /* Bordes redondeados para que coincida con los enlaces */
+  z-index: 0; /* Colocar detrás de los enlaces */
+  pointer-events: none; /* Asegura que el indicador no interrumpa los clics */
+}
+
+/* Media Queries para responsive */
 @media (max-width: 768px) {
-  .menu-escritorio {
+  .nav-end-logo {
+    font-size: initial;
+    font-weight: normal;
     display: none;
   }
 
-  .menu-movil {
+  .nav-brand {
+    margin-right: auto;
+  }
+
+  .nav-toggle {
     display: block;
-    position: fixed;
-    top: 80px;
+    margin-left: auto;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    display: none;
+    position: absolute;
+    top: 100%;
     left: 0;
-    width: 100vw; /* Ocupa todo el ancho de la pantalla */
-    height: calc(100vh - 80px); /* Ocupa toda la altura restante */
-    background-color: var(--color-primario);
-    padding: 20px;
-    z-index: 999;
-    overflow-y: auto; /* Añade scroll si es necesario */
+    width: 100%;
+    background-color: #c41e3a;
+    z-index: 10;
   }
 
-  .menu-movil ul {
-    list-style-type: none;
-    padding: 0;
+  .nav-link.active {
+    color: white;
   }
 
-  .menu-movil li {
-    margin: 20px 0;
+  .nav-menu.open {
+    display: flex;
   }
 
-  .menu-movil a {
-    color: var(--color-secundario);
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: 600;
+  .nav-link {
+    padding: 15px;
+    text-align: center;
   }
 
-  .menu-toggle {
-    display: block;
+  .nav-link.active:hover, .indicator {
+    display: none;
+  }
+
+  .nav-toggle img {
+    width: 60px;
+    height: 60px;
   }
 }
