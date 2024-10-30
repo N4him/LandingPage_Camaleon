@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import './TrabajosGrado.css';
+import '../assets/styles/TrabajosGrado.css';
 
 const TrabajosGrado = () => {
   const trabajos = [

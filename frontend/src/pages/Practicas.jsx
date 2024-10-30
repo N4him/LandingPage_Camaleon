@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import './Practicas.css';
+import '../assets/styles/Practicas.css';
 
 const Practicas = () => {
   const practicas = [

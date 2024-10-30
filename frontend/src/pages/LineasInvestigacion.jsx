@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCubes, FaVrCardboard, FaUserAlt, FaTasks } from 'react-icons/fa';
-import './LineasInvestigacion.css';
+import '../assets/styles/LineasInvestigacion.css';
 
 const LineasInvestigacion = () => {
   const lineas = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
-import './PiePagina.css';
+import '../assets/styles/PiePagina.css';
 
 const PiePagina = () => {
   const containerVariants = {
