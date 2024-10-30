@@ -5,6 +5,8 @@ import Slider from "react-slick";
 import logo from "@/app/images/logo.png"; 
 import { FaFacebookF, FaTwitter, FaYoutube } from 'react-icons/fa';
 import Tab from "@/components/ui/tab";
+import Alliances from '@/components/ui/Alliances';
+
 
 const initialMembers = [
   {
@@ -50,6 +52,20 @@ const initialMembers = [
     image: "path/to/bob_brown.jpg",
   },
 ];
+  {/* aqui se llama al archivo de alliances.tsx aun que por alguna razon vercel decteta los ccambios y mee pide 
+    el cambio en el despliegue deel mismo  */}
+const LandingPage: React.FC = () => {
+  return (
+      <div>
+          {/* Otras secciones de la página */}
+          <Alliances />
+          {/* Otras secciones de la página */}
+      </div>
+  );
+};
+
+export default LandingPage;
+
 
 export function LandingPageComponent() {
   const [isAdmin, setIsAdmin] = useState(false);
