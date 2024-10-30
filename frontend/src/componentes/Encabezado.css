@@ -1,0 +1,138 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #c41e3a;
+  color: white;
+  position: relative; /* Asegura que el menú se posicione correctamente */
+}
+
+.nav-brand {
+  display: flex;
+  margin-right: auto;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+.logo-encima {
+  height: 80px; /* Ajusta el tamaño del logo */
+  display: flex; /* Habilita el modo flex */
+  justify-content: center; /* Espacio entre el logo y la palabra "Camaleón" */
+}
+
+.nav-menu {
+  position: relative; /* Necesario para posicionar el indicador */
+  display: flex;
+  gap: 1.5rem; /* Espaciado entre los botones */
+}
+
+
+.nav-link {
+  color: white; /* Color inicial del texto */
+  text-decoration: none;
+  font-size: 1rem;
+  z-index: 1;
+  padding: 10px 20px; /* Espaciado interno para hacer más grande el área clickeable */
+  border-radius: 5px; /* Bordes redondeados */
+}
+@media screen and (min-width: 1024px) {
+  .nav-link.active {
+    color: #c41e3a; /* Cambia el color del texto a rojo cuando está activo */
+  }
+}
+
+
+.nav-link.active:hover {
+  border-radius: 30px;
+  background-color: white; /* Mantiene el fondo blanco */
+  color: #c41e3a; /* Mantiene el color rojo */
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.nav-end-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  height: 90px;
+  margin-left: auto; /* Empuja el logo hacia la derecha */
+  display: flex; /* Habilita el modo flex */
+  justify-content: center; /* Centra el contenido horizontalmente */
+}
+
+.indicator {
+  position: absolute;
+  bottom: 0; /* Coloca el indicador en la parte inferior */
+  left: 0; /* Alinea el indicador al inicio */
+  height: 100%; /* Alto del indicador igual al del enlace */
+  background-color: white; /* Color del fondo activo */
+  transition: transform 0.1s ease, width 0.2s ease; /* Transiciones suaves para el movimiento */
+  border-radius: 30px; /* Bordes redondeados para que coincida con los enlaces */
+  z-index: 0; /* Colocar detrás de los enlaces */
+  pointer-events: none; /* Asegura que el indicador no interrumpa los clics */
+}
+
+/* Media Queries para responsive */
+@media (max-width: 768px) {
+  .nav-end-logo {
+    font-size: initial;
+    font-weight: normal;
+    display: none;
+  }
+
+  .nav-brand {
+    margin-right: auto;
+  }
+
+  .nav-toggle {
+    display: block;
+    margin-left: auto;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #c41e3a;
+    z-index: 10;
+  }
+
+  .nav-link.active {
+    color: white;
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: 15px;
+    text-align: center;
+  }
+
+  .nav-link.active:hover, .indicator {
+    display: none;
+  }
+
+  .nav-toggle img {
+    width: 60px;
+    height: 60px;
+  }
+}

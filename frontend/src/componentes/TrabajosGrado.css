@@ -1,0 +1,55 @@
+.trabajos-grado {
+  background-color: #ffffff;
+  padding: 100px 0;
+}
+
+.lista-trabajos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.trabajo-item {
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.trabajo-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.trabajo-item h3 {
+  color: var(--color-primario);
+  margin-top: 0;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.trabajo-item p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.trabajo-item strong {
+  color: var(--color-primario);
+}
+
+.mencion {
+  display: inline-block;
+  background-color: var(--color-primario);
+  color: var(--color-secundario);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .lista-trabajos {
+    grid-template-columns: 1fr;
+  }
+}

@@ -4,12 +4,43 @@ import { db } from '../config.js';
 
 const router = express.Router();
 
+// Middleware para validar los datos de la práctica
+const validarPractica = (req, res, next) => {
+  const { profesor, resultadoInvestigacion, estudiantes, tituloPractica } = req.body;
+
+  // Validación de campos vacíos o inexistentes
+  if (!profesor || !profesor.nombres || !profesor.apellidos) {
+    return res.status(400).json({ error: 'El nombre y apellido del profesor son obligatorios.' });
+  }
+  if (!resultadoInvestigacion || resultadoInvestigacion.trim() === '') {
+    return res.status(400).json({ error: 'El resultado de la investigación es obligatorio.' });
+  }
+  if (!tituloPractica || tituloPractica.trim() === '') {
+    return res.status(400).json({ error: 'El título de la práctica es obligatorio.' });
+  }
+  if (!Array.isArray(estudiantes) || estudiantes.length === 0) {
+    return res.status(400).json({ error: 'Debe haber al menos un estudiante.' });
+  }
+
+  // Validación de cada estudiante en el array
+  for (const estudiante of estudiantes) {
+    if (!estudiante.nombres || estudiante.nombres.trim() === '') {
+      return res.status(400).json({ error: 'El nombre del estudiante es obligatorio.' });
+    }
+    if (!estudiante.apellidos || estudiante.apellidos.trim() === '') {
+      return res.status(400).json({ error: 'El apellido del estudiante es obligatorio.' });
+    }
+  }
+
+  next();
+};
+
 // Ruta para obtener todas las prácticas
 router.get('/', async (req, res) => {
   try {
     const collectionRef = collection(db, 'Practicas');
     const snapshot = await getDocs(collectionRef);
-    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = snapshot.docs.map(doc => ({ id: doc.id, practica: doc.data() }));
     res.json(data);
   } catch (error) {
     console.error('Error al obtener las prácticas:', error);
@@ -18,12 +49,12 @@ router.get('/', async (req, res) => {
 });
 
 // Ruta para crear una nueva práctica
-router.post('/', async (req, res) => {
+router.post('/', validarPractica, async (req, res) => {
   const data = req.body;
   try {
     const collectionRef = collection(db, 'Practicas');
     const docRef = await addDoc(collectionRef, data);
-    res.status(201).json({ id: docRef.id, ...data });
+    res.status(201).json({ id: docRef.id, practica: data });
   } catch (error) {
     console.error('Error al crear la práctica:', error);
     res.status(500).json({ error: 'Error al crear la práctica' });
@@ -38,7 +69,7 @@ router.get('/:id', async (req, res) => {
     const snapshot = await getDoc(docRef);
 
     if (snapshot.exists()) {
-      res.json({ id: snapshot.id, ...snapshot.data() });
+      res.json({ id: snapshot.id, practica: snapshot.data() });
     } else {
       res.status(404).json({ error: 'Práctica no encontrada' });
     }
@@ -49,13 +80,13 @@ router.get('/:id', async (req, res) => {
 });
 
 // Ruta para actualizar una práctica
-router.put('/:id', async (req, res) => {
+router.put('/:id', validarPractica, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
     const docRef = doc(db, 'Practicas', id);
     await updateDoc(docRef, data);
-    res.json({ id, ...data });
+    res.json({ id, practica: data });
   } catch (error) {
     console.error('Error al actualizar la práctica:', error);
     res.status(500).json({ error: 'Error al actualizar la práctica' });

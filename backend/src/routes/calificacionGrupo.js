@@ -4,6 +4,18 @@ import { db } from '../config.js';
 
 const router = express.Router();
 
+// Middleware de validación para comprobar campos vacíos o incompletos
+const validateCalificacionFields = (req, res, next) => {
+  const { calificacion } = req.body;
+
+  // Comprobar si el objeto calificacion existe y si los campos son válidos
+  if (!calificacion || !calificacion.calificacion || !calificacion['Más información']) {
+    return res.status(400).json({ error: 'Los campos "calificación" y "Más información" son obligatorios.' });
+  }
+
+  next(); // Si la validación pasa, continuar con la siguiente función
+};
+
 // Rutas para "Calificación del Grupo"
 router.get('/', async (req, res) => {
   try {
@@ -17,7 +29,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+// Crear una nueva calificación del grupo
+router.post('/', validateCalificacionFields, async (req, res) => {
   const data = req.body;
   try {
     const collectionRef = collection(db, 'Calificacion del Grupo de Investigacion');
@@ -29,6 +42,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Obtener una calificación específica del grupo
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -46,7 +60,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+// Actualizar una calificación del grupo
+router.put('/:id', validateCalificacionFields, async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -59,6 +74,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Eliminar una calificación del grupo
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
