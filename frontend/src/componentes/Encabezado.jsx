@@ -1,106 +1,93 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes } from 'react-icons/fa';
-import './Encabezado.css';
+import { useState, useRef, useEffect } from "react";
+import "./Encabezado.css";
+import LogoCamaleon from "./../../public/Group.svg";
+import LogoUnivalle from "./../../public/LogoUnivalle.svg";
+import Menuburger from "./../assets/burger_menu.svg";
 
-const Encabezado = () => {
-  const [menuAbierto, setMenuAbierto] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [modoAdmin, setModoAdmin] = useState(false); // Estado para manejar el modo
+export default function Component() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [indicatorStyle, setIndicatorStyle] = useState({});
+
+  const aboutRef = useRef(null);
+  const projectsRef = useRef(null);
+  const thesisRef = useRef(null);
+  const researchRef = useRef(null);
+  const contactRef = useRef(null);
+
+  const sections = [
+    { name: "Acerca de Nosotros", ref: aboutRef },
+    { name: "Proyectos de Investigación", ref: projectsRef },
+    { name: "Trabajos de Grado", ref: thesisRef },
+    { name: "Prácticas de Investigación", ref: researchRef },
+    { name: "Contáctanos", ref: contactRef },
+  ];
+
+  const handleClick = (index, ref) => {
+    setActiveIndex(index);
+
+    setIsOpen(false); // Cierra el menú al hacer clic en un enlace
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
-      }
-    };
-
-    document.addEventListener('scroll', handleScroll);
-
-    return () => {
-      document.removeEventListener('scroll', handleScroll);
-    };
-  }, [scrolled]);
-
-  const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto);
-  };
-
-  const toggleModo = () => {
-    setModoAdmin(!modoAdmin); // Cambia el modo
-  };
-
-  const menuVariants = {
-    closed: { opacity: 0, x: "-100%" },
-    open: { opacity: 1, x: 0 }
-  };
+    const currentLink = document.querySelectorAll('.nav-link')[activeIndex];
+    if (currentLink) {
+      const { offsetWidth, offsetLeft } = currentLink;
+      setIndicatorStyle({
+        width: `${offsetWidth}px`,
+        transform: `translateX(${offsetLeft}px)`,
+        transition: 'transform 0.3s ease, width 0.3s ease',
+      });
+    }
+  }, [activeIndex]);
 
   return (
-    <motion.header 
-      className={`encabezado ${scrolled ? 'scrolled' : ''}`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="contenedor encabezado-contenido">
-        <motion.h1
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          Grupo Camaleón
-        </motion.h1>
-        <AnimatePresence>
-          {menuAbierto && (
-            <motion.nav
-              className="menu-movil"
-              variants={menuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
-              transition={{ duration: 0.3 }}
-            >
-              <ul>
-                <li><a href="#informacion" onClick={toggleMenu}>Información</a></li>
-                <li><a href="#practicas" onClick={toggleMenu}>Prácticas</a></li>
-                <li><a href="#trabajos-grado" onClick={toggleMenu}>Trabajos de Grado</a></li>
-                <li><a href="#proyectos" onClick={toggleMenu}>Proyectos</a></li>
-                <li><a href="#lineas" onClick={toggleMenu}>Líneas de Investigación</a></li>
-                <li><a href="#miembros" onClick={toggleMenu}>Miembros</a></li>
-                <li><a href="#convenios" onClick={toggleMenu}>Convenios</a></li>
-              </ul>
-            </motion.nav>
-          )}
-        </AnimatePresence>
-        <nav className="menu-escritorio">
-          <ul>
-            <li><a href="#informacion">Información</a></li>
-            <li><a href="#practicas">Prácticas</a></li>
-            <li><a href="#trabajos-grado">Trabajos de Grado</a></li>
-            <li><a href="#proyectos">Proyectos</a></li>
-            <li><a href="#lineas">Líneas de Investigación</a></li>
-            <li><a href="#miembros">Miembros</a></li>
-            <li><a href="#convenios">Convenios</a></li>
-            {/* Botón de switch para modo admin/user */}
-            <li>
-  <button 
-    className="modo-switch" // Aplicando la clase de estilo
-    onClick={toggleModo}
-    style={{ marginLeft: 'auto' }} // Para alinear a la derecha
-  >
-    {modoAdmin ? 'Modo Admin' : 'Modo User'}
-  </button>
-</li>
-
-          </ul>
-        </nav>
-        <button className="menu-toggle" onClick={toggleMenu}>
-          {menuAbierto ? <FaTimes /> : <FaBars />}
-        </button>
+    <nav className="navbar">
+      <div className="nav-brand">
+        <a href="/" className="nav-logo">
+          <img src={LogoCamaleon} alt="Logo Camaleón" className="logo-encima" />
+          <span>Grupo Camaleón</span>
+        </a>
       </div>
-    </motion.header>
-  );
-};
 
-export default Encabezado;
+      <button className="nav-toggle" onClick={() => setIsOpen(!isOpen)}>
+  <img src={Menuburger} alt="Icono del menú" />
+</button>
+
+
+      <div className={`nav-menu ${isOpen ? 'open' : ''}`}>
+        <div
+          className="indicator"
+          style={{
+            ...indicatorStyle,
+            backgroundColor: "white",
+          }}
+        ></div>
+        {sections.map((item, index) => (
+          <a
+            href="#"
+            className={`nav-link ${activeIndex === index ? "active" : ""}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handleClick(index, item.ref);
+              setActiveIndex(index);
+            }}
+            key={index}
+          >
+            {item.name}
+          </a>
+        ))}
+      </div>
+
+      <div className="nav-end-logo">
+        <img src={LogoUnivalle} alt="Logo u" className="logo-univalle" />
+      </div>
+
+      <div ref={aboutRef}></div>
+      <div ref={projectsRef}></div>
+      <div ref={thesisRef}></div>
+      <div ref={researchRef}></div>
+      <div ref={contactRef}></div>
+    </nav>
+  );
+}
