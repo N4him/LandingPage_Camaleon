@@ -6,6 +6,7 @@ import './Convenios.css';
 
 
 
+
 const Convenios = () => {
   // Nuevas alianzas para las tarjetas
   const alianzas = [

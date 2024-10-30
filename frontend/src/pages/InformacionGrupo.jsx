@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaUsers, FaChartLine, FaLightbulb } from 'react-icons/fa';
-import './InformacionGrupo.css';
+import '../assets/styles/InformacionGrupo.css';
 
 const InformacionGrupo = () => {
   const containerVariants = {
