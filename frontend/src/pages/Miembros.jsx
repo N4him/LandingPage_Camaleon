@@ -1,93 +1,83 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import '../assets/styles/Miembros.css';
+import React, { useState } from "react";
+import "../assets/styles/Miembros.css";
 
-const Miembros = () => {
-  const miembros = [
+const TeamMembers = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const members = [
     {
-      nombre: "Dra. Laura Gómez",
-      lineas: ["Interfaces de Usuario Tangibles", "Experiencia de Usuario"],
-      foto: "https://ejemplo.com/foto-laura-gomez.jpg",
-      perfil: "https://cvlac.minciencias.gov.co/laura-gomez"
+      name: "Santiago Gutierrez",
+      role: "Product Owner",
+      image: "/placeholder.jpg",
     },
     {
-      nombre: "Dr. Carlos Rodríguez",
-      lineas: ["Realidad Aumentada", "Gestión de Proyectos Software"],
-      foto: "https://ejemplo.com/foto-carlos-rodriguez.jpg",
-      perfil: "https://cvlac.minciencias.gov.co/carlos-rodriguez"
+      name: "Esteban Hernadez",
+      role: "Developer Scrum",
+      image: "/placeholder.jpg",
     },
     {
-      nombre: "Dra. Carmen Ortiz",
-      lineas: ["Experiencia de Usuario", "Interfaces de Usuario Tangibles"],
-      foto: "https://ejemplo.com/foto-carmen-ortiz.jpg",
-      perfil: "https://cvlac.minciencias.gov.co/carmen-ortiz"
+      name: "Brayan Urrea",
+      role: "Developer Scrum",
+      image: "/placeholder.jpg",
     },
-    {
-      nombre: "Dr. Andrés Ramírez",
-      lineas: ["Gestión de Proyectos Software", "Realidad Aumentada"],
-      foto: "https://ejemplo.com/foto-andres-ramirez.jpg",
-      perfil: "https://cvlac.minciencias.gov.co/andres-ramirez"
-    }
+       {
+      name: "Brayan Urrea",
+      role: "Developer Scrum",
+      image: "/placeholder.jpg",
+    },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.2
-      }
-    }
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % Math.ceil(members.length / 3));
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
+  const prevSlide = () => {
+    setCurrentSlide(
+      (prev) =>
+        (prev - 1 + Math.ceil(members.length / 3)) %
+        Math.ceil(members.length / 3)
+    );
   };
+
+  const totalSlides = Math.ceil(members.length / 3); // Cambiar para calcular las páginas
+
 
   return (
-    <section id="miembros" className="seccion miembros">
-      <div className="contenedor">
-        <motion.h2 
-          className="titulo-seccion"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+    <section className="team-members">
+      <h2>Our Members</h2>
+      <div className="carousel">
+        <div
+          className="carousel-inner"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
-          Miembros del Grupo
-        </motion.h2>
-        <motion.div 
-          className="lista-miembros"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {miembros.map((miembro, index) => (
-            <motion.div 
-              key={index} 
-              className="miembro-item"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-            >
-              <img src={miembro.foto} alt={miembro.nombre} className="miembro-foto" />
-              <h3>{miembro.nombre}</h3>
-              <p><strong>Líneas de investigación:</strong></p>
-              <ul>
-                {miembro.lineas.map((linea, i) => (
-                  <li key={i}>{linea}</li>
-                ))}
-              </ul>
-              <a href={miembro.perfil} target="_blank" rel="noopener noreferrer" className="boton-perfil">Ver perfil académico</a>
-            </motion.div>
+          {members.map((member, index) => (
+            <div key={index} className="member-card">
+              <div className="member-image">
+                <img src={member.image} alt={member.name} />
+              </div>
+              <h3>{member.name}</h3>
+              <p>{member.role}</p>
+            </div>
           ))}
-        </motion.div>
+        </div>
+        <button className="nav-button prev" onClick={prevSlide}>
+          &lt;
+        </button>
+        <button className="nav-button next" onClick={nextSlide}>
+          &gt;
+        </button>
       </div>
+      <div className="carousel-dots">
+  {Array.from({ length: totalSlides }, (_, index) => ( // Modificar para crear dots según totalSlides
+    <button
+      key={index}
+      className={`dot ${currentSlide === index ? "active" : ""}`}
+      onClick={() => setCurrentSlide(index)}
+    />
+  ))}
+</div>
     </section>
   );
 };
 
-export default Miembros;
+export default TeamMembers;
