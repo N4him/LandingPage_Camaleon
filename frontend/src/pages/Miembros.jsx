@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import edit from '../assets/images/edit.png'
+import edit from '../assets/images/edit.png';
 import '../assets/styles/Miembros.css';
 
 const Miembros = () => {
   const [miembros, setMiembros] = useState([]);
   const [newMiembro, setNewMiembro] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingLineIndex, setEditingLineIndex] = useState(null); // Nueva variable de estado
+  const [lineasInvestigacion, setLineasInvestigacion] = useState(''); // Nueva variable de estado
 
   useEffect(() => {
     fetch('http://localhost:3000/miembrosGrupo')
@@ -32,6 +35,52 @@ const Miembros = () => {
     });
   };
 
+  const handleEditToggle = (index) => {
+    setEditingIndex(index === editingIndex ? null : index);
+  };
+
+  const handleEditChange = (e, field) => {
+    const updatedMiembros = [...miembros];
+    updatedMiembros[editingIndex][field] = e.target.value;
+    setMiembros(updatedMiembros);
+  };
+
+  const handleEditLineaChange = (e, index) => {
+    // Clona el array de líneas de investigación del miembro que se está editando
+    const updatedLineas = [...miembros[editingIndex].linea_de_investigacion];
+    // Actualiza el valor de la línea de investigación en el índice correspondiente
+    updatedLineas[index] = e.target.value;
+
+    // Actualiza el estado del miembro en edición con las líneas de investigación actualizadas
+    setMiembros(prevMiembros =>
+      prevMiembros.map((miembro, i) =>
+        i === editingIndex ? { ...miembro, linea_de_investigacion: updatedLineas } : miembro
+      )
+    );
+  };
+
+  const handleAddEditLinea = () => {
+    const updatedMiembros = [...miembros];
+    updatedMiembros[editingIndex].linea_de_investigacion.push(''); // Agrega una nueva línea vacía
+    setMiembros(updatedMiembros); // Actualiza el estado
+  };
+  
+
+
+  const handleSaveEdit = async () => {
+    const miembro = miembros[editingIndex];
+    try {
+      const response = await axios.put(`http://localhost:3000/miembrosGrupo/${miembro.id}`, { miembro_del_grupo: miembro });
+      setMiembros(miembros.map((m, i) => (i === editingIndex ? response.data : m)));
+      setEditingIndex(null);
+      alert('Cambios guardados exitosamente');
+    } catch (error) {
+      console.error('Error al actualizar el miembro:', error);
+      alert('Error al guardar los cambios');
+    }
+  };
+
+
   const handleChange = (e, field) => {
     setNewMiembro({
       ...newMiembro,
@@ -39,9 +88,8 @@ const Miembros = () => {
     });
   };
 
-   // Función para cancelar la tarea
-   const handleCancel = () => {
-    setNewMiembro(null); // Elimina la tarjeta de nuevo convenio
+  const handleCancel = () => {
+    setNewMiembro(null);
   };
 
   const handleLineaChange = (e, index) => {
@@ -59,14 +107,13 @@ const Miembros = () => {
 
   const handleSave = async () => {
     const formData = new FormData();
-  
+
     formData.append('miembro_del_grupo[nombre_completo]', newMiembro.nombre_completo);
     formData.append('miembro_del_grupo[cvlac]', newMiembro.cvlac);
     newMiembro.linea_de_investigacion.forEach((linea) => {
       formData.append('miembro_del_grupo[linea_de_investigacion]', linea);
     });
-  
-    // Si hay una foto, añadirla al FormData
+
     if (newMiembro.foto) {
       formData.append('foto', newMiembro.foto);
     }
@@ -77,98 +124,98 @@ const Miembros = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
-      // Actualiza el estado de miembros con el nuevo miembro creado
       setMiembros(prevMiembros => [...prevMiembros, response.data]);
-
       alert('Miembro creado exitosamente');
-      setNewMiembro(null); // Limpiar el formulario después de guardar
-
+      setNewMiembro(null);
     } catch (error) {
       console.error('Error al crear el miembro:', error);
       alert('Error al crear el miembro');
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
-  };
-
   return (
     <section id="miembros" className="seccion miembros">
       <div className="contenedor">
-        <motion.h2
-          className="titulo-seccion"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Miembros del Grupo
-        </motion.h2>
-        <motion.div
-          className="lista-miembros"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <motion.h2 className="titulo-seccion">Miembros del Grupo</motion.h2>
+        <motion.div className="lista-miembros">
           {Array.isArray(miembros) ? (
             miembros.map((miembro, index) => (
-              <motion.div
-                key={index}
-                className="miembro-item"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-              >
-                <div style={{ display : 'grid' , justifyContent : 'end'}}>
-                  <img
-                    src={edit}
-                    alt="Edit icon"
-                    width={25}
-                    height={25}
+              <motion.div key={index} className="miembro-item">
+                <div style={{ display: 'grid', justifyContent: 'end' }}>
+                  <button
+                    onClick={() => handleEditToggle(index)}
                     style={{
-                      filter: 'invert(18%) sepia(96%) saturate(7497%) hue-rotate(357deg) brightness(102%) contrast(113%)'
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0
                     }}
-                  />
+                  >
+
+                    <img src={edit} alt="Edit icon" width={25}
+                      height={25}
+                      style={{
+                        filter: 'invert(18%) sepia(96%) saturate(7497%) hue-rotate(357deg) brightness(102%) contrast(113%)'
+                      }} />
+                  </button>
                 </div>
-                <br/>
-                <img src={miembro.foto} alt={miembro.nombre_completo} className="miembro-foto" />
-                <h3>{miembro.nombre_completo}</h3>
-                <p><strong>Líneas de investigación:</strong></p>
-                <ul>
-                  {Array.isArray(miembro.linea_de_investigacion) && miembro.linea_de_investigacion.map((linea, i) => (
-                    <li key={i}>{linea}</li>
-                  ))}
-                </ul>
-                <a href={miembro.cvlac} target="_blank" rel="noopener noreferrer" className="boton-perfil">Ver perfil académico</a>
+                {editingIndex === index ? (
+                  <>
+                    <input
+                      type="text"
+                      value={miembro.nombre_completo}
+                      onChange={(e) => handleEditChange(e, 'nombre_completo')}
+                    />
+                    <input
+                      type="text"
+                      value={miembro.foto}
+                      onChange={(e) => handleEditChange(e, 'foto')}
+                    />
+                    <p><strong>Líneas de investigación:</strong></p>
+                    <ul>
+                      {miembro.linea_de_investigacion.map((linea, lineaIndex) => (
+                        <li key={lineaIndex}>
+                          <input
+                            type="text"
+                            value={linea}
+                            onChange={(e) => handleEditLineaChange(e, lineaIndex)} // Actualiza con el índice de la línea
+                            placeholder="Línea de investigación"
+                          />
+                        </li>
+                      ))}
+                      <button onClick={handleAddEditLinea} className="boton-perfil">Agregar línea</button>
+                    </ul>
+                    <input
+                      type="text"
+                      value={miembro.cvlac}
+                      onChange={(e) => handleEditChange(e, 'cvlac')}
+                    />
+                    <button onClick={() => setEditingIndex(null)} className="boton-perfil">Cancelar</button>
+                    <button onClick={handleSaveEdit} className="boton-perfil">Guardar</button>
+                  </>
+                ) : (
+                  <>
+                    <img src={miembro.foto} alt={miembro.nombre_completo} className="miembro-foto" />
+                    <h3>{miembro.nombre_completo}</h3>
+                    <p><strong>Líneas de investigación:</strong></p>
+                    <ul>
+                      {Array.isArray(miembro.linea_de_investigacion) && miembro.linea_de_investigacion.map((linea, i) => (
+                        <li key={i}>{linea}</li>
+                      ))}
+                    </ul>
+                    <a href={miembro.cvlac} target="_blank" rel="noopener noreferrer" className="boton-perfil">Ver perfil académico</a>
+                  </>
+                )}
               </motion.div>
             ))
           ) : (
             <p>No hay miembros disponibles.</p>
           )}
 
-          {/* Botón para agregar un nuevo miembro */}
-          <button onClick={handleAddMember} className="boton-agregar">
-            +
-          </button>
+          <button onClick={handleAddMember} className="boton-agregar">+</button>
 
-          {/* Tarjeta para agregar un nuevo miembro */}
           {newMiembro && (
-            <motion.div className="miembro-item" variants={itemVariants} whileHover={{ scale: 1.05 }}>
+            <motion.div className="miembro-item">
               <input
                 type="text"
                 placeholder="Nombre completo"
@@ -201,7 +248,7 @@ const Miembros = () => {
                 value={newMiembro.cvlac}
                 onChange={(e) => handleChange(e, 'cvlac')}
               />
-              <button onClick={handleCancel} className="boton-perfil">Cancelar</button> {/* Botón para cancelar */}
+              <button onClick={handleCancel} className="boton-perfil">Cancelar</button>
               <button onClick={handleSave} className="boton-perfil">Guardar</button>
             </motion.div>
           )}

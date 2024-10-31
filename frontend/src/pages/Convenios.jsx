@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../assets/styles/Convenios.css';
+import edit from '../assets/images/edit.png';
 
 const Convenios = () => {
   const [convenios, setConvenios] = useState([]);
   const [newConvenio, setNewConvenio] = useState(null); // Estado para el nuevo convenio
+  const [editingIndex, setEditingIndex] = useState(null); // Índice del convenio que se está editando
 
   useEffect(() => {
     fetch('http://localhost:3000/conveniosAlianzas')
@@ -30,6 +32,24 @@ const Convenios = () => {
     });
   };
 
+  const handleEditToggle = (index) => {
+    setEditingIndex(editingIndex === index ? null : index); // Alternar el estado de edición
+  };
+
+  const handleEditChange = (e, field, index) => {
+    const updatedConvenios = [...convenios]; // Copia la lista actual
+    updatedConvenios[index][field] = e.target.value; // Actualiza el campo correspondiente
+    setConvenios(updatedConvenios); // Establece la lista actualizada
+  };
+
+  const handleListaEditChange = (e, index, field) => {
+    const updatedConvenios = [...convenios]; // Copia la lista actual
+    const newList = [...updatedConvenios[editingIndex][field]]; // Crea una nueva lista para actualizar
+    newList[index] = e.target.value; // Actualiza la lista correspondiente
+    updatedConvenios[editingIndex][field] = newList; // Establece la nueva lista en el convenio editado
+    setConvenios(updatedConvenios); // Establece la lista actualizada
+  };
+
   const handleChange = (e, field) => {
     setNewConvenio({
       ...newConvenio,
@@ -43,11 +63,57 @@ const Convenios = () => {
     setNewConvenio({ ...newConvenio, [field]: newList });
   };
 
-  const handleAddItem = (field) => {
-    setNewConvenio({
-      ...newConvenio,
-      [field]: [...newConvenio[field], ''] // Agrega un nuevo campo vacío
-    });
+  const handleAddEditItem = (e) => {
+    const updatedConvenios = [...convenios];
+    const field = e === 'objetivos' ? 'objetivos' : 'resultados';
+    updatedConvenios[editingIndex][field].push(''); // Agrega un nuevo objetivo o resultado
+    setConvenios(updatedConvenios); // Actualiza la lista de convenios
+  };
+
+  const handleSaveEdit = async (index) => {
+    const convenioToUpdate = convenios[index];
+
+    if (!convenioToUpdate || !convenioToUpdate.institucion || !convenioToUpdate.objetivos || !convenioToUpdate.resultados) {
+      alert('Por favor, complete todos los campos necesarios.');
+      return;
+    }
+
+    const data = {
+      institucion: convenioToUpdate.institucion,
+      objetivos: convenioToUpdate.objetivos,
+      resultados: convenioToUpdate.resultados,
+    };
+
+    try {
+      const response = await fetch(`http://localhost:3000/conveniosAlianzas/${convenioToUpdate.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const updatedConvenio = await response.json();
+        const updatedConvenios = [...convenios];
+        updatedConvenios[index] = updatedConvenio; // Actualiza el convenio en la lista
+        setConvenios(updatedConvenios); // Establecer la lista actualizada
+        alert('Convenio actualizado exitosamente');
+        setEditingIndex(null); // Restablecer el índice de edición
+      } else {
+        const errorResponse = await response.json();
+        console.error('Error al actualizar el convenio:', errorResponse);
+        alert(`Error al actualizar el convenio: ${errorResponse.error}`);
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      alert('Error al actualizar el convenio. Inténtalo de nuevo.');
+    }
+  };
+
+  // Función para cancelar la tarea
+  const handleCancel = () => {
+    setNewConvenio(null); // Elimina la tarjeta de nuevo convenio
   };
 
   const handleSave = async () => {
@@ -56,14 +122,14 @@ const Convenios = () => {
       alert('Por favor, complete todos los campos necesarios.');
       return;
     }
-  
+
     // Crear el objeto de datos según la nueva estructura del backend
     const data = {
       institucion: newConvenio.institucion,
       objetivos: newConvenio.objetivos, // Asumiendo que 'objetivos' es un array de objetivos
       resultados: newConvenio.resultados, // Asegúrate de que este campo esté en el objeto
     };
-  
+
     // Realizar la solicitud POST al backend
     const response = await fetch('http://localhost:3000/conveniosAlianzas', {
       method: 'POST',
@@ -72,7 +138,7 @@ const Convenios = () => {
       },
       body: JSON.stringify(data),
     });
-  
+
     // Manejar la respuesta del servidor
     if (response.ok) {
       const savedConvenio = await response.json();
@@ -85,12 +151,16 @@ const Convenios = () => {
       alert(`Error al crear el convenio: ${errorResponse.error}`);
     }
   };
-  
 
+  const handleCancelEdit = () => {
+    setEditingIndex(null); // Cancelar la edición
+  };
 
-  // Función para cancelar la tarea
-  const handleCancel = () => {
-    setNewConvenio(null); // Elimina la tarjeta de nuevo convenio
+  const handleAddItem = (field) => {
+    setNewConvenio({
+      ...newConvenio,
+      [field]: [...newConvenio[field], ''] // Agrega un nuevo campo vacío
+    });
   };
 
   const containerVariants = {
@@ -125,7 +195,7 @@ const Convenios = () => {
         </motion.h2>
         <motion.div
           className="lista-convenios"
-          variants={containerVariants}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
           initial="hidden"
           animate="visible"
         >
@@ -134,35 +204,94 @@ const Convenios = () => {
               <motion.div
                 key={index}
                 className="convenio-item"
-                variants={itemVariants}
                 whileHover={{ scale: 1.03 }}
               >
-                <div className="convenio-icono">{convenio.icono}</div>
-                <h3>{convenio.institucion}</h3>
-                <div className="convenio-contenido">
-                  <div className="convenio-seccion">
-                    <h4>Objetivos:</h4>
-                    <ul>
-                      {Array.isArray(convenio.objetivos) && convenio.objetivos.map((objetivo, i) => (
-                        <li key={i}>{objetivo}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="convenio-seccion">
-                    <h4>Resultados esperados/alcanzados:</h4>
-                    <ul>
-                      {Array.isArray(convenio.resultados) && convenio.resultados.map((resultado, i) => (
-                        <li key={i}>{resultado}</li>
-                      ))}
-                    </ul>
-                  </div>
+                <div style={{ display: 'grid', justifyContent: 'end' }}>
+                  <button
+                    onClick={() => handleEditToggle(index)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0
+                    }}
+                  >
+                    <img src={edit} alt="Edit icon" width={25} height={25} style={{ filter: 'invert(18%) sepia(96%) saturate(7497%) hue-rotate(357deg) brightness(102%) contrast(113%)' }} />
+                  </button>
                 </div>
+                {editingIndex === index ? (
+                  <>
+                    <input
+                      type="text"
+                      value={convenio.institucion}
+                      onChange={(e) => handleEditChange(e, 'institucion', index)}
+                      placeholder="Institución"
+                    />
+                    <div className="convenio-contenido">
+                      <div className="convenio-seccion">
+                        <h4>Objetivos:</h4>
+                        <ul>
+                          {Array.isArray(convenio.objetivos) && convenio.objetivos.map((objetivo, i) => (
+                            <li key={i}>
+                              <input
+                                type="text"
+                                value={objetivo}
+                                onChange={(e) => handleListaEditChange(e, i, 'objetivos')}
+                                placeholder="Objetivo"
+                              />
+                            </li>
+                          ))}
+                          <button onClick={() => handleAddEditItem('objetivos')} className="boton-perfil">Agregar objetivo</button>
+                        </ul>
+                      </div>
+                      <div className="convenio-seccion">
+                        <h4>Resultados esperados/alcanzados:</h4>
+                        <ul>
+                          {Array.isArray(convenio.resultados) && convenio.resultados.map((resultado, i) => (
+                            <li key={i}>
+                              <input
+                                type="text"
+                                value={resultado}
+                                onChange={(e) => handleListaEditChange(e, i, 'resultados')}
+                                placeholder="Resultado"
+                              />
+                            </li>
+                          ))}
+                          <button onClick={() => handleAddEditItem('resultados')} className="boton-perfil">Agregar resultado</button>
+                        </ul>
+                      </div>
+                    </div>
+                    <button onClick={handleCancelEdit} className="boton-perfil">Cancelar</button>
+                    <button onClick={() => handleSaveEdit(index)} className="boton-perfil">Guardar</button>
+                  </>
+                ) : (
+                  <>
+                    <h3>{convenio.institucion}</h3>
+                    <div className="convenio-contenido">
+                      <div className="convenio-seccion">
+                        <h4>Objetivos:</h4>
+                        <ul>
+                          {Array.isArray(convenio.objetivos) && convenio.objetivos.map((objetivo, i) => (
+                            <li key={i}>{objetivo}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="convenio-seccion">
+                        <h4>Resultados esperados/alcanzados:</h4>
+                        <ul>
+                          {Array.isArray(convenio.resultados) && convenio.resultados.map((resultado, i) => (
+                            <li key={i}>{resultado}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                )}
               </motion.div>
             ))
           ) : (
             <p>No hay convenios disponibles.</p>
           )}
-
           {/* Botón para agregar un nuevo convenio */}
           <button onClick={handleAddConvenio} className="boton-agregar">
             +
@@ -185,7 +314,7 @@ const Convenios = () => {
               />
               <p><strong>Objetivos:</strong></p>
               <ul>
-                {newConvenio.objetivos.map((objetivo, index) => (
+                {Array.isArray(newConvenio.objetivos) && newConvenio.objetivos.map((objetivo, index) => (
                   <li key={index}>
                     <input
                       type="text"
@@ -199,7 +328,7 @@ const Convenios = () => {
               </ul>
               <p><strong>Resultados esperados/alcanzados:</strong></p>
               <ul>
-                {newConvenio.resultados.map((resultado, index) => (
+                {Array.isArray(newConvenio.resultados) && newConvenio.resultados.map((resultado, index) => (
                   <li key={index}>
                     <input
                       type="text"
@@ -216,6 +345,7 @@ const Convenios = () => {
 
             </motion.div>
           )}
+
         </motion.div>
       </div>
     </section>
