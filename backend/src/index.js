@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import practicasRoutes from './routes/practicas.js';
 import trabajosGradoRoutes from './routes/trabajosGrado.js';
 import proyectosInvestigacionRoutes from './routes/proyectosInvestigacion.js';
@@ -11,6 +12,13 @@ import conveniosAlianzasRoutes from './routes/conveniosAlianzas.js';
 import authRoutes from './routes/auth.js'; 
 
 const app = express();
+
+app.use(cors(
+    {
+        origin: 'http://localhost:5173', // Permite frontend
+        credentials: true // Permite enviar cookies y sesiones
+    }
+))
 
 app.use(bodyParser.json());
 
@@ -38,8 +46,8 @@ app.use('/trabajosGrado', ensureAuthenticated, trabajosGradoRoutes);
 app.use('/proyectosInvestigacion', ensureAuthenticated, proyectosInvestigacionRoutes);
 app.use('/lineasInvestigacion', ensureAuthenticated, lineasInvestigacionRoutes);
 app.use('/calificacionGrupo', ensureAuthenticated, calificacionGrupoRoutes);
-app.use('/miembrosGrupo', ensureAuthenticated, miembrosGrupoRoutes);
-app.use('/conveniosAlianzas', ensureAuthenticated, conveniosAlianzasRoutes);
+app.use('/miembrosGrupo', miembrosGrupoRoutes); //desactivación de autenticación momentanea
+app.use('/conveniosAlianzas', conveniosAlianzasRoutes); //desactivación de autenticación momentanea
 
 // Inicializar el servidor
 const PORT = process.env.PORT || 3000;
