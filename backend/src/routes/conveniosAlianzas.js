@@ -4,17 +4,20 @@ import { db } from '../config.js';
 
 const router = express.Router();
 
+
 // Middleware de validación para comprobar campos vacíos o incompletos
 const validateConvenioFields = (req, res, next) => {
-  const { objetivo, 'institucion asociada': institucionAsociada } = req.body['Convenio y Alianza'] || {};
+  // Extraer los campos necesarios directamente del body
+  const { institucion, objetivos, resultados } = req.body;
 
   // Comprobar si los campos necesarios están presentes y no vacíos
-  if (!objetivo || !institucionAsociada) {
-    return res.status(400).json({ error: 'Los campos "objetivo" e "institucion asociada" son obligatorios.' });
+  if (!institucion || !objetivos || !resultados) {
+    return res.status(400).json({ error: 'Los campos "institucion", "objetivos" y "resultados" son obligatorios.' });
   }
 
   next(); // Si la validación pasa, continuar con la siguiente función
 };
+
 
 // Rutas para "Convenios y Alianzas"
 router.get('/', async (req, res) => {
