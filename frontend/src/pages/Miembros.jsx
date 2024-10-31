@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import edit from '../assets/images/edit.png'
 import '../assets/styles/Miembros.css';
 
 const Miembros = () => {
@@ -133,6 +134,18 @@ const Miembros = () => {
                 variants={itemVariants}
                 whileHover={{ scale: 1.05 }}
               >
+                <div style={{ display : 'grid' , justifyContent : 'end'}}>
+                  <img
+                    src={edit}
+                    alt="Edit icon"
+                    width={25}
+                    height={25}
+                    style={{
+                      filter: 'invert(18%) sepia(96%) saturate(7497%) hue-rotate(357deg) brightness(102%) contrast(113%)'
+                    }}
+                  />
+                </div>
+                <br/>
                 <img src={miembro.foto} alt={miembro.nombre_completo} className="miembro-foto" />
                 <h3>{miembro.nombre_completo}</h3>
                 <p><strong>Líneas de investigación:</strong></p>
