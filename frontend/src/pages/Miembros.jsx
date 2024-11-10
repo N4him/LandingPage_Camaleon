@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import edit from '../assets/images/edit.png';
 import '../assets/styles/Miembros.css';
+import logo from '../assets/images/logoS.png'; // Asegúrate de tener el logo
 
 const Miembros = () => {
   const [miembros, setMiembros] = useState([]);
@@ -136,6 +137,11 @@ const Miembros = () => {
   return (
     <section id="miembros" className="seccion miembros">
       <div className="contenedor">
+
+        <div className="linea-separadora-contenedor-Miembros">
+          <img src={logo} alt="Logo" className="logo-imagen" />
+          <div className="linea-roja"></div>
+        </div>
         <motion.h2 className="titulo-seccion">Miembros del Grupo</motion.h2>
         <motion.div className="lista-miembros">
           {Array.isArray(miembros) ? (

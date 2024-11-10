@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../assets/styles/Convenios.css';
 import edit from '../assets/images/edit.png';
+import logo from '../assets/images/logoS.png'; 
 
 const Convenios = () => {
   const [convenios, setConvenios] = useState([]);
@@ -185,6 +186,11 @@ const Convenios = () => {
   return (
     <section id="convenios" className="seccion convenios">
       <div className="contenedor">
+         {/* Línea separadora con la imagen */}
+         <div className="linea-separadora-contenedor-Conv">
+          <img src={logo} alt="Logo" className="logo-imagen" />
+          <div className="linea-roja-Conv"></div>
+        </div>
         <motion.h2
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}

@@ -1,9 +1,31 @@
-.informacion-grupo {
-  background-color: var(--color-fondo);
-  padding: 120px 0 80px; /* Ajusta si es necesario */
-  margin-top: 60px; /* Ajusta según la altura de la navbar */
+.linea-separadora-contenedor {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: -65px; 
+  position: relative; 
+  transform: translateY(-75px) translateX(270px);  
+}
+.logo-imagen {
+  width: 50px; 
+  height: auto;
+  position: relative;
+  z-index: 2; 
+  margin-right: 0; 
 }
 
+.linea-roja {
+  flex-grow: 1;
+  height: 2px;
+  background-color: red;  
+  margin-left: 10px; 
+  position: absolute;
+  left: 25px; 
+  width: 47%; 
+  z-index: 1;  
+}
+
+/* Estilos de la presentación de texto */
 .presentacion {
   text-align: justify;
   margin-bottom: 60px;
@@ -12,6 +34,7 @@
   margin-right: auto;
 }
 
+/* Estilos para las características */
 .caracteristicas {
   display: flex;
   justify-content: space-between;
@@ -44,6 +67,7 @@
   font-size: 1.5rem;
 }
 
+/* Estilos para la clasificación */
 .clasificacion {
   background-color: var(--color-primario);
   color: var(--color-secundario);
@@ -65,7 +89,16 @@
   font-weight: 600;
 }
 
+/* Media query para pantallas más pequeñas */
 @media (max-width: 768px) {
+  .linea-roja {
+    width: 30%; /* En pantallas pequeñas, reduce la longitud de la línea aún más */
+  }
+
+  .logo-imagen {
+    width: 40px; /* Ajusta el tamaño de la imagen en pantallas pequeñas */
+  }
+
   .caracteristicas {
     flex-direction: column;
   }
@@ -73,4 +106,9 @@
   .caracteristica {
     margin-bottom: 30px;
   }
+}
+
+/* Evitar el desplazamiento horizontal en el body */
+body {
+  overflow-x: hidden;  /* Desactiva el desplazamiento horizontal */
 }
