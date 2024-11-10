@@ -3,7 +3,7 @@
   width: 100%;
   margin: 0;
   color: white;
-  background-color: var(--color-primario);
+  background-color: #C20E1A;
   padding: 20px 0; /* Ajusta el padding para el diseño */
   position: relative;
   bottom: 0;
@@ -39,4 +39,13 @@
   font-size: 16px; /* Tamaño de la fuente opcional */
   font-weight: bold; /* Letra en negrita */
   transition: color 0.3s; /* Transición suave para el color */
+}
+
+.nav-end-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  height: 90px;
+  margin-left: auto; 
+  display: flex; 
+  justify-content: center; 
 }

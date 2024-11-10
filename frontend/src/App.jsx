@@ -62,33 +62,9 @@ function App() {
           <Convenios />
         </motion.div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={sectionVariants}
-        >
-          <ProyectosInvestigacion />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={sectionVariants}
-        >
-          <TrabajosGrado />
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={sectionVariants}
-        >
-          <Practicas />
-        </motion.div>
-
+        
+        
+        
 
       </main>
       <PiePagina />

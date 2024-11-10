@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaUsers, FaChartLine, FaLightbulb } from 'react-icons/fa';
 import '../assets/styles/InformacionGrupo.css';
+import logo from '../assets/images/logoS.png'
 
 const InformacionGrupo = () => {
   const containerVariants = {
@@ -34,6 +35,13 @@ const InformacionGrupo = () => {
         >
           Información del Grupo
         </motion.h2>
+
+        <div className="linea-separadora-contenedor">
+          <img src={logo} alt="Logo" className="logo-imagen" />
+          <div className="linea-roja"></div>
+          <div className="circulo-rojo"></div>
+        </div>
+
         <motion.div 
           className="presentacion"
           variants={containerVariants}
@@ -47,12 +55,14 @@ const InformacionGrupo = () => {
             El grupo ofrece un espacio para actividades de investigación y desarrollo, enfocándose en interfaces innovadoras en los contextos de educación, arte y salud. También busca explorar diversas técnicas y métodos de gestión, aprovechando la naturaleza multidisciplinaria de estos proyectos.
           </motion.p>
         </motion.div>
+
         <motion.div 
           className="caracteristicas"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
+          {/* Características del grupo */}
           <motion.div 
             className="caracteristica"
             variants={itemVariants}
@@ -84,6 +94,7 @@ const InformacionGrupo = () => {
             <p>Desarrollamos investigación de vanguardia en interfaces de usuario y experiencia de usuario.</p>
           </motion.div>
         </motion.div>
+
         <motion.div 
           className="clasificacion"
           initial={{ opacity: 0, scale: 0.8 }}

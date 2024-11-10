@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "../assets/styles/Encabezado.css";
 import LogoCamaleon from "./../../public/Group.svg";
-import LogoUnivalle from "./../../public/LogoUnivalle.svg";
 import Menuburger from "./../assets/burger_menu.svg";
 
 export default function Component() {
@@ -77,10 +76,6 @@ export default function Component() {
             {item.name}
           </a>
         ))}
-      </div>
-
-      <div className="nav-end-logo">
-        <img src={LogoUnivalle} alt="Logo u" className="logo-univalle" />
       </div>
 
       <div ref={aboutRef}></div>

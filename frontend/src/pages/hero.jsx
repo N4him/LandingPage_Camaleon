@@ -10,7 +10,7 @@ function Hero() {
       justifyContent: 'space-between',
       padding: '0 2rem',
       height: '100vh',
-      background: 'linear-gradient(to bottom, rgba(196, 30, 58, 1), rgba(196, 30, 58, 0.8) 60%, rgba(255, 255, 255, 0.9) 100%)', // Ajustar el gradiente
+      background: 'linear-gradient(to bottom, #C20E1A, #C20E1A 60%, rgba(248, 248, 248, 1) 100%)', 
     },
     contentContainer: {
       flex: 1,

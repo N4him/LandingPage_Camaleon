@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaCubes, FaVrCardboard, FaUserAlt, FaTasks } from 'react-icons/fa';
 import '../assets/styles/LineasInvestigacion.css';
+import logo from '../assets/images/logoS.png'; 
 
 const LineasInvestigacion = () => {
   const lineas = [
@@ -49,6 +50,12 @@ const LineasInvestigacion = () => {
   return (
     <section id="lineas" className="seccion lineas-investigacion">
       <div className="contenedor">
+
+        <div className="linea-separadora-contenedor-lineasInv">
+          <img src={logo} alt="Logo" className="logo-imagen" />
+          <div className="linea-roja"></div>
+        </div>
+
         <motion.h2 
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}
@@ -57,6 +64,7 @@ const LineasInvestigacion = () => {
         >
           Líneas de Investigación
         </motion.h2>
+        
         <motion.div 
           className="lista-lineas"
           variants={containerVariants}

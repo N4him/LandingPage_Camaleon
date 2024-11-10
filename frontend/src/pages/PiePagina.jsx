@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import '../assets/styles/PiePagina.css';
+import LogoUnivalle from "./../../public/LogoUnivalle.svg";
 
 const PiePagina = () => {
   const containerVariants = {
@@ -32,6 +33,11 @@ const PiePagina = () => {
           initial="hidden"
           animate="visible"
         >
+          <motion.div className="logo" variants={itemVariants}>
+          <div className="nav-end-logo">
+            <img src={LogoUnivalle} alt="Logo u" className="logo-univalle" />
+          </div>
+          </motion.div>
           <motion.div className="info-universidad" variants={itemVariants}>
             <h3>Universidad del Valle</h3>
             <p>Cali - Colombia</p>
