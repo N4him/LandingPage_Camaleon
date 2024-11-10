@@ -18,8 +18,7 @@ export default function Navbar({ aboutRef, projectsRef, thesisRef, researchRef, 
 
   const handleClick = (index, ref) => {
     setActiveIndex(index);
-    setIsOpen(false); // Cierra el menú al hacer clic en un enlace
-    // Desplazamiento hacia la sección con scroll suave
+    setIsOpen(false); 
     ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 

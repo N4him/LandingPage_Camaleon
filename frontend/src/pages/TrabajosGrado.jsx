@@ -4,18 +4,17 @@ import axios from 'axios';
 import '../assets/styles/TrabajosGrado.css';
 import logo from '../assets/images/logoS.png';
 
-const TrabajosGrado = React.forwardRef((props, ref) => { // Usamos forwardRef
+const TrabajosGrado = React.forwardRef((props, ref) => { 
   const [trabajos, setTrabajos] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Realizar la solicitud GET con axios y enviar las cookies de sesión
     axios.get('http://localhost:3000/trabajosGrado', {
-      withCredentials: true, // Incluir cookies de sesión en la solicitud
+      withCredentials: true,
     })
       .then(response => {
-        setTrabajos(response.data);  // Guardar los datos obtenidos
-        setError(null);  // Limpiar cualquier error previo
+        setTrabajos(response.data);  
+        setError(null);  
       })
       .catch(error => {
         console.error("Error al obtener los trabajos de grado:", error);
