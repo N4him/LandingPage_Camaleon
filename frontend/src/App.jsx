@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import Encabezado from './pages/Encabezado';
 import Hero from './pages/hero'; 
@@ -22,37 +22,46 @@ const sectionVariants = {
 };
 
 function App() {
+  // Referencias para cada sección
+  const aboutRef = useRef(null);
+  const projectsRef = useRef(null);
+  const thesisRef = useRef(null);  // Referencia para "Trabajos de Grado"
+  const researchRef = useRef(null);
+  const contactRef = useRef(null);
+
   return (
     <div className="App">
-      <Encabezado />
+      <Encabezado 
+        aboutRef={aboutRef} 
+        projectsRef={projectsRef} 
+        thesisRef={thesisRef} 
+        researchRef={researchRef} 
+        contactRef={contactRef} 
+      />
       <Hero /> 
       <main>
         <motion.div
           initial="hidden"
           animate="visible"
           variants={sectionVariants}
+          ref={aboutRef}
         >
           <InformacionGrupo />
         </motion.div>
-
         <motion.div
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          animate="visible"
           variants={sectionVariants}
         >
           <LineasInvestigacion />
         </motion.div>
-
         <motion.div
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          animate="visible"
           variants={sectionVariants}
         >
           <Miembros />
         </motion.div>
-        
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -61,11 +70,37 @@ function App() {
         >
           <Convenios />
         </motion.div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={sectionVariants}
+          ref={projectsRef}
+        >
+          <ProyectosInvestigacion />
+        </motion.div>
 
-        
-        
-        
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={sectionVariants}
+          ref={thesisRef}
+        >
+          <TrabajosGrado />
+        </motion.div>
 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={sectionVariants}
+          ref={researchRef}
+        >
+          <Practicas />
+        </motion.div>
+
+       
       </main>
       <PiePagina />
     </div>

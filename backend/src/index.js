@@ -42,7 +42,7 @@ app.use('/auth', authRoutes);
 
 // Rutas protegidas por autenticación
 app.use('/practicas', ensureAuthenticated, practicasRoutes);
-app.use('/trabajosGrado', ensureAuthenticated, trabajosGradoRoutes);
+app.use('/trabajosGrado', trabajosGradoRoutes); //desactivación de autenticación momentanea
 app.use('/proyectosInvestigacion', ensureAuthenticated, proyectosInvestigacionRoutes);
 app.use('/lineasInvestigacion', ensureAuthenticated, lineasInvestigacionRoutes);
 app.use('/calificacionGrupo', ensureAuthenticated, calificacionGrupoRoutes);

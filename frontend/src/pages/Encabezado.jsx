@@ -3,16 +3,10 @@ import "../assets/styles/Encabezado.css";
 import LogoCamaleon from "./../../public/Group.svg";
 import Menuburger from "./../assets/burger_menu.svg";
 
-export default function Component() {
+export default function Navbar({ aboutRef, projectsRef, thesisRef, researchRef, contactRef }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({});
-
-  const aboutRef = useRef(null);
-  const projectsRef = useRef(null);
-  const thesisRef = useRef(null);
-  const researchRef = useRef(null);
-  const contactRef = useRef(null);
 
   const sections = [
     { name: "Acerca de Nosotros", ref: aboutRef },
@@ -24,8 +18,9 @@ export default function Component() {
 
   const handleClick = (index, ref) => {
     setActiveIndex(index);
-
     setIsOpen(false); // Cierra el menú al hacer clic en un enlace
+    // Desplazamiento hacia la sección con scroll suave
+    ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   useEffect(() => {
@@ -50,9 +45,8 @@ export default function Component() {
       </div>
 
       <button className="nav-toggle" onClick={() => setIsOpen(!isOpen)}>
-  <img src={Menuburger} alt="Icono del menú" />
-</button>
-
+        <img src={Menuburger} alt="Icono del menú" />
+      </button>
 
       <div className={`nav-menu ${isOpen ? 'open' : ''}`}>
         <div
@@ -69,7 +63,6 @@ export default function Component() {
             onClick={(e) => {
               e.preventDefault();
               handleClick(index, item.ref);
-              setActiveIndex(index);
             }}
             key={index}
           >
@@ -77,12 +70,6 @@ export default function Component() {
           </a>
         ))}
       </div>
-
-      <div ref={aboutRef}></div>
-      <div ref={projectsRef}></div>
-      <div ref={thesisRef}></div>
-      <div ref={researchRef}></div>
-      <div ref={contactRef}></div>
     </nav>
   );
 }
