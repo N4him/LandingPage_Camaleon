@@ -1,47 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 import '../assets/styles/TrabajosGrado.css';
+import logo from '../assets/images/logoS.png';
 
-const TrabajosGrado = () => {
-  const trabajos = [
-    {
-      titulo: "Desarrollo de un Sistema de Realidad Aumentada para Educación",
-      estudiantes: ["María López", "Pedro Sánchez"],
-      directores: ["Dr. Andrés Ramírez"],
-      mencion: "Meritoria",
-      descripcion: "Implementación de un sistema de realidad aumentada para mejorar la experiencia educativa en aulas de clase."
-    },
-    {
-      titulo: "Diseño de Interfaces Tangibles para Niños con Discapacidad Visual",
-      estudiantes: ["Sofía Hernández"],
-      directores: ["Dra. Carmen Ortiz", "Dr. Luis Mendoza"],
-      mencion: "Laureada",
-      descripcion: "Creación de interfaces tangibles innovadoras para facilitar el aprendizaje en niños con discapacidad visual."
-    }
-  ];
+const TrabajosGrado = React.forwardRef((props, ref) => { 
+  const [trabajos, setTrabajos] = useState([]);
+  const [error, setError] = useState(null);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
-  };
+  useEffect(() => {
+    axios.get('http://localhost:3000/trabajosGrado', {
+      withCredentials: true,
+    })
+      .then(response => {
+        setTrabajos(response.data);  
+        setError(null);  
+      })
+      .catch(error => {
+        console.error("Error al obtener los trabajos de grado:", error);
+        setError('No se pudo obtener los trabajos de grado. Asegúrese de estar autenticado.');
+      });
+  }, []);
 
   return (
-    <section id="trabajos-grado" className="seccion trabajos-grado">
+    <section id="trabajos-grado" ref={ref} className="seccion trabajos-grado">
       <div className="contenedor">
+        <div className="linea-separadora-contenedor-TrabajosG">
+          <img src={logo} alt="Logo" className="logo-imagen" />
+          <div className="linea-roja"></div>
+        </div>
         <motion.h2 
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}
@@ -50,30 +37,39 @@ const TrabajosGrado = () => {
         >
           Trabajos de Grado
         </motion.h2>
-        <motion.div 
-          className="lista-trabajos"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {trabajos.map((trabajo, index) => (
-            <motion.div 
-              key={index} 
-              className="trabajo-item"
-              variants={itemVariants}
-              whileHover={{ scale: 1.03 }}
-            >
-              <h3>{trabajo.titulo}</h3>
-              <p><strong>Estudiantes:</strong> {trabajo.estudiantes.join(", ")}</p>
-              <p><strong>Directores:</strong> {trabajo.directores.join(", ")}</p>
-              <p><strong>Mención:</strong> <span className="mencion">{trabajo.mencion}</span></p>
-              <p>{trabajo.descripcion}</p>
+        {error && <p className="error-message">{error}</p>}
+        <motion.div className="lista-trabajos">
+          {trabajos.length === 0 ? (
+            <motion.div className="trabajo-item">
+              <p>No hay trabajos de grado disponibles.</p>
             </motion.div>
-          ))}
+          ) : (
+            trabajos.map((trabajo, index) => (
+              <motion.div key={index} className="trabajo-item">
+                <h3>{trabajo.titulo || 'No disponible'}</h3>
+                <p><strong>Estudiantes:</strong> 
+                  {trabajo.estudiantes && trabajo.estudiantes.length > 0
+                    ? trabajo.estudiantes.map((estudiante, idx) => `${estudiante["nombre(s)"]} ${estudiante["apellido(s)"]}`).join(", ")
+                    : 'No hay estudiantes asignados.'}
+                </p>
+                <p><strong>Directores:</strong> 
+                  {trabajo["director(es)"] && trabajo["director(es)"].length > 0
+                    ? trabajo["director(es)"].map((director, idx) => `${director["nombre(s)"]} ${director["apellido(s)"]}`).join(", ")
+                    : 'No hay directores asignados.'}
+                </p>
+                <p><strong>Mención:</strong> 
+                  {trabajo.mencion && trabajo.mencion.length > 0
+                    ? trabajo.mencion.join(", ")
+                    : 'No especificada'}
+                </p>
+                <p><strong>Descripción:</strong> {trabajo.descripcion || 'No especificada'}</p>
+              </motion.div>
+            ))
+          )}
         </motion.div>
       </div>
     </section>
   );
-};
+});
 
 export default TrabajosGrado;

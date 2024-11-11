@@ -13,7 +13,7 @@ const validarTrabajoDeGrado = (req, res, next) => {
     titulo, 
     mencion, 
     estudiantes, 
-    "director(es)": directores 
+    "director(es)": directores
   } = req.body["Trabajo de Grado"];
 
   // Validar que la descripción y el título no estén vacíos
