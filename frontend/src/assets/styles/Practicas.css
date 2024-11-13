@@ -1,12 +1,8 @@
-.practicas {
-  padding: 100px 0;
-  background-color: #f9f9f9;
-}
-
 .lista-practicas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas fijas */
+  gap: 30px; /* Espaciado entre las tarjetas */
+  justify-items: center; /* Centrar horizontalmente */
 }
 
 .practica-item {
@@ -15,6 +11,10 @@
   padding: 30px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+
+  width: 100%; /* Ocupa el ancho del contenedor de la columna */
+  max-width: 400px; /* Tamaño máximo uniforme */
+  min-height: 250px; /* Mantén la altura mínima consistente */
 }
 
 .practica-item:hover {
@@ -22,24 +22,24 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-.practica-item h3 {
-  color: var(--color-primario);
-  margin-top: 0;
-  font-size: 1.4rem;
-  margin-bottom: 15px;
+/* Ajuste especial para la última tarjeta centrada */
+.lista-practicas .practica-item:last-child:nth-child(3n + 1) {
+  grid-column: span 3; /* Hace que ocupe toda la fila */
+  justify-self: center; /* Centrada horizontalmente */
+  width: 100%; /* Igual ancho que las demás tarjetas */
+  max-width:370px; /* Mantiene el tamaño uniforme */
+  min-height: 250px; /* Mantiene la altura consistente */
 }
 
-.practica-item p {
-  margin: 10px 0;
-  line-height: 1.6;
-}
-
-.practica-item strong {
-  color: var(--color-primario);
-}
-
+/* Responsividad */
 @media (max-width: 768px) {
   .lista-practicas {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas en pantallas medianas */
+  }
+}
+
+@media (max-width: 480px) {
+  .lista-practicas {
+    grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
   }
 }
