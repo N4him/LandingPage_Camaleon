@@ -5,10 +5,11 @@ import {
   addDoc,
   deleteDoc,
   doc,
-  updateDoc,
+  updateDoc,query, orderBy
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { PlusIcon,PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { BarLoader  } from "react-spinners"; // Importa el spinner
 
 export default function Practicas() {
   const [practicas, setPracticas] = useState([]);
@@ -101,7 +102,21 @@ export default function Practicas() {
     });
   };
 
-  if (loading) return <div className="text-center mt-8">Cargando...</div>;
+  const getSortedPracticas = () => {
+    return [...practicas].sort((a, b) =>
+      a.tituloPractica.localeCompare(b.tituloPractica)
+    );
+  };
+  
+
+  if (loading)
+    return (
+      <div className="text-center mt-8 flex flex-col items-center">
+        <BarLoader  color="#4F46E5" size={50} /> {/* Spinner */}
+        <p className="mt-4 text-indigo-600 font-semibold">Cargando...</p>
+      </div>
+    );
+
   if (error)
     return <div className="text-red-600 text-center mt-8">{error}</div>;
 
@@ -110,9 +125,12 @@ export default function Practicas() {
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-4xl font-extrabold text-indigo-800">Prácticas</h2>
       </div>
+
+      
   
       {showForm && (
         <div className="relative bg-white p-10 rounded-xl shadow-2xl mb-10 space-y-8">
+          
           {/* Botón Cancelar arriba a la derecha */}
           <button
             onClick={() => {
@@ -266,9 +284,10 @@ export default function Practicas() {
       )}
   
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-  {practicas.map((practica) => (
+  {getSortedPracticas().map((practica) => (
     <div
-      key={practica.id}
+      key={practica.name}
+
       className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 min-h-[200px] flex flex-col justify-between"
     >
       <h3 className="text-lg font-semibold text-indigo-700 mb-4">
