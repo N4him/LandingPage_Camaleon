@@ -41,6 +41,14 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajusta automáticamente el número de columnas */
   gap: 40px; /* Aumentamos el espacio entre tarjetas */
   margin-top: 30px;
+  justify-content: center; /* Asegura el centrado para filas incompletas */
+}
+
+/* Centrar la última tarjeta cuando es impar */
+.trabajo-item:nth-child(odd):last-child {
+  grid-column: span 2; /* Ocupa el espacio de 2 columnas */
+  justify-self: center; /* Centra la tarjeta individualmente */
+  width: 50%;
 }
 
 /* Estilo para cada tarjeta de trabajo de grado */
