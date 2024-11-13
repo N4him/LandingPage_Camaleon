@@ -28,11 +28,11 @@ export default function Sidebar() {
   return (
     <div className="flex flex-col w-64 bg-mainColor min-h-screen">
       {/* Logo y título */}
-      <div className="flex items-center h-16 px-4">
+      <div className="flex items-center h-20 px-5">
         <img 
           src={LogoCamaleon} 
           alt="Logo" 
-          className="w-10 h-10 mr-3" // Ajusta el tamaño del logo según sea necesario
+          className="w-15 h-12 mr-2" // Ajusta el tamaño del logo según sea necesario
         />
         <h1 className="text-white font-bold text-xl">Dashboard Administrador</h1>
       </div>
