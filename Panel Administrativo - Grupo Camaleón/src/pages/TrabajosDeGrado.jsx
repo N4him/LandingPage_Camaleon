@@ -102,6 +102,13 @@ export default function TrabajosDeGrado() {
     });
   };
 
+  const getSortedPracticas = () => {
+    return [...trabajos].sort((a, b) =>
+      a.titulo.localeCompare(b.titulo)
+    );
+  };
+  
+
   if (loading) return <div className="text-center mt-8 text-lg text-gray-700">Cargando...</div>;
   if (error) return <div className="text-red-600 text-center mt-8 text-lg">{error}</div>;
 
@@ -250,58 +257,63 @@ export default function TrabajosDeGrado() {
       )}
   
       {/* Cards de los Trabajos de Grado */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Card para Nuevo Trabajo de Grado */}
-        <div
-          onClick={() => {
-            setShowForm(!showForm);
-            if (showForm) {
-              setIsEditing(false);
-              setCurrentTrabajoId(null);
-              setFormData({
-                descripcion: '',
-                titulo: '',
-                mencion: ['meritoria'],
-                estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
-                "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
-              });
-            }
-          }}
-          className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl cursor-pointer order-last"
+      {/* Cards de los Trabajos de Grado */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {/* Card para Nuevo Trabajo de Grado */}
+  <div
+    onClick={() => {
+      setShowForm(!showForm);
+      if (showForm) {
+        setIsEditing(false);
+        setCurrentTrabajoId(null);
+        setFormData({
+          descripcion: '',
+          titulo: '',
+          mencion: ['meritoria'],
+          estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
+          "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
+        });
+      }
+    }}
+    className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl cursor-pointer order-last min-h-[200px] h-full"
+  >
+    <PlusIcon className="w-12 h-12 text-indigo-600 mb-2" />
+    <p className="text-lg font-semibold text-indigo-600">Nuevo Trabajo de Grado</p>
+  </div>
+
+  {/* Cards de los Trabajos de Grado */}
+  {getSortedPracticas().map((trabajo) => (
+    <div
+      key={trabajo.id}
+      className="relative bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl min-h-[200px] h-full"
+    >
+      <h3 className="text-lg font-semibold text-gray-800">{trabajo.titulo}</h3>
+      <p className="text-gray-600 mb-2">{trabajo.descripcion}</p>
+      <p className="text-sm text-gray-500">
+        <strong>Mención: </strong>{trabajo.mencion.join(', ')}
+      </p>
+      <p className="text-sm text-gray-500">
+        <strong>Estudiantes: </strong>{trabajo.estudiantes.map(est => `${est["nombre(s)"]} ${est["apellido(s)"]}`).join(', ')}
+      </p>
+      <p className="text-sm text-gray-500">
+        <strong>Directores: </strong>{trabajo["director(es)"].map(dir => `${dir["nombre(s)"]} ${dir["apellido(s)"]}`).join(', ')}
+      </p>
+      {/* Botones Editar y Eliminar */}
+      <div className="absolute bottom-4 right-4 flex space-x-4">
+        <button
+          onClick={() => handleEdit(trabajo)}
+          className="text-indigo-600 hover:text-indigo-800 transition duration-300"
         >
-          <PlusIcon className="w-12 h-12 text-indigo-600 mb-2" />
-          <p className="text-lg font-semibold text-indigo-600">Nuevo Trabajo de Grado</p>
-        </div>
-  
-        {/* Cards de los Trabajos de Grado */}
-        {trabajos.map((trabajo) => (
-          <div key={trabajo.id} className="bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-800">{trabajo.titulo}</h3>
-            <p className="text-gray-600 mb-2">{trabajo.descripcion}</p>
-            <p className="text-sm text-gray-500">
-              <strong>Mención: </strong>{trabajo.mencion.join(', ')}
-            </p>
-            <p className="text-sm text-gray-500">
-              <strong>Estudiantes: </strong>{trabajo.estudiantes.map(est => `${est["nombre(s)"]} ${est["apellido(s)"]}`).join(', ')}
-            </p>
-            <p className="text-sm text-gray-500">
-              <strong>Directores: </strong>{trabajo["director(es)"].map(dir => `${dir["nombre(s)"]} ${dir["apellido(s)"]}`).join(', ')}
-            </p>
-            <div className="flex justify-end space-x-4 mt-4">
-              <button
-                onClick={() => handleEdit(trabajo)}
-                className="text-indigo-600 hover:text-indigo-800 transition duration-300"
-              >
-                <PencilIcon className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => handleDelete(trabajo.id)}
-                className="text-red-600 hover:text-red-800 transition duration-300"
-              >
-                <TrashIcon className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
+          <PencilIcon className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => handleDelete(trabajo.id)}
+          className="text-red-600 hover:text-red-800 transition duration-300"
+        >
+          <TrashIcon className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
         ))}
       </div>
     </div>
