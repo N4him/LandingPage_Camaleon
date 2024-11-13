@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { PlusIcon,PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 export default function TrabajosDeGrado() {
   const [trabajos, setTrabajos] = useState([]);
@@ -106,31 +107,18 @@ export default function TrabajosDeGrado() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold text-gray-800">Trabajos de Grado</h2>
-        <button
-          onClick={() => {
-            setShowForm(!showForm);
-            if (showForm) {
-              setIsEditing(false);
-              setCurrentTrabajoId(null);
-              setFormData({
-                descripcion: '',
-                titulo: '',
-                mencion: ['meritoria'],
-                estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
-                "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
-              });
-            }
-          }}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
-        >
-          {showForm ? 'Cancelar' : 'Nuevo Trabajo de Grado'}
-        </button>
-      </div>
-
+      {/* Formulario de creación/edición */}
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg mb-6 space-y-8">
+        <form onSubmit={handleSubmit} className="relative bg-white p-8 rounded-lg shadow-lg mb-6 space-y-8">
+          {/* Botón Cancelar en la esquina superior derecha */}
+          <button
+            type="button"
+            onClick={() => setShowForm(false)}
+            className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+          >
+            Cancelar
+          </button>
+  
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Descripción</label>
             <textarea
@@ -141,7 +129,7 @@ export default function TrabajosDeGrado() {
               required
             />
           </div>
-
+  
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Título</label>
             <input
@@ -152,7 +140,7 @@ export default function TrabajosDeGrado() {
               required
             />
           </div>
-
+  
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Mención</label>
             <select
@@ -169,7 +157,7 @@ export default function TrabajosDeGrado() {
               <option value="laureada">Laureada</option>
             </select>
           </div>
-
+  
           <div className="mb-6">
             <div className="flex justify-between items-center mb-4">
               <label className="block text-sm font-medium text-gray-700">Estudiantes</label>
@@ -210,7 +198,7 @@ export default function TrabajosDeGrado() {
               </div>
             ))}
           </div>
-
+  
           <div className="mb-6">
             <div className="flex justify-between items-center mb-4">
               <label className="block text-sm font-medium text-gray-700">Directores</label>
@@ -251,7 +239,7 @@ export default function TrabajosDeGrado() {
               </div>
             ))}
           </div>
-
+  
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
@@ -260,39 +248,62 @@ export default function TrabajosDeGrado() {
           </button>
         </form>
       )}
-
+  
+      {/* Cards de los Trabajos de Grado */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-          {trabajos.map((trabajo) => (
-            <div key={trabajo.id} className="bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl">
-              <h3 className="text-lg font-semibold text-gray-800">{trabajo.titulo}</h3>
-              <p className="text-gray-600 mb-2">{trabajo.descripcion}</p>
-              <p className="text-sm text-gray-500">
-                <strong>Mención: </strong>{trabajo.mencion.join(', ')}
-              </p>
-              <p className="text-sm text-gray-500">
-                <strong>Estudiantes: </strong>{trabajo.estudiantes.map(est => `${est["nombre(s)"]} ${est["apellido(s)"]}`).join(', ')}
-              </p>
-              <p className="text-sm text-gray-500">
-                <strong>Directores: </strong>{trabajo["director(es)"].map(dir => `${dir["nombre(s)"]} ${dir["apellido(s)"]}`).join(', ')}
-              </p>
-              <div className="flex justify-end space-x-4 mt-4">
-                <button
-                  onClick={() => handleEdit(trabajo)}
-                  className="text-indigo-600 hover:text-indigo-800 transition duration-300"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleDelete(trabajo.id)}
-                  className="text-red-600 hover:text-red-800 transition duration-300"
-                >
-                  Eliminar
-                </button>
-              </div>
+        {/* Card para Nuevo Trabajo de Grado */}
+        <div
+          onClick={() => {
+            setShowForm(!showForm);
+            if (showForm) {
+              setIsEditing(false);
+              setCurrentTrabajoId(null);
+              setFormData({
+                descripcion: '',
+                titulo: '',
+                mencion: ['meritoria'],
+                estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
+                "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
+              });
+            }
+          }}
+          className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl cursor-pointer order-last"
+        >
+          <PlusIcon className="w-12 h-12 text-indigo-600 mb-2" />
+          <p className="text-lg font-semibold text-indigo-600">Nuevo Trabajo de Grado</p>
+        </div>
+  
+        {/* Cards de los Trabajos de Grado */}
+        {trabajos.map((trabajo) => (
+          <div key={trabajo.id} className="bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-800">{trabajo.titulo}</h3>
+            <p className="text-gray-600 mb-2">{trabajo.descripcion}</p>
+            <p className="text-sm text-gray-500">
+              <strong>Mención: </strong>{trabajo.mencion.join(', ')}
+            </p>
+            <p className="text-sm text-gray-500">
+              <strong>Estudiantes: </strong>{trabajo.estudiantes.map(est => `${est["nombre(s)"]} ${est["apellido(s)"]}`).join(', ')}
+            </p>
+            <p className="text-sm text-gray-500">
+              <strong>Directores: </strong>{trabajo["director(es)"].map(dir => `${dir["nombre(s)"]} ${dir["apellido(s)"]}`).join(', ')}
+            </p>
+            <div className="flex justify-end space-x-4 mt-4">
+              <button
+                onClick={() => handleEdit(trabajo)}
+                className="text-indigo-600 hover:text-indigo-800 transition duration-300"
+              >
+                <PencilIcon className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => handleDelete(trabajo.id)}
+                className="text-red-600 hover:text-red-800 transition duration-300"
+              >
+                <TrashIcon className="w-5 h-5" />
+              </button>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+}  
