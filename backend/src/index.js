@@ -13,12 +13,10 @@ import authRoutes from './routes/auth.js';
 
 const app = express();
 
-app.use(cors(
-    {
-        origin: 'http://localhost:5173', // Permite frontend
-        credentials: true // Permite enviar cookies y sesiones
-    }
-))
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:5273'],  // Agregar el nuevo puerto
+    credentials: true
+}));
 
 app.use(bodyParser.json());
 
@@ -41,13 +39,13 @@ function ensureAuthenticated(req, res, next) {
 app.use('/auth', authRoutes);
 
 // Rutas protegidas por autenticación
-app.use('/practicas', ensureAuthenticated, practicasRoutes);
-app.use('/trabajosGrado', trabajosGradoRoutes); //desactivación de autenticación momentanea
+app.use('/practicas',  practicasRoutes);
+app.use('/trabajosGrado', ensureAuthenticated, trabajosGradoRoutes); //desactivación de autenticación momentanea
 app.use('/proyectosInvestigacion', ensureAuthenticated, proyectosInvestigacionRoutes);
 app.use('/lineasInvestigacion', ensureAuthenticated, lineasInvestigacionRoutes);
 app.use('/calificacionGrupo', ensureAuthenticated, calificacionGrupoRoutes);
-app.use('/miembrosGrupo', miembrosGrupoRoutes); //desactivación de autenticación momentanea
-app.use('/conveniosAlianzas', conveniosAlianzasRoutes); //desactivación de autenticación momentanea
+app.use('/miembrosGrupo', ensureAuthenticated, miembrosGrupoRoutes); //desactivación de autenticación momentanea
+app.use('/conveniosAlianzas', ensureAuthenticated, conveniosAlianzasRoutes); //desactivación de autenticación momentanea
 
 // Inicializar el servidor
 const PORT = process.env.PORT || 3000;
