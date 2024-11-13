@@ -9,6 +9,8 @@ import {
   BuildingLibraryIcon
 } from '@heroicons/react/24/outline';
 
+import LogoCamaleon from "./../../public/Group.svg";
+
 const navigation = [
   { name: 'Prácticas', href: '/practicas', icon: AcademicCapIcon },
   { name: 'Trabajos de Grado', href: '/trabajos-grado', icon: BookOpenIcon },
@@ -19,15 +21,24 @@ const navigation = [
   { name: 'Convenios', href: '/convenios', icon: BuildingLibraryIcon },
 ];
 
+
 export default function Sidebar() {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col w-64 bg-gray-800 min-h-screen">
-      <div className="flex items-center justify-center h-16 px-4">
-        <h1 className="text-white font-bold text-xl">Dashboard Admin</h1>
+    <div className="flex flex-col w-64 bg-mainColor min-h-screen">
+      {/* Logo y título */}
+      <div className="flex items-center h-20 px-5">
+        <img 
+          src={LogoCamaleon} 
+          alt="Logo" 
+          className="w-15 h-12 mr-2" // Ajusta el tamaño del logo según sea necesario
+        />
+        <h1 className="text-white font-bold text-xl">Dashboard Administrador</h1>
       </div>
-      <nav className="mt-5 flex-1 px-2 space-y-1">
+
+      {/* Navegación */}
+      <nav className="mt-5 flex-1 px-4 space-y-4">
         {navigation.map((item) => {
           const isActive = location.pathname === item.href;
           return (
@@ -36,17 +47,19 @@ export default function Sidebar() {
               to={item.href}
               className={`${
                 isActive
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
+                  ? 'bg-white text-red-500 scale-105 shadow-lg'
+                  : 'text-white hover:bg-white hover:text-red-500 hover:scale-105'
+              } transform transition-all duration-300 flex flex-col items-center justify-center px-4 py-6 text-sm font-medium rounded-lg group`}
             >
               <item.icon
                 className={`${
-                  isActive ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300'
-                } mr-3 flex-shrink-0 h-6 w-6`}
+                  isActive
+                    ? 'text-red-500'
+                    : 'text-white group-hover:text-red-500'
+                } h-8 w-8 transition-colors duration-300`}
                 aria-hidden="true"
               />
-              {item.name}
+              <span className="mt-2">{item.name}</span>
             </Link>
           );
         })}

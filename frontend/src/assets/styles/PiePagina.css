@@ -17,6 +17,9 @@
 .enlaces {
   color: white;
 }
+.titulos{
+  color:white
+}
 
 .pie-contenido {
   display: flex; /* Usar flexbox para organizar los elementos */
