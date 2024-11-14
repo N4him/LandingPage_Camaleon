@@ -52,22 +52,26 @@ export default function usePracticas() {
         },
       };
 
+      // Validate the form data before submitting
+      if (!formData.tituloPractica || !formData.profesor.nombres || !formData.profesor.apellidos) {
+        setError("Por favor complete todos los campos obligatorios");
+        return;
+      }
+
       if (isEditing && currentPracticaId) {
+        // PUT request to update the existing práctica
         await practicasApi.put(`/${currentPracticaId}`, dataToSend);
         setIsEditing(false);
         setCurrentPracticaId(null);
       } else {
+        // POST request to create a new práctica
         await practicasApi.post("/", dataToSend);
       }
 
+      // Fetch updated list of practicas
       await fetchPracticas();
       setShowForm(false);
-      setFormData({
-        profesor: { nombres: "", apellidos: "" },
-        resultadoInvestigacion: "",
-        tituloPractica: "",
-        estudiantes: [{ nombres: "", apellidos: "" }],
-      });
+      resetFormData();
     } catch (err) {
       setError("Error al guardar la práctica");
       console.error(err);
@@ -75,6 +79,11 @@ export default function usePracticas() {
   };
 
   const handleDelete = async (id) => {
+    if (!id) {
+      setError("ID de práctica inválido");
+      return;
+    }
+
     try {
       await practicasApi.delete(`/${id}`);
       await fetchPracticas();
@@ -97,16 +106,25 @@ export default function usePracticas() {
   };
 
   const addEstudiante = () => {
-    setFormData({
-      ...formData,
-      estudiantes: [...formData.estudiantes, { nombres: "", apellidos: "" }],
-    });
+    setFormData((prevData) => ({
+      ...prevData,
+      estudiantes: [...prevData.estudiantes, { nombres: "", apellidos: "" }],
+    }));
   };
 
   const getSortedPracticas = () => {
     return [...practicas].sort((a, b) =>
       a.tituloPractica.localeCompare(b.tituloPractica)
     );
+  };
+
+  const resetFormData = () => {
+    setFormData({
+      profesor: { nombres: "", apellidos: "" },
+      resultadoInvestigacion: "",
+      tituloPractica: "",
+      estudiantes: [{ nombres: "", apellidos: "" }],
+    });
   };
 
   return {
