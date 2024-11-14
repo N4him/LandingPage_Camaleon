@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import '../assets/styles/PiePagina.css';
+import LogoUnivalle from "./../../public/LogoUnivalle.svg";
 
 const PiePagina = () => {
   const containerVariants = {
@@ -32,24 +33,29 @@ const PiePagina = () => {
           initial="hidden"
           animate="visible"
         >
+          <motion.div className="logo" variants={itemVariants}>
+          <div className="nav-end-logo">
+            <img src={LogoUnivalle} alt="Logo u" className="logo-univalle" />
+          </div>
+          </motion.div>
           <motion.div className="info-universidad" variants={itemVariants}>
-            <h3>Universidad del Valle</h3>
+            <h4 className='titulos '>Universidad del Valle</h4>
             <p>Cali - Colombia</p>
             <p>© 1994 - 2024</p>
           </motion.div>
           <motion.div className="direcciones" variants={itemVariants}>
-            <h4>Direcciones:</h4>
+            <h4 className='titulos ' >Direcciones</h4>
             <p>Ciudad Universitaria Meléndez<br />Calle 13 # 100-00</p>
             <p>Sede San Fernando<br />Calle 4B N° 36-00</p>
           </motion.div>
           <motion.div className="contacto" variants={itemVariants}>
-            <h4>Contacto:</h4>
+            <h4 className='titulos ' >Contacto</h4>
             <p>PBX: +57 602 3212100</p>
             <p>Línea gratuita PQRS: 018000 220021</p>
             <p>Apartado Aéreo: 25360</p>
           </motion.div>
           <motion.div className="enlaces-rapidos" variants={itemVariants}>
-            <h4>Enlaces Rápidos:</h4>
+            <h4 className='titulos ' >Enlaces</h4>
             <ul className="enlaces-rapidos">
               <li><a className="enlaces" href="#">Consejo Superior</a></li>
               <li><a className="enlaces" href="#">Consejo Académico</a></li>
@@ -59,12 +65,12 @@ const PiePagina = () => {
             </ul>
           </motion.div>
           <motion.div className="redes-sociales" variants={itemVariants}>
-            <h4>Síguenos:</h4>
+            <h4 className='titulos ' > Síguenos</h4>
             <div className="iconos-redes">
-              <a href="#" className="red-social"><FaFacebookF /></a>
-              <a href="#" className="red-social"><FaTwitter /></a>
-              <a href="#" className="red-social"><FaInstagram /></a>
-              <a href="#" className="red-social"><FaLinkedinIn /></a>
+              <a  href="#" className='titulos ' ><FaFacebookF /></a>
+              <a href="#" className='titulos '><FaTwitter /></a>
+              <a href="#" className='titulos ' ><FaInstagram /></a>
+              <a href="#" className='titulos '><FaLinkedinIn /></a>
             </div>
           </motion.div>
         </motion.div>

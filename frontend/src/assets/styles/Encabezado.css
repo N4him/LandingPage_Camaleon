@@ -3,10 +3,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #c41e3a;
+  background-color: #C20E1A;
   color: white;
-  position: relative; /* Asegura que el menú se posicione correctamente */
+  position: sticky; /* Cambiado para que sea sticky */
+  top: 0; /* Queda fija en la parte superior de la pantalla */
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
 }
+
 
 .nav-brand {
   display: flex;
@@ -24,7 +27,7 @@
 }
 
 .logo-encima {
-  height: 80px; /* Ajusta el tamaño del logo */
+  height: 70px; /* Ajusta el tamaño del logo */
   display: flex; /* Habilita el modo flex */
   justify-content: center; /* Espacio entre el logo y la palabra "Camaleón" */
 }
@@ -43,13 +46,13 @@
   z-index: 1;
   padding: 10px 20px; /* Espaciado interno para hacer más grande el área clickeable */
   border-radius: 5px; /* Bordes redondeados */
+  margin-right: 18px;
 }
 @media screen and (min-width: 1024px) {
   .nav-link.active {
     color: #c41e3a; /* Cambia el color del texto a rojo cuando está activo */
   }
 }
-
 
 .nav-link.active:hover {
   border-radius: 30px;
@@ -96,6 +99,7 @@
 
   .nav-brand {
     margin-right: auto;
+    
   }
 
   .nav-toggle {
@@ -108,7 +112,6 @@
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
     width: 100%;
     background-color: #c41e3a;
     z-index: 10;
