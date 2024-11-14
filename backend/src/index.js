@@ -39,13 +39,13 @@ function ensureAuthenticated(req, res, next) {
 app.use('/auth', authRoutes);
 
 // Rutas protegidas por autenticación
-app.use('/practicas',ensureAuthenticated,  practicasRoutes);
-app.use('/trabajosGrado', ensureAuthenticated, trabajosGradoRoutes); //desactivación de autenticación momentanea
-app.use('/proyectosInvestigacion', ensureAuthenticated, proyectosInvestigacionRoutes);
-app.use('/lineasInvestigacion', ensureAuthenticated, lineasInvestigacionRoutes);
-app.use('/calificacionGrupo', ensureAuthenticated, calificacionGrupoRoutes);
-app.use('/miembrosGrupo', ensureAuthenticated, miembrosGrupoRoutes); //desactivación de autenticación momentanea
-app.use('/conveniosAlianzas', ensureAuthenticated, conveniosAlianzasRoutes); //desactivación de autenticación momentanea
+app.use('/practicas',  practicasRoutes);
+app.use('/trabajosGrado', trabajosGradoRoutes); //desactivación de autenticación momentanea
+app.use('/proyectosInvestigacion', proyectosInvestigacionRoutes);
+app.use('/lineasInvestigacion', lineasInvestigacionRoutes);
+app.use('/calificacionGrupo', calificacionGrupoRoutes);
+app.use('/miembrosGrupo', miembrosGrupoRoutes); //desactivación de autenticación momentanea
+app.use('/conveniosAlianzas', conveniosAlianzasRoutes); //desactivación de autenticación momentanea
 
 // Inicializar el servidor
 const PORT = process.env.PORT || 3000;
