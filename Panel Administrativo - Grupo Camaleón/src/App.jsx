@@ -8,6 +8,10 @@ import Header from './components/Header';
 import Practicas from './pages/Practicas';
 import TrabajosDeGrado from './pages/TrabajosDeGrado';
 import MiembrosGrupo from './pages/MiembroDelGrupo';
+import Calificacion from './pages/Calificacion';
+import Proyectos from './pages/Proyectos';
+import LineaDeInvestigacion from './pages/LineaDeInvestigacion';
+import Convenios from './pages/Convenios';
 
 function App() {
   return (
@@ -29,11 +33,11 @@ function App() {
                           <Route path="/" element={<Dashboard />} />
                           <Route path="/practicas" element={<Practicas />} />
                           <Route path="/trabajos-grado" element={<TrabajosDeGrado/>} />
-                          <Route path="/proyectos" element={<h1>Proyectos de Investigación</h1>} />
-                          <Route path="/lineas" element={<h1>Líneas de Investigación</h1>} />
-                          <Route path="/calificaciones" element={<h1>Calificación de Grupo</h1>} />
+                          <Route path="/proyectos" element={<Proyectos/>} />
+                          <Route path="/lineas" element={<LineaDeInvestigacion/>} />
+                          <Route path="/calificaciones" element={<Calificacion/>} />
                           <Route path="/miembros" element={<MiembrosGrupo/>}  />
-                          <Route path="/convenios" element={<h1>Convenios/Alianzas</h1>} />
+                          <Route path="/convenios" element={<Convenios/>} />
                         </Routes>
                       </main>
                     </div>
