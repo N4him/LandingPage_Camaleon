@@ -1,32 +1,73 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import "../assets/styles/Practicas.css";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import axios from 'axios';
+import '../assets/styles/Practicas.css';
 
 const Practicas = () => {
   const [practicas, setPracticas] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Crear instancia de axios para las peticiones GET
+  const practicasApi = axios.create({
+    baseURL: "http://localhost:3000/practicas",
+    withCredentials: true,
+  });
+
   useEffect(() => {
-    fetch("http://localhost:3000/practicas") // Asegúrate de que esta URL sea correcta
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la respuesta del servidor");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setPracticas(data);
-      })
-      .catch((error) => {
-        console.error("Error al obtener las prácticas:", error);
-        setError("No se pudieron cargar las prácticas.");
-      });
+    fetchPracticas();
   }, []);
+
+  // Función para obtener las prácticas desde el servidor
+  const fetchPracticas = async () => {
+    try {
+      const response = await practicasApi.get("/");
+      const practicasData = response.data.map((item) => ({
+        id: item.id,
+        ...item.practica,
+      }));
+      setPracticas(practicasData);  // Establecer el estado con los datos obtenidos
+    } catch (err) {
+      setError("Error al cargar las prácticas");
+      console.error(err);
+    } finally {
+      setLoading(false);  // Finaliza la carga
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  };
+
+  // Mientras los datos están cargando
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // Si hay un error al cargar los datos
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <section id="practicas" className="seccion practicas">
       <div className="contenedor">
-        <motion.h2
+        <motion.h2 
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -34,33 +75,26 @@ const Practicas = () => {
         >
           Prácticas
         </motion.h2>
-        {error ? (
-          <p className="error">{error}</p>
-        ) : practicas.length > 0 ? (
-          <motion.div className="lista-practicas">
-            {practicas.map((practica, index) => (
-              <motion.div key={index} className="practica-item">
-                <h3>{practica.practica.tituloPractica}</h3>
-                <p>
-                  <strong>Estudiante(s):</strong>{" "}
-                  {practica.practica.estudiantes
-                    .map(
-                      (estudiante) =>
-                        `${estudiante.nombres} ${estudiante.apellidos}`
-                    )
-                    .join(", ")}
-                </p>
-                <p>
-                  <strong>Profesor responsable:</strong>{" "}
-                  {`${practica.practica.profesor.nombres} ${practica.practica.profesor.apellidos}`}
-                </p>
-                <p>{practica.practica.resultadoInvestigacion}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        ) : (
-          <p>No hay prácticas disponibles.</p>
-        )}
+        <motion.div 
+          className="lista-practicas"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {practicas.map((practica, index) => (
+            <motion.div 
+              key={index} 
+              className="practica-item"
+              variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+            >
+              <h3>{practica.tituloPractica}</h3>
+              <p><strong>Estudiante:</strong> {practica.estudiantes[0].nombres} {practica.estudiantes[0].apellidos}</p>
+              <p><strong>Profesor responsable:</strong> {practica.profesor.nombres} {practica.profesor.apellidos}</p>
+              <p>{practica.resultadoInvestigacion}</p>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

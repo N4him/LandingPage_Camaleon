@@ -1,123 +1,43 @@
-import { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'; 
+import useTrabajosDeGrado from '../pages/TrabajosDeGradoLogic';  // Importa la lógica
 
 export default function TrabajosDeGrado() {
-  const [trabajos, setTrabajos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentTrabajoId, setCurrentTrabajoId] = useState(null);
-
-  const [formData, setFormData] = useState({
-    descripcion: '',
-    titulo: '',
-    mencion: ['meritoria'], // default value
-    estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
-    "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
-  });
-
-  useEffect(() => {
-    fetchTrabajos();
-  }, []);
-
-  async function fetchTrabajos() {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'Trabajos de Grado'));
-      const trabajosData = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          titulo: data.titulo || [],
-          estudiantes: data.estudiantes || [],
-          mencion: data.mencion || [],
-          "director(es)": data["director(es)"] || [],
-          descripcion: data.descripcion || '',
-        }
-      });
-      setTrabajos(trabajosData);
-    } catch (err) {
-      setError('Error al cargar los trabajos de grado');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (isEditing && currentTrabajoId) {
-        const trabajoRef = doc(db, 'Trabajos de Grado', currentTrabajoId);
-        await updateDoc(trabajoRef, formData);
-        setIsEditing(false);
-        setCurrentTrabajoId(null);
-      } else {
-        await addDoc(collection(db, 'Trabajos de Grado'), formData);
-      }
-      await fetchTrabajos();
-      setShowForm(false);
-      setFormData({
-        descripcion: '',
-        titulo: '',
-        mencion: ['meritoria'],
-        estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
-        "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
-      });
-    } catch (err) {
-      setError('Error al guardar el trabajo de grado');
-      console.error(err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteDoc(doc(db, 'Trabajos de Grado', id));
-      await fetchTrabajos();
-    } catch (err) {
-      setError('Error al eliminar el trabajo de grado');
-      console.error(err);
-    }
-  };
-
-  const handleEdit = (trabajo) => {
-    setIsEditing(true);
-    setCurrentTrabajoId(trabajo.id);
-    setFormData({
-      descripcion: trabajo.descripcion,
-      titulo: trabajo.titulo,
-      mencion: trabajo.mencion,
-      estudiantes: trabajo.estudiantes,
-      "director(es)": trabajo["director(es)"]
-    });
-    setShowForm(true);
-  };
-
-  const addEstudiante = () => {
-    setFormData({
-      ...formData,
-      estudiantes: [...formData.estudiantes, { "nombre(s)": '', "apellido(s)": '' }]
-    });
-  };
-
-  const addDirector = () => {
-    setFormData({
-      ...formData,
-      "director(es)": [...formData["director(es)"], { "nombre(s)": '', "apellido(s)": '' }]
-    });
-  };
-
-  const getSortedPracticas = () => {
-    return [...trabajos].sort((a, b) =>
-      a.titulo.localeCompare(b.titulo)
-    );
-  };
-
+  const {
+    trabajos,
+    loading,
+    error,
+    showForm,
+    setShowForm,
+    isEditing,
+    setIsEditing,
+    currentTrabajoId,
+    setCurrentTrabajoId,
+    formData,
+    setFormData,
+    handleSubmit,
+    handleDelete,
+    handleEdit,
+    addEstudiante,
+    addDirector,
+    getSortedTrabajos
+  } = useTrabajosDeGrado();
 
   if (loading) return <div className="text-center mt-8 text-lg text-gray-700">Cargando...</div>;
   if (error) return <div className="text-red-600 text-center mt-8 text-lg">{error}</div>;
+
+  // Reseteamos el formulario después de cancelar o guardar
+  const handleCancel = () => {
+    setShowForm(false);
+    setIsEditing(false);
+    setCurrentTrabajoId(null);
+    setFormData({
+      descripcion: '',
+      titulo: '',
+      mencion: ['meritoria'],
+      estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
+      "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
+    });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -132,7 +52,7 @@ export default function TrabajosDeGrado() {
           >
             Cancelar
           </button>
-
+  
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Descripción</label>
             <textarea
@@ -143,7 +63,7 @@ export default function TrabajosDeGrado() {
               required
             />
           </div>
-
+  
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Título</label>
             <input
@@ -154,7 +74,7 @@ export default function TrabajosDeGrado() {
               required
             />
           </div>
-
+  
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Mención</label>
             <select
@@ -169,9 +89,10 @@ export default function TrabajosDeGrado() {
             >
               <option value="meritoria">Meritoria</option>
               <option value="laureada">Laureada</option>
+              <option value="">""</option>
             </select>
           </div>
-
+  
           <div className="mb-6">
             <div className="flex justify-between items-center mb-4">
               <label className="block text-sm font-medium text-gray-700">Estudiantes</label>
@@ -212,7 +133,7 @@ export default function TrabajosDeGrado() {
               </div>
             ))}
           </div>
-
+  
           <div className="mb-6">
             <div className="flex justify-between items-center mb-4">
               <label className="block text-sm font-medium text-gray-700">Directores</label>
@@ -253,7 +174,7 @@ export default function TrabajosDeGrado() {
               </div>
             ))}
           </div>
-
+  
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition duration-300 ease-in-out"
@@ -262,67 +183,74 @@ export default function TrabajosDeGrado() {
           </button>
         </form>
       )}
-
+  
       {/* Cards de los Trabajos de Grado */}
       {/* Cards de los Trabajos de Grado */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Card para Nuevo Trabajo de Grado */}
-        <div
-          onClick={() => {
-            setShowForm(!showForm);
-            if (showForm) {
-              setIsEditing(false);
-              setCurrentTrabajoId(null);
-              setFormData({
-                descripcion: '',
-                titulo: '',
-                mencion: ['meritoria'],
-                estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
-                "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
-              });
-            }
-          }}
-          className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl cursor-pointer order-last min-h-[200px] h-full"
-        >
-          <PlusIcon className="w-12 h-12 text-indigo-600 mb-2" />
-          <p className="text-lg font-semibold text-indigo-600">Nuevo Trabajo de Grado</p>
-        </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {/* Card para Nuevo Trabajo de Grado */}
+  <div
+    onClick={() => {
+      setShowForm(!showForm);
+      if (showForm) {
+        setIsEditing(false);
+        setCurrentTrabajoId(null);
+        setFormData({
+          descripcion: '',
+          titulo: '',
+          mencion: ['meritoria'],
+          estudiantes: [{ "nombre(s)": '', "apellido(s)": '' }],
+          "director(es)": [{ "nombre(s)": '', "apellido(s)": '' }]
+        });
+      }
+    }}
+    className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl cursor-pointer order-last min-h-[200px] h-full"
+  >
+    <PlusIcon className="w-12 h-12 text-indigo-600 mb-2" />
+    <p className="text-lg font-semibold text-indigo-600">Nuevo Trabajo de Grado</p>
+  </div>
 
-        {/* Cards de los Trabajos de Grado */}
-        {getSortedPracticas().map((trabajo) => (
-          <div
-            key={trabajo.id}
-            className="relative bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl min-h-[200px] h-full"
-          >
-            <h3 className="text-lg font-semibold text-gray-800">{trabajo.titulo}</h3>
-            <p className="text-gray-600 mb-2">{trabajo.descripcion}</p>
-            <p className="text-sm text-gray-500">
-              <strong>Mención: </strong>{trabajo.mencion.join(', ')}
-            </p>
-            <p className="text-sm text-gray-500">
-              <strong>Estudiantes: </strong>{trabajo.estudiantes.map(est => `${est["nombre(s)"]} ${est["apellido(s)"]}`).join(', ')}
-            </p>
-            <p className="text-sm text-gray-500">
-              <strong>Directores: </strong>{trabajo["director(es)"].map(dir => `${dir["nombre(s)"]} ${dir["apellido(s)"]}`).join(', ')}
-            </p>
-            {/* Botones Editar y Eliminar */}
-            <div className="absolute bottom-4 right-4 flex space-x-4">
-              <button
-                onClick={() => handleEdit(trabajo)}
-                className="text-indigo-600 hover:text-indigo-800 transition duration-300"
-              >
-                <PencilIcon className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => handleDelete(trabajo.id)}
-                className="text-red-600 hover:text-red-800 transition duration-300"
-              >
-                <TrashIcon className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        ))}
+  {getSortedTrabajos().map((trabajo) => (
+  <div
+    key={trabajo.id}
+    className="relative bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl min-h-[200px] h-full"
+  >
+    <h3 className="text-lg font-semibold text-gray-800">{trabajo.titulo}</h3>
+    <p className="text-gray-600 mb-2">{trabajo.descripcion}</p>
+
+    {/* Conditionally render the Mención section only if it's not empty */}
+    {trabajo.mencion && trabajo.mencion.length > 0 && trabajo.mencion[0] !== "" && (
+      <p className="text-sm text-gray-500">
+        <strong>Mención: </strong>{trabajo.mencion.join(', ')}
+      </p>
+    )}
+
+    <p className="text-sm text-gray-500">
+      <strong>Estudiantes: </strong>{trabajo.estudiantes.map(est => `${est["nombre(s)"]} ${est["apellido(s)"]}`).join(', ')}
+    </p>
+    <p className="text-sm text-gray-500">
+      <strong>Directores: </strong>{trabajo["director(es)"].map(dir => `${dir["nombre(s)"]} ${dir["apellido(s)"]}`).join(', ')}
+    </p>
+
+    {/* Botones Editar y Eliminar */}
+    <div className="absolute bottom-4 right-4 flex space-x-4">
+      <button
+        onClick={() => handleEdit(trabajo)}
+        className="text-indigo-600 hover:text-indigo-800 transition duration-300"
+      >
+        <PencilIcon className="w-5 h-5" />
+      </button>
+      <button
+        onClick={() => handleDelete(trabajo.id)}
+        className="text-red-600 hover:text-red-800 transition duration-300"
+      >
+        <TrashIcon className="w-5 h-5" />
+      </button>
+    </div>
+  </div>
+))}
+
       </div>
     </div>
   );
-}  
+}
+
