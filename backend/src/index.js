@@ -27,13 +27,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Middleware para verificar si el usuario está autenticado
-function ensureAuthenticated(req, res, next) {
-    if (req.session.user) {
-        return next();
-    }
-    res.status(401).json({ message: 'Debe estar autenticado para acceder a esta ruta' });
-}
+
 
 // Rutas de autenticación
 app.use('/auth', authRoutes);
