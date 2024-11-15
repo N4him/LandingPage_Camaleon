@@ -1,16 +1,22 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+// Importa dotenv y configura las variables de entorno
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Importa las funciones necesarias de la SDK de Firebase
+import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage'; // Importa Storage
+import { getAuth } from 'firebase/auth'; // Importa el módulo de autenticación
 
+// Tu configuración de Firebase usando variables de entorno
 const firebaseConfig = {
-  apiKey: "AIzaSyA6FM-lkZRM0R1aSw9ZDoSsCf3Sufnd9TQ",
-  authDomain: "database-camaleon.firebaseapp.com",
-  databaseURL: "https://database-camaleon-default-rtdb.firebaseio.com",
-  projectId: "database-camaleon",
-  storageBucket: "database-camaleon.appspot.com",
-  messagingSenderId: "354363698225",
-  appId: "1:354363698225:web:b95243338b87a49f543910"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID
 };
 
 // Inicializa Firebase
