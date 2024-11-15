@@ -7,6 +7,7 @@ import { db } from '../config.js';
 const router = express.Router();
 
 // Middleware de validación para Trabajo de Grado
+// Middleware de validación para Trabajo de Grado
 const validarTrabajoDeGrado = (req, res, next) => {
   const { 
     descripcion, 
@@ -25,13 +26,13 @@ const validarTrabajoDeGrado = (req, res, next) => {
     return res.status(400).json({ error: 'El título es obligatorio.' });
   }
 
-  // Validar mención: solo puede ser "meritoria" o "laureada"
+  // Validar mención: puede ser "meritoria", "laureada" o ""
   if (
     !Array.isArray(mencion) || 
-    mencion.some(opcion => opcion !== 'meritoria' && opcion !== 'laureada')
+    mencion.some(opcion => opcion !== 'meritoria' && opcion !== 'laureada' && opcion !== '')
   ) {
     return res.status(400).json({ 
-      error: 'Las menciones deben ser "meritoria" o "laureada".' 
+      error: 'Las menciones deben ser "meritoria", "laureada" o una cadena vacía ("").' 
     });
   }
 
@@ -60,6 +61,7 @@ const validarTrabajoDeGrado = (req, res, next) => {
   next();
 };
 
+
 // Rutas para "Trabajos de Grado"
 
 // Obtener todos los trabajos de grado
@@ -74,6 +76,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los trabajos de grado' });
   }
 });
+
 
 // Crear un nuevo trabajo de grado
 router.post('/', validarTrabajoDeGrado, async (req, res) => {

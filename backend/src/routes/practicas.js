@@ -6,9 +6,8 @@ const router = express.Router();
 
 // Middleware para validar los datos de la práctica
 const validarPractica = (req, res, next) => {
-  const { profesor, resultadoInvestigacion, estudiantes, tituloPractica } = req.body;
+  const { profesor, resultadoInvestigacion, estudiantes, tituloPractica } = req.body.practica;  // Asegúrate de acceder a req.body.practica
 
-  // Validación de campos vacíos o inexistentes
   if (!profesor || !profesor.nombres || !profesor.apellidos) {
     return res.status(400).json({ error: 'El nombre y apellido del profesor son obligatorios.' });
   }
@@ -22,7 +21,6 @@ const validarPractica = (req, res, next) => {
     return res.status(400).json({ error: 'Debe haber al menos un estudiante.' });
   }
 
-  // Validación de cada estudiante en el array
   for (const estudiante of estudiantes) {
     if (!estudiante.nombres || estudiante.nombres.trim() === '') {
       return res.status(400).json({ error: 'El nombre del estudiante es obligatorio.' });
@@ -34,6 +32,7 @@ const validarPractica = (req, res, next) => {
 
   next();
 };
+
 
 // Ruta para obtener todas las prácticas
 router.get('/', async (req, res) => {
@@ -50,7 +49,7 @@ router.get('/', async (req, res) => {
 
 // Ruta para crear una nueva práctica
 router.post('/', validarPractica, async (req, res) => {
-  const data = req.body;
+  const data = req.body.practica; // Aquí accedemos a los datos de la práctica desde el cuerpo de la solicitud
   try {
     const collectionRef = collection(db, 'Practicas');
     const docRef = await addDoc(collectionRef, data);
@@ -60,6 +59,7 @@ router.post('/', validarPractica, async (req, res) => {
     res.status(500).json({ error: 'Error al crear la práctica' });
   }
 });
+
 
 // Ruta para obtener una práctica por ID
 router.get('/:id', async (req, res) => {
@@ -82,7 +82,9 @@ router.get('/:id', async (req, res) => {
 // Ruta para actualizar una práctica
 router.put('/:id', validarPractica, async (req, res) => {
   const { id } = req.params;
-  const data = req.body;
+  const { profesor, resultadoInvestigacion, estudiantes, tituloPractica } = req.body.practica;  // Acceder al objeto "practica"
+  const data = { profesor, resultadoInvestigacion, estudiantes, tituloPractica };  // Crear un objeto con solo los campos necesarios
+
   try {
     const docRef = doc(db, 'Practicas', id);
     await updateDoc(docRef, data);
@@ -92,6 +94,7 @@ router.put('/:id', validarPractica, async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar la práctica' });
   }
 });
+
 
 // Ruta para eliminar una práctica
 router.delete('/:id', async (req, res) => {
