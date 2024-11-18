@@ -11,9 +11,19 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  function isValidEmail(email) {
+    // Simple email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-
+    
+    if (!isValidEmail(email)) {
+      setError('Por favor, ingrese un correo electrónico válido.');
+      return;
+    }
     try {
       setError('');
       setLoading(true);
