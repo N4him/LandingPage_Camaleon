@@ -9,8 +9,8 @@ const validateCalificacionFields = (req, res, next) => {
   const { calificacion } = req.body;
 
   // Comprobar si el objeto calificacion existe y si los campos son válidos
-  if (!calificacion || !calificacion.calificacion || !calificacion['Más información']) {
-    return res.status(400).json({ error: 'Los campos "calificación" y "Más información" son obligatorios.' });
+  if (!calificacion || !calificacion.calificacion || !calificacion.masInformacion) {
+    return res.status(400).json({ error: 'Los campos "calificación" y "masInformacion" son obligatorios.' });
   }
 
   next(); // Si la validación pasa, continuar con la siguiente función

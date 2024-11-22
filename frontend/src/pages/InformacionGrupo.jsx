@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaUsers, FaChartLine, FaLightbulb } from 'react-icons/fa';
 import '../assets/styles/InformacionGrupo.css';
-import logo from '../assets/images/logoS.png'
+import logo from '../assets/images/logoS.png';
+import Clasificacion from './Clasificacion'; // Importamos el componente Clasificacion
 
 const InformacionGrupo = () => {
   const containerVariants = {
@@ -95,18 +96,13 @@ const InformacionGrupo = () => {
           </motion.div>
         </motion.div>
 
-        <motion.div 
-          className="clasificacion"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <h3>Clasificación</h3>
-          <p>C (otorgada por Minciencias)</p>
-        </motion.div>
+        {/* Aquí incluimos el componente de clasificación */}
+        <Clasificacion />
+        
       </div>
     </section>
   );
 };
 
 export default InformacionGrupo;
+
