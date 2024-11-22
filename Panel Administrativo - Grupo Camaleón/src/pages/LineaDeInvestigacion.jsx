@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, doc, updateDoc, deleteDoc, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import axios from 'axios';
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+
+const lineasInvestigacionApi = axios.create({
+  baseURL: "http://localhost:3000/lineasInvestigacion",
+  withCredentials: true,
+});
 
 export default function LineaDeInvestigacion() {
     const [lineas, setLineas] = useState([]);
@@ -21,13 +25,12 @@ export default function LineaDeInvestigacion() {
 
     async function fetchLineas() {
         try {
-            const querySnapshot = await getDocs(collection(db, 'Líneas de Investigacion'));
-            const lineasData = querySnapshot.docs.map((doc) => {
-                const data = doc.data();
+            const response = await lineasInvestigacionApi.get('/');
+            const lineasData = response.data.map((linea) => {
                 return {
-                    id: doc.id,
-                    nombre: data.nombre || '',
-                    descripcion: data.descripcion || '',
+                    id: linea.id,
+                    nombre: linea['Linea de Investigacion'].nombre,
+                    descripcion: linea['Linea de Investigacion'].descripcion,
                 };
             });
             setLineas(lineasData);
@@ -43,17 +46,18 @@ export default function LineaDeInvestigacion() {
         e.preventDefault();
         try {
             const lineaData = {
-                nombre: formData.nombre,
-                descripcion: formData.descripcion,
+                "Linea de Investigacion": {
+                    nombre: formData.nombre,
+                    descripcion: formData.descripcion,
+                },
             };
 
             if (isEditing && currentLineaId) {
-                const lineaRef = doc(db, 'Líneas de Investigacion', currentLineaId);
-                await updateDoc(lineaRef, lineaData);
+                await lineasInvestigacionApi.put(`/${currentLineaId}`, lineaData);
                 setIsEditing(false);
                 setCurrentLineaId(null);
             } else {
-                await addDoc(collection(db, 'Líneas de Investigacion'), lineaData);
+                await lineasInvestigacionApi.post('/', lineaData);
             }
             await fetchLineas();
             setShowForm(false);
@@ -75,8 +79,7 @@ export default function LineaDeInvestigacion() {
 
     const handleDelete = async (lineaId) => {
         try {
-            const lineaRef = doc(db, 'Líneas de Investigacion', lineaId);
-            await deleteDoc(lineaRef);
+            await lineasInvestigacionApi.delete(`/${lineaId}`);
             await fetchLineas();
         } catch (err) {
             setError('Error al eliminar la línea de investigación');
@@ -168,3 +171,4 @@ export default function LineaDeInvestigacion() {
         </div>
     );
 }
+
