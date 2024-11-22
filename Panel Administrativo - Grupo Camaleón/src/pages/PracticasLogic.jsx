@@ -52,7 +52,7 @@ export default function usePracticas() {
         },
       };
 
-      // Validate the form data before submitting
+      // Validate the form data before submitti
       if (!formData.tituloPractica || !formData.profesor.nombres || !formData.profesor.apellidos) {
         setError("Por favor complete todos los campos obligatorios");
         return;
