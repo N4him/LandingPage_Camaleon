@@ -2,45 +2,41 @@
   padding: 100px 0;
   background-color: #f9f9f9;
 }
+
 .linea-separadora-contenedor-Miembros {
   display: flex;
   align-items: center;
   margin-top: 30px;
-  margin-bottom: -30px; 
+  margin-bottom: -30px;
   position: relative;
-  transform: translateY(127px) translateX(270px); 
+  transform: translateY(127px) translateX(270px);
 }
 
 .logo-imagen {
   width: 50px;  
   height: auto;
   position: relative;
-  z-index: 2; 
+  z-index: 2;
   margin-right: 0; 
 }
 
 .linea-roja {
   flex-grow: 1;
   height: 2px;
-  background-color: red;  
-  margin-left: 10px; 
+  background-color: red;
+  margin-left: 10px;
   position: absolute;
   left: 25px;
   width: 47%; 
-  z-index: 1; 
+  z-index: 1;
 }
 
 .lista-miembros {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Ajusta el grid para 3 por fila en pantallas grandes */
   gap: 40px;
-  justify-content: center; 
-}
-
-.miembro-item:nth-child(odd):last-child {
-  grid-column: span 4; 
-  justify-self: center; 
-  width: 22%;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .miembro-item {
@@ -58,8 +54,11 @@
 }
 
 .miembro-foto {
-  width: 100px; /* Ajusta el ancho según sea necesario */
-  height: auto; /* Mantiene la proporción de la imagen */
+  width: 100px; /* Ajusta el ancho de la imagen */
+  height: 100px; /* Asegura que la imagen sea cuadrada */
+  object-fit: cover; /* Asegura que la imagen se recorte bien */
+  border-radius: 50%; /* Hace la imagen circular */
+  margin-bottom: 15px;
 }
 
 .miembro-item h3 {
@@ -132,8 +131,15 @@ li {
   margin-bottom: 10px; /* Margen inferior entre líneas */
 }
 
+/* Responsividad */
+@media (max-width: 1024px) {
+  .lista-miembros {
+    grid-template-columns: repeat(2, 1fr); /* Dos tarjetas por fila en pantallas más pequeñas (tabletas) */
+  }
+}
+
 @media (max-width: 768px) {
   .lista-miembros {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Una tarjeta por fila en dispositivos móviles */
   }
 }
