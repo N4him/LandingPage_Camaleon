@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import '../assets/styles/Practicas.css';
+import logo from '../assets/images/logoS.png';
 
 const Practicas = () => {
   const [practicas, setPracticas] = useState([]);
@@ -67,6 +68,10 @@ const Practicas = () => {
   return (
     <section id="practicas" className="seccion practicas">
       <div className="contenedor">
+      <div className="linea-separadora-contenedor-Practicas">
+          <img src={logo} alt="Logo" className="logo-imagen" />
+          <div className="linea-roja-Practicas"></div>
+        </div>
         <motion.h2 
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}

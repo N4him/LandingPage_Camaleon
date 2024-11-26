@@ -1,52 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import axios from 'axios'; // Asegúrate de instalar axios: npm install axios
 import '../assets/styles/ProyectosInvestigacion.css';
+import logo from '../assets/images/logoS.png';
 
 const ProyectosInvestigacion = () => {
-  const proyectos = [
-    {
-      titulo: "Desarrollo de Interfaces de Usuario Adaptativas",
-      objetivos: [
-        "Diseñar algoritmos de adaptación de interfaces basados en el comportamiento del usuario",
-        "Implementar un prototipo de sistema con interfaces adaptativas"
-      ],
-      resultados: [
-        "Algoritmo de adaptación de interfaces con 95% de precisión",
-        "Prototipo funcional implementado en React Native"
-      ],
-      produccion: [
-        "Artículo publicado en ACM CHI Conference",
-        "Software registrado ante la Dirección Nacional de Derechos de Autor"
-      ],
-      participantes: [
-        "Dra. Laura Gómez (Investigadora principal)",
-        "Dr. Carlos Rodríguez",
-        "Ing. Ana Martínez (Estudiante de doctorado)",
-        "Juan Pérez (Estudiante de maestría)"
-      ]
-    },
-    {
-      titulo: "Evaluación de Experiencia de Usuario en Aplicaciones de Salud Mental",
-      objetivos: [
-        "Desarrollar métricas específicas para evaluar la UX en apps de salud mental",
-        "Realizar un estudio comparativo de las principales apps de salud mental del mercado"
-      ],
-      resultados: [
-        "Framework de evaluación UX para apps de salud mental",
-        "Informe detallado del estudio comparativo de 10 apps líderes"
-      ],
-      produccion: [
-        "Capítulo de libro en 'Advances in Human-Computer Interaction'",
-        "Presentación en congreso internacional de e-Health"
-      ],
-      participantes: [
-        "Dr. Andrés Ramírez (Investigador principal)",
-        "Dra. Carmen Ortiz",
-        "Sofía Hernández (Estudiante de doctorado)",
-        "Pedro Sánchez (Asistente de investigación)"
-      ]
-    }
-  ];
+  const [proyectos, setProyectos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Función para cargar los proyectos desde el backend
+    const fetchProyectos = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/proyectosInvestigacion'); // Ajusta la URL según tu configuración
+        const proyectosData = response.data.map(item => {
+          const { proyecto_de_investigacion } = item;
+          return {
+            titulo: proyecto_de_investigacion.titulo,
+            objetivos: [proyecto_de_investigacion.objetivo],
+            resultados: [proyecto_de_investigacion.resultado],
+            produccion: [proyecto_de_investigacion.produccion_academica],
+            participantes: [
+              ...proyecto_de_investigacion.estudiantes.map(e => `${e.nombre} ${e.apellido}`),
+              ...proyecto_de_investigacion.profesionales.map(p => `${p.nombre} ${p.apellido}`),
+              ...proyecto_de_investigacion.docentes_directores.map(d => `${d.nombre} ${d.apellido}`)
+            ]
+          };
+        });
+        setProyectos(proyectosData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error al cargar los proyectos:', error);
+        setError('No se pudieron cargar los proyectos.');
+        setLoading(false);
+      }
+    };
+
+    fetchProyectos();
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -67,9 +59,16 @@ const ProyectosInvestigacion = () => {
     }
   };
 
+  if (loading) return <p>Cargando proyectos...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <section id="proyectos" className="seccion proyectos-investigacion">
       <div className="contenedor">
+      <div className="linea-separadora-contenedor-ProyectosI">
+          <img src={logo} alt="Logo" className="logo-imagen" />
+          <div className="linea-roja-Proy"></div>
+        </div>
         <motion.h2 
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}
