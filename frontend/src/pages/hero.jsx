@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import LogoCamaleon from "../assets/images/logo.png";
+import Chamaleon from '../componentes/Chamaleon';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 
 function Hero() {
   const styles = {
@@ -10,7 +13,7 @@ function Hero() {
       justifyContent: 'space-between',
       padding: '0 2rem',
       height: '100vh',
-      background: 'linear-gradient(to bottom, #C20E1A, #C20E1A 60%, rgba(248, 248, 248, 1) 100%)', 
+      background: 'linear-gradient(to bottom, #C20E1A, #C20E1A 60%, rgba(248, 248, 248, 1) 100%)',
     },
     contentContainer: {
       flex: 1,
@@ -106,8 +109,18 @@ function Hero() {
         </motion.button>
       </motion.div>
       <motion.div style={styles.modelContainer} variants={itemVariants}>
-        <div style={styles.circle} /> {/* Forma circular */}
-        <img src={LogoCamaleon} alt="Camaleón" style={styles.groupImage} />
+        <Canvas className='canvas-chamaleon' camera={{ position: [4, 1, -3] }}  >
+          <OrbitControls makeDefault target={[0, 1, 0]} enablePan={false} enableZoom={false} autoRotate />
+          <ambientLight />
+          <spotLight intensity={20} position={[0, 3, -2]} />
+          <Chamaleon />
+        </Canvas>
+        {/* <div style={styles.circle} >
+          
+        </div> */}
+        {/* Forma circular */}
+        {/* <img src={LogoCamaleon} alt="Camaleón" style={styles.groupImage} /> */}
+
       </motion.div>
     </motion.section>
   );
