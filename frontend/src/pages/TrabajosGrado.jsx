@@ -44,27 +44,28 @@ const TrabajosGrado = React.forwardRef((props, ref) => {
               <p>No hay trabajos de grado disponibles.</p>
             </motion.div>
           ) : (
-            trabajos.map((trabajo, index) => (
-              <motion.div key={index} className="trabajo-item">
-                <h3>{trabajo.titulo || 'No disponible'}</h3>
-                <p><strong>Estudiantes:</strong> 
-                  {trabajo.estudiantes && trabajo.estudiantes.length > 0
-                    ? trabajo.estudiantes.map((estudiante, idx) => `${estudiante["nombre(s)"]} ${estudiante["apellido(s)"]}`).join(", ")
-                    : 'No hay estudiantes asignados.'}
-                </p>
-                <p><strong>Directores:</strong> 
-                  {trabajo["director(es)"] && trabajo["director(es)"].length > 0
-                    ? trabajo["director(es)"].map((director, idx) => `${director["nombre(s)"]} ${director["apellido(s)"]}`).join(", ")
-                    : 'No hay directores asignados.'}
-                </p>
-                <p><strong>Mención:</strong> 
-                  {trabajo.mencion && trabajo.mencion.length > 0
-                    ? trabajo.mencion.join(", ")
-                    : 'No especificada'}
-                </p>
-                <p><strong>Descripción:</strong> {trabajo.descripcion || 'No especificada'}</p>
-              </motion.div>
-            ))
+            trabajos.map((trabajoData, index) => {
+              const trabajo = trabajoData["Trabajo de Grado"]; // Accediendo al objeto "Trabajo de Grado"
+              return (
+                <motion.div key={index} className="trabajo-item">
+                  <h3>{trabajo.titulo || 'No disponible'}</h3>
+                  <p><strong>Estudiantes:</strong> 
+                    {trabajo.estudiantes && trabajo.estudiantes.length > 0
+                      ? trabajo.estudiantes.map((estudiante, idx) => `${estudiante["nombre(s)"]} ${estudiante["apellido(s)"]}`).join(", ")
+                      : 'No hay estudiantes asignados.'}
+                  </p>
+                  <p><strong>Directores:</strong> 
+                    {trabajo["director(es)"] && trabajo["director(es)"].length > 0
+                      ? trabajo["director(es)"].map((director, idx) => `${director["nombre(s)"]} ${director["apellido(s)"]}`).join(", ")
+                      : 'No hay directores asignados.'}
+                  </p>
+                  {trabajo.mencion && trabajo.mencion[0] !== "" && (
+                    <p><strong>Mención:</strong> {trabajo.mencion.join(", ")}</p>
+                  )}
+                  <p><strong>Descripción:</strong> {trabajo.descripcion || 'No especificada'}</p>
+                </motion.div>
+              );
+            })
           )}
         </motion.div>
       </div>

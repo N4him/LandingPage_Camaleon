@@ -13,12 +13,10 @@ import authRoutes from './routes/auth.js';
 
 const app = express();
 
-app.use(cors(
-    {
-        origin: 'http://localhost:5173', // Permite frontend
-        credentials: true // Permite enviar cookies y sesiones
-    }
-))
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:5273'],  // Agregar el nuevo puerto
+    credentials: true
+}));
 
 app.use(bodyParser.json());
 
@@ -29,23 +27,17 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Middleware para verificar si el usuario está autenticado
-function ensureAuthenticated(req, res, next) {
-    if (req.session.user) {
-        return next();
-    }
-    res.status(401).json({ message: 'Debe estar autenticado para acceder a esta ruta' });
-}
+
 
 // Rutas de autenticación
 app.use('/auth', authRoutes);
 
 // Rutas protegidas por autenticación
-app.use('/practicas', ensureAuthenticated, practicasRoutes);
+app.use('/practicas',  practicasRoutes);
 app.use('/trabajosGrado', trabajosGradoRoutes); //desactivación de autenticación momentanea
-app.use('/proyectosInvestigacion', ensureAuthenticated, proyectosInvestigacionRoutes);
-app.use('/lineasInvestigacion', ensureAuthenticated, lineasInvestigacionRoutes);
-app.use('/calificacionGrupo', ensureAuthenticated, calificacionGrupoRoutes);
+app.use('/proyectosInvestigacion', proyectosInvestigacionRoutes);
+app.use('/lineasInvestigacion', lineasInvestigacionRoutes);
+app.use('/calificacionGrupo', calificacionGrupoRoutes);
 app.use('/miembrosGrupo', miembrosGrupoRoutes); //desactivación de autenticación momentanea
 app.use('/conveniosAlianzas', conveniosAlianzasRoutes); //desactivación de autenticación momentanea
 
