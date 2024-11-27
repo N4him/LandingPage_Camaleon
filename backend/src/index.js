@@ -10,6 +10,8 @@ import calificacionGrupoRoutes from './routes/calificacionGrupo.js';
 import miembrosGrupoRoutes from './routes/miembrosGrupo.js';
 import conveniosAlianzasRoutes from './routes/conveniosAlianzas.js';
 import authRoutes from './routes/auth.js'; 
+import grupoRoutes from './routes/infoGrupo.js'; 
+
 
 const app = express();
 
@@ -40,6 +42,7 @@ app.use('/lineasInvestigacion', lineasInvestigacionRoutes);
 app.use('/calificacionGrupo', calificacionGrupoRoutes);
 app.use('/miembrosGrupo', miembrosGrupoRoutes); //desactivación de autenticación momentanea
 app.use('/conveniosAlianzas', conveniosAlianzasRoutes); //desactivación de autenticación momentanea
+app.use('/grupo', grupoRoutes); 
 
 // Inicializar el servidor
 const PORT = process.env.PORT || 3000;
