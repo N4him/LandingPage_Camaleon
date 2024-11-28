@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { PencilIcon } from '@heroicons/react/24/outline';
-import { getAllCalificacionesGrupo, updateCalificacionGrupo } from '../api/apis';
+import { createCalificacionGrupo, getAllCalificacionesGrupo, updateCalificacionGrupo } from '../api/apis';
 
 export default function Calificacion() {
     const [calificaciones, setCalificaciones] = useState([]);
@@ -24,7 +24,7 @@ export default function Calificacion() {
             setCalificaciones(response.data.map(cal => ({
                 id: cal.id,
                 calificacion: cal.calificacion.calificacion, // Accede a "calificacion" directamente
-                masInformacion: cal.calificacion.masInformacion // Accede a "masInformacion" directamente
+                masInformacion: cal.calificacion["Más información"] // Accede a "masInformacion" directamente
             })));
         } catch (err) {
             setError('Error al cargar las calificaciones');
@@ -37,15 +37,16 @@ export default function Calificacion() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (isEditing && currentCalificacionId) {
-                // Aquí estamos asegurándonos de que los datos que envías coincidan con lo que espera el backend
-                const updatedCalificacion = {
-                    calificacion: {
-                        calificacion: formData.calificacion,  // Valor de la calificación
-                        masInformacion: formData.masInformacion  // URL
-                    }
-                };
+            // Aquí estamos asegurándonos de que los datos que envías coincidan con lo que espera el backend
+            const updatedCalificacion = {
+                calificacion: {
+                    calificacion: formData.calificacion,  // Valor de la calificación
+                    "Más información": formData.masInformacion  // URL
+                }
+            };
+            console.log(formData)
 
+            if (isEditing && currentCalificacionId) {
                 // Llamada a la API para actualizar la calificación en el backend
                 await updateCalificacionGrupo(currentCalificacionId, updatedCalificacion);
 
@@ -53,6 +54,8 @@ export default function Calificacion() {
                 setIsEditing(false);
                 setCurrentCalificacionId(null);
                 setFormData({ calificacion: '', masInformacion: '' }); // Limpiar el formulario
+            }else{
+                await createCalificacionGrupo(updatedCalificacion)
             }
 
             // Recargar las calificaciones después de la actualización

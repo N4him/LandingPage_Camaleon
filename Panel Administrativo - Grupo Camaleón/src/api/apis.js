@@ -71,7 +71,7 @@ export const deleteLineaInvestigacion = (id) => lineasInvestigacionApi.delete(`/
 export const getAllCalificacionesGrupo = () => calificacionGrupoApi.get("/");
 export const getCalificacionGrupo = (id) => calificacionGrupoApi.get(`/${id}/`);
 export const createCalificacionGrupo = (calificacion) => calificacionGrupoApi.post("/", calificacion);
-export const updateCalificacionGrupo = (id, calificacion) => calificacionGrupoApi.put(`/${id}`, calificacion);
+export const updateCalificacionGrupo = (id, calificacion) => calificacionGrupoApi.put(`/${id}/`, calificacion);
 export const deleteCalificacionGrupo = (id) => calificacionGrupoApi.delete(`/${id}/`);
 
 // Funciones para "miembrosGrupo"
