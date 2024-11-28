@@ -3,11 +3,18 @@ import { motion } from 'framer-motion';
 import '../assets/styles/Convenios.css';
 import logo from '../assets/images/logoS.png';
 
+const conveniosApi = axios.create({
+  baseURL: process.env.CALIFICACION_GRUPO_API_URL
+    ? `${process.env.CALIFICACION_GRUPO_API_URL}/conveniosAlianzas`
+    : "http://localhost:3000/conveniosAlianzas",
+  withCredentials: true,
+});
+
 const Convenios = () => {
   const [convenios, setConvenios] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/conveniosAlianzas')
+    fetch(conveniosApi)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error en la respuesta del servidor');

@@ -7,9 +7,14 @@ import logo from '../assets/images/logoS.png';
 const TrabajosGrado = React.forwardRef((props, ref) => { 
   const [trabajos, setTrabajos] = useState([]);
   const [error, setError] = useState(null);
-
+  const trabajosGradoApi = axios.create({
+    baseURL: process.env.CALIFICACION_GRUPO_API_URL
+    ? `${process.env.CALIFICACION_GRUPO_API_URL}/trabajosGrado`
+    : "http://localhost:3000/trabajosGrado",
+    withCredentials: true,
+  });
   useEffect(() => {
-    axios.get('http://localhost:3000/trabajosGrado', {
+    axios.get(trabajosGradoApi, {
       withCredentials: true,
     })
       .then(response => {

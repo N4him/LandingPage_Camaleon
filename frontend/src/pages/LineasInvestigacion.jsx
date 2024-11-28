@@ -7,7 +7,9 @@ import logo from '../assets/images/logoS.png';
 
 // Create an Axios instance for your API
 const lineasInvestigacionApi = axios.create({
-  baseURL: "http://localhost:3000/lineasInvestigacion",
+  baseURL: process.env.CALIFICACION_GRUPO_API_URL
+    ? `${process.env.CALIFICACION_GRUPO_API_URL}/lineasInvestigacion`
+    : "http://localhost:3000/lineasInvestigacion",
   withCredentials: true,
 });
 

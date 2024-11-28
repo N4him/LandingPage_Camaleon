@@ -8,12 +8,17 @@ const ProyectosInvestigacion = () => {
   const [proyectos, setProyectos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const proyectosInvestigacionApi = axios.create({
+    baseURL: process.env.CALIFICACION_GRUPO_API_URL
+    ? `${process.env.CALIFICACION_GRUPO_API_URL}/proyectosInvestigacion`
+    : "http://localhost:3000/proyectosInvestigacion",
+    withCredentials: true,
+  });
   useEffect(() => {
     // Función para cargar los proyectos desde el backend
     const fetchProyectos = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/proyectosInvestigacion'); // Ajusta la URL según tu configuración
+        const response = await axios.get(proyectosInvestigacionApi); // Ajusta la URL según tu configuración
         const proyectosData = response.data.map(item => {
           const { proyecto_de_investigacion } = item;
           return {

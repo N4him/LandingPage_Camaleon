@@ -5,9 +5,14 @@ import logo from '../assets/images/logoS.png'; // Asegúrate de tener el logo
 
 const Miembros = () => {
   const [miembros, setMiembros] = useState([]);
-
+  const miembrosApi = axios.create({
+    baseURL: process.env.CALIFICACION_GRUPO_API_URL
+      ? `${process.env.CALIFICACION_GRUPO_API_URL}/miembrosGrupo`
+      : "http://localhost:3000/miembrosGrupo",
+    withCredentials: true,
+  });
   useEffect(() => {
-    fetch('http://localhost:3000/miembrosGrupo')
+    fetch(miembrosApi)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error en la respuesta del servidor');

@@ -4,9 +4,12 @@ import axios from 'axios';
 import '../assets/styles/clasificacion.css'; 
 
 const calificacionGrupoApi = axios.create({
-  baseURL: "http://localhost:3000/calificacionGrupo",
+  baseURL: process.env.CALIFICACION_GRUPO_API_URL
+    ? `${process.env.CALIFICACION_GRUPO_API_URL}/calificacionGrupo`
+    : "http://localhost:3000/calificacionGrupo",
   withCredentials: true,
 });
+
 
 const Clasificacion = () => {
   const [clasificacion, setClasificacion] = useState('');
