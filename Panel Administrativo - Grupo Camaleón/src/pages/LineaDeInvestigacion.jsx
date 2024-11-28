@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
-
-const lineasInvestigacionApi = axios.create({
-  baseURL: "http://localhost:3000/lineasInvestigacion",
-  withCredentials: true,
-});
+import { createLineaInvestigacion, deleteLineaInvestigacion, getAllLineasInvestigacion, updateLineaInvestigacion } from '../api/apis';
 
 export default function LineaDeInvestigacion() {
     const [lineas, setLineas] = useState([]);
@@ -25,15 +20,8 @@ export default function LineaDeInvestigacion() {
 
     async function fetchLineas() {
         try {
-            const response = await lineasInvestigacionApi.get('/');
-            const lineasData = response.data.map((linea) => {
-                return {
-                    id: linea.id,
-                    nombre: linea['Linea de Investigacion'].nombre,
-                    descripcion: linea['Linea de Investigacion'].descripcion,
-                };
-            });
-            setLineas(lineasData);
+            const response = await getAllLineasInvestigacion()
+            setLineas(response.data);
         } catch (err) {
             setError('Error al cargar las líneas de investigación');
             console.error(err);
@@ -46,18 +34,18 @@ export default function LineaDeInvestigacion() {
         e.preventDefault();
         try {
             const lineaData = {
-                "Linea de Investigacion": {
+                "Linea de Investigacion":{
                     nombre: formData.nombre,
-                    descripcion: formData.descripcion,
-                },
+                    descripcion: formData.descripcion}
+                
             };
 
             if (isEditing && currentLineaId) {
-                await lineasInvestigacionApi.put(`/${currentLineaId}`, lineaData);
+                await updateLineaInvestigacion(currentLineaId, lineaData)
                 setIsEditing(false);
                 setCurrentLineaId(null);
             } else {
-                await lineasInvestigacionApi.post('/', lineaData);
+                await createLineaInvestigacion(lineaData);
             }
             await fetchLineas();
             setShowForm(false);
@@ -72,14 +60,14 @@ export default function LineaDeInvestigacion() {
         setShowForm(!showForm);
         setCurrentLineaId(linea.id);
         setFormData({
-            nombre: linea.nombre,
-            descripcion: linea.descripcion,
+            nombre: linea["Linea de Investigacion"].nombre,
+            descripcion: linea["Linea de Investigacion"].descripcion,
         });
     };
 
     const handleDelete = async (lineaId) => {
         try {
-            await lineasInvestigacionApi.delete(`/${lineaId}`);
+            await deleteLineaInvestigacion(lineaId);
             await fetchLineas();
         } catch (err) {
             setError('Error al eliminar la línea de investigación');
@@ -151,8 +139,8 @@ export default function LineaDeInvestigacion() {
                         key={linea.id}
                         className="relative bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl min-h-[200px] h-full"
                     >
-                        <h3 className="text-lg font-semibold text-gray-800">{linea.nombre}</h3>
-                        <p className="text-gray-600 mb-2">{linea.descripcion}</p>
+                        <h3 className="text-lg font-semibold text-gray-800">{linea["Linea de Investigacion"].nombre}</h3>
+                        <p className="text-gray-600 mb-2">{linea["Linea de Investigacion"].descripcion}</p>
                         {/* Botones para editar y eliminar */}
                         <div className="absolute bottom-4 right-4 flex space-x-4">
                             <button onClick={() => handleEdit(linea)} className="text-gray-500 hover:text-indigo-600">
@@ -171,4 +159,3 @@ export default function LineaDeInvestigacion() {
         </div>
     );
 }
-

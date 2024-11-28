@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, doc, updateDoc, deleteDoc, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { createProyectoInvestigacion, deleteProyectoInvestigacion, getAllProyectosInvestigacion, updateProyectoInvestigacion } from '../api/apis';
 
 export default function ProyectoInvestigacion() {
     const [proyectos, setProyectos] = useState([]);
@@ -11,7 +10,7 @@ export default function ProyectoInvestigacion() {
     const [showForm, setShowForm] = useState(false);
     const [currentProyectoId, setCurrentProyectoId] = useState(null);
     const [formData, setFormData] = useState({
-        docentesDirectores: [],
+        docentes_directores: [],
         estudiantes: [],
         objetivo: '',
         produccionAcademica: '',
@@ -26,21 +25,8 @@ export default function ProyectoInvestigacion() {
 
     async function fetchProyectos() {
         try {
-            const querySnapshot = await getDocs(collection(db, 'Proyectos de Investigacion'));
-            const proyectosData = querySnapshot.docs.map((doc) => {
-                const data = doc.data();
-                return {
-                    id: doc.id,
-                    docentesDirectores: data.docentes_directores || [],
-                    estudiantes: data.estudiantes || [],
-                    objetivo: data.objetivo || '',
-                    produccionAcademica: data.produccion_academica || '',
-                    profesionales: data.profesionales || [],
-                    titulo: data.titulo || '',
-                    resultado: data.resultado || '',
-                };
-            });
-            setProyectos(proyectosData);
+            const response = await getAllProyectosInvestigacion();
+            setProyectos(response.data);
         } catch (err) {
             setError('Error al cargar los proyectos');
             console.error(err);
@@ -53,7 +39,7 @@ export default function ProyectoInvestigacion() {
         e.preventDefault();
         try {
             const proyectoData = {
-                docentes_directores: formData.docentesDirectores,
+                docentes_directores: formData.docentes_directores,
                 estudiantes: formData.estudiantes,
                 objetivo: formData.objetivo,
                 produccion_academica: formData.produccionAcademica,
@@ -63,12 +49,11 @@ export default function ProyectoInvestigacion() {
             };
 
             if (isEditing && currentProyectoId) {
-                const proyectoRef = doc(db, 'Proyectos de Investigacion', currentProyectoId);
-                await updateDoc(proyectoRef, proyectoData);
+                await updateProyectoInvestigacion(currentProyectoId, proyectoData);
                 setIsEditing(false);
                 setCurrentProyectoId(null);
             } else {
-                await addDoc(collection(db, 'Proyectos de Investigacion'), proyectoData);
+                await createProyectoInvestigacion(proyectoData);
             }
             await fetchProyectos();
             setShowForm(false)
@@ -83,20 +68,19 @@ export default function ProyectoInvestigacion() {
         setShowForm(!showForm);
         setCurrentProyectoId(proyecto.id);
         setFormData({
-            docentesDirectores: proyecto.docentesDirectores,
-            estudiantes: proyecto.estudiantes,
-            objetivo: proyecto.objetivo,
-            produccionAcademica: proyecto.produccionAcademica,
-            profesionales: proyecto.profesionales,
-            titulo: proyecto.titulo,
-            resultado: proyecto.resultado,
+            docentes_directores: proyecto.proyecto_de_investigacion.docentes_directores,
+            estudiantes: proyecto.proyecto_de_investigacion.estudiantes,
+            objetivo: proyecto.proyecto_de_investigacion.objetivo,
+            produccionAcademica: proyecto.proyecto_de_investigacion.produccionAcademica,
+            profesionales: proyecto.proyecto_de_investigacion.profesionales,
+            titulo: proyecto.proyecto_de_investigacion.titulo,
+            resultado: proyecto.proyecto_de_investigacion.resultado,
         });
     };
 
     const handleDelete = async (proyectoId) => {
         try {
-            const proyectoRef = doc(db, 'Proyectos de Investigacion', proyectoId);
-            await deleteDoc(proyectoRef);
+            await deleteProyectoInvestigacion(proyectoId);
             await fetchProyectos();
         } catch (err) {
             setError('Error al eliminar el proyecto');
@@ -105,14 +89,14 @@ export default function ProyectoInvestigacion() {
     };
 
     const handleArrayChange = (arrayKey, index, field, value) => {
-        const updatedArray = formData[arrayKey].map((item, i) =>
+        const updatedArray = formData[arrayKey]?.map((item, i) =>
             i === index ? { ...item, [field]: value } : item
         );
         setFormData({ ...formData, [arrayKey]: updatedArray });
     };
 
     const addArrayItem = (arrayKey) => {
-        setFormData({ ...formData, [arrayKey]: [...formData[arrayKey], { nombre: '', apellido: '', titulo: '', resultado: '' }] });
+        setFormData({ ...formData, [arrayKey]: [...formData[arrayKey], { nombre: '', apellido: '',titulo:''}] });
     };
 
     const removeArrayItem = (arrayKey, index) => {
@@ -138,7 +122,7 @@ export default function ProyectoInvestigacion() {
                     </button>
 
                     {/* Campos de Formulario */}
-                    {['objetivo', 'titulo', 'resultado', 'produccionAcademica'].map((campo) => (
+                    {['objetivo', 'titulo', 'resultado', 'produccionAcademica']?.map((campo) => (
                         <div key={campo}>
                             <label className="block text-sm font-medium text-gray-700 capitalize">{campo}</label>
                             <input
@@ -152,10 +136,10 @@ export default function ProyectoInvestigacion() {
                     ))}
 
                     {/* Campos Dinámicos */}
-                    {['docentesDirectores', 'estudiantes', 'profesionales'].map((arrayKey) => (
+                    {['docentes_directores', 'estudiantes', 'profesionales']?.map((arrayKey) => (
                         <div key={arrayKey}>
                             <h3 className="font-semibold text-lg text-center capitalize">{arrayKey}</h3>
-                            {formData[arrayKey].map((item, index) => (
+                            {formData[arrayKey]?.map((item, index) => (
                                 <div key={index} className="flex flex-col space-y-2">
                                     <div className="flex items-center space-x-2">
                                         <input
@@ -228,64 +212,69 @@ export default function ProyectoInvestigacion() {
                 >
                     <PlusIcon className="w-12 h-12 text-indigo-600 mb-2" />
                     <p className="text-lg font-semibold text-indigo-600">Nuevo proyecto</p>
+
                 </div>
 
                 {/* Card para cada proyecto */}
-                {proyectos.map((proyecto) => (
-                    <div
-                        key={proyecto.id}
-                        className="relative bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl min-h-[200px] h-full"
-                    >
-                        <h3 className="text-lg font-semibold text-gray-800">{proyecto.titulo}</h3>
-                        <p className="text-gray-600 mb-2">{proyecto.objetivo}</p>
-                        <p className="text-sm text-gray-500">
-                            <strong>Docentes/Directores:</strong>
-                            {proyecto.docentesDirectores.map((dir, index) => (
-                                <span key={index}>
-                                    - {dir.nombre} {dir.apellido}
-                                    <br />
-                                </span>
-                            ))}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                            <strong>Estudiantes:</strong>
-                            {proyecto.estudiantes.map((est, index) => (
-                                <span key={index}>
-                                    - {est.nombre} {est.apellido}
-                                    <br />
-                                </span>
-                            ))}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                            <strong>Profesionales:</strong>
-                            {proyecto.profesionales.map((prof, index) => (
-                                <span key={index}>
-                                    - {prof.nombre} {prof.apellido}
-                                    <br />
-                                </span>
-                            ))}
-                        </p>
-
-                        <p className="text-sm text-gray-500">
-                            <strong>Resultados: </strong>{proyecto.resultado}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                            <strong>Porducción Academica: </strong>{proyecto.produccion_academica}
-                        </p>
-                        {/* Botones para editar y eliminar */}
-                        <div className="absolute bottom-4 right-4 flex space-x-4">
-                            <button onClick={() => handleEdit(proyecto)} className="text-gray-500 hover:text-indigo-600">
-                                <PencilIcon className="w-6 h-6" />
-                            </button>
-                            <button
-                                onClick={() => handleDelete(proyecto.id)}
-                                className="text-red-600 hover:text-red-800 transition duration-300"
-                            >
-                                <TrashIcon className="w-5 h-5" />
-                            </button>
+                {proyectos?.length > 0 ? (
+                    proyectos.map((proyecto) => (
+                        <div
+                            key={proyecto.id}
+                            className="relative bg-white p-6 rounded-lg shadow-md transition duration-300 hover:shadow-xl min-h-[200px] h-full"
+                        >
+                            <h3 className="text-lg font-semibold text-gray-800">{proyecto.proyecto_de_investigacion.titulo}</h3>
+                            <p className="text-gray-600 mb-2">{proyecto.proyecto_de_investigacion.objetivo}</p>
+                            <p className="text-sm text-gray-500">
+                                <strong>Docentes/Directores:</strong>
+                                {proyecto.proyecto_de_investigacion.docentes_directores?.map((dir, index) => (
+                                    <span key={index}>
+                                        - {dir.nombre} {dir.apellido}
+                                        <br />
+                                    </span>
+                                ))}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                <strong>Estudiantes:</strong>
+                                {proyecto.proyecto_de_investigacion.estudiantes?.map((est, index) => (
+                                    <span key={index}>
+                                        - {est.nombre} {est.apellido}
+                                        <br />
+                                    </span>
+                                ))}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                <strong>Profesionales:</strong>
+                                {proyecto.proyecto_de_investigacion.profesionales?.map((prof, index) => (
+                                    <span key={index}>
+                                        - {prof.nombre} {prof.apellido}
+                                        <br />
+                                    </span>
+                                ))}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                <strong>Resultados: </strong>{proyecto.proyecto_de_investigacion.resultado}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                <strong>Producción Académica: </strong>{proyecto.proyecto_de_investigacion.produccion_academica}
+                            </p>
+                            {/* Botones para editar y eliminar */}
+                            <div className="absolute bottom-4 right-4 flex space-x-4">
+                                <button onClick={() => handleEdit(proyecto)} className="text-gray-500 hover:text-indigo-600">
+                                    <PencilIcon className="w-6 h-6" />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(proyecto.id)}
+                                    className="text-red-600 hover:text-red-800 transition duration-300"
+                                >
+                                    <TrashIcon className="w-5 h-5" />
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p className="text-gray-500 text-center">No hay proyectos disponibles para mostrar.</p>
+                )}
+
             </div>
         </div>
     );

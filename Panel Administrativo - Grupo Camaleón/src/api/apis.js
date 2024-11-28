@@ -36,6 +36,16 @@ const practicasApi = axios.create({
   withCredentials: true,
 });
 
+const grupoInfoApi = axios.create({
+  baseURL: "http://localhost:3000/grupo",
+  withCredentials: true,
+});
+
+// Funciones para "grupoInfo"
+export const getGrupoInfo = () => grupoInfoApi.get("/");  // Obtener la información del grupo
+export const updateGrupoInfo = (id, grupoInfo) => grupoInfoApi.put(`/${id}`, grupoInfo);  // Actualizar información del grupo
+
+
 // Funciones para "trabajosGrado"
 export const getAllTrabajosGrado = () => trabajosGradoApi.get("/");
 export const getTrabajoGrado = (id) => trabajosGradoApi.get(`/${id}/`);

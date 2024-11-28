@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, doc, updateDoc, deleteDoc, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { createConvenioAlianza, deleteConvenioAlianza, getAllConveniosAlianzas, updateConvenioAlianza } from '../api/apis';
 
 export default function Convenios() {
     const [convenios, setConvenios] = useState([]);
@@ -22,17 +21,8 @@ export default function Convenios() {
 
     async function fetchConvenios() {
         try {
-            const querySnapshot = await getDocs(collection(db, 'Convenios y Alianzas'));
-            const conveniosData = querySnapshot.docs.map((doc) => {
-                const data = doc.data();
-                return {
-                    id: doc.id,
-                    institucion: data.institucion || '',
-                    objetivos: data.objetivos || [],
-                    resultados: data.resultados || [],
-                };
-            });
-            setConvenios(conveniosData);
+            const {data} = await getAllConveniosAlianzas();
+            setConvenios(data);
         } catch (err) {
             setError('Error al cargar los convenios');
             console.error(err);
@@ -51,12 +41,11 @@ export default function Convenios() {
             };
 
             if (isEditing && currentConvenioId) {
-                const convenioRef = doc(db, 'Convenios y Alianzas', currentConvenioId);
-                await updateDoc(convenioRef, convenioData);
+                await updateConvenioAlianza(currentConvenioId,convenioData)
                 setIsEditing(false);
                 setCurrentConvenioId(null);
             } else {
-                await addDoc(collection(db, 'Convenios y Alianzas'), convenioData);
+                await createConvenioAlianza(convenioData)
             }
             await fetchConvenios();
             setShowForm(false);
@@ -79,8 +68,7 @@ export default function Convenios() {
 
     const handleDelete = async (convenioId) => {
         try {
-            const convenioRef = doc(db, 'Convenios y Alianzas', convenioId);
-            await deleteDoc(convenioRef);
+            await deleteConvenioAlianza(convenioId);
             await fetchConvenios();
         } catch (err) {
             setError('Error al eliminar el convenio');
