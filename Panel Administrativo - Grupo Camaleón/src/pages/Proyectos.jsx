@@ -202,7 +202,7 @@ export default function ProyectoInvestigacion() {
                             titulo: '',
                             resultado: '',
                             produccionAcademica: '',
-                            docentesDirectores: [{ nombre: '', apellido: '' }],
+                            docentes_directores: [{ nombre: '', apellido: '' }],
                             estudiantes: [{ nombre: '', apellido: '' }],
                             profesionales: [{ nombre: '', apellido: '', titulo: '' }]
                         });
