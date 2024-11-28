@@ -10,8 +10,8 @@ const Practicas = () => {
   const [error, setError] = useState(null);
   // Crear instancia de axios para las peticiones GET
   const practicasApi = axios.create({
-    baseURL: process.env.CALIFICACION_GRUPO_API_URL
-    ? `${process.env.CALIFICACION_GRUPO_API_URL}/practicas`
+    baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/practicas`
     : "http://localhost:3000/practicas",
     withCredentials: true,
   });

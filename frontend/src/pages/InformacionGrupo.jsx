@@ -6,12 +6,10 @@ import logo from '../assets/images/logoS.png'
 const InformacionGrupo = () => {
   const [grupoInfo, setGrupoInfo] = useState({ presentacion: [], caracteristicas: [] });
   const [calificacionInfo, setCalificacionInfo] = useState(null); // Para almacenar la calificación
-  const infoGrupoApi = axios.create({
-    baseURL: process.env.CALIFICACION_GRUPO_API_URL
-      ? `${process.env.CALIFICACION_GRUPO_API_URL}`
-      : "http://localhost:3000",
-    withCredentials: true,
-  });
+  const infoGrupoApi = 
+import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}`
+      : "http://localhost:3000";
   // Obtener información del grupo desde el backend
   useEffect(() => {
     const fetchData = async () => {

@@ -3,12 +3,11 @@ import { motion } from 'framer-motion';
 import '../assets/styles/Convenios.css';
 import logo from '../assets/images/logoS.png';
 
-const conveniosApi = axios.create({
-  baseURL: process.env.CALIFICACION_GRUPO_API_URL
-    ? `${process.env.CALIFICACION_GRUPO_API_URL}/conveniosAlianzas`
-    : "http://localhost:3000/conveniosAlianzas",
-  withCredentials: true,
-});
+const conveniosApi = 
+import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/conveniosAlianzas`
+    : "http://localhost:3000/conveniosAlianzas"
+;
 
 const Convenios = () => {
   const [convenios, setConvenios] = useState([]);

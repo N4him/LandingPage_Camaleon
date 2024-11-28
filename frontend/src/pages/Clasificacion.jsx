@@ -4,8 +4,8 @@ import axios from 'axios';
 import '../assets/styles/clasificacion.css'; 
 
 const calificacionGrupoApi = axios.create({
-  baseURL: process.env.CALIFICACION_GRUPO_API_URL
-    ? `${process.env.CALIFICACION_GRUPO_API_URL}/calificacionGrupo`
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/calificacionGrupo`
     : "http://localhost:3000/calificacionGrupo",
   withCredentials: true,
 });

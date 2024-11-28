@@ -5,12 +5,9 @@ import logo from '../assets/images/logoS.png'; // Asegúrate de tener el logo
 
 const Miembros = () => {
   const [miembros, setMiembros] = useState([]);
-  const miembrosApi = axios.create({
-    baseURL: process.env.CALIFICACION_GRUPO_API_URL
-      ? `${process.env.CALIFICACION_GRUPO_API_URL}/miembrosGrupo`
-      : "http://localhost:3000/miembrosGrupo",
-    withCredentials: true,
-  });
+  const miembrosApi = import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}/miembrosGrupo`
+      : "http://localhost:3000/miembrosGrupo";
   useEffect(() => {
     fetch(miembrosApi)
       .then(response => {

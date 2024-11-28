@@ -8,15 +8,14 @@ const TrabajosGrado = React.forwardRef((props, ref) => {
   const [trabajos, setTrabajos] = useState([]);
   const [error, setError] = useState(null);
   const trabajosGradoApi = axios.create({
-    baseURL: process.env.CALIFICACION_GRUPO_API_URL
-    ? `${process.env.CALIFICACION_GRUPO_API_URL}/trabajosGrado`
-    : "http://localhost:3000/trabajosGrado",
+    baseURL: import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}/trabajosGrado`
+      : "http://localhost:3000/trabajosGrado",
     withCredentials: true,
   });
+  
   useEffect(() => {
-    axios.get(trabajosGradoApi, {
-      withCredentials: true,
-    })
+    trabajosGradoApi.get()  // Use the API instance directly here
       .then(response => {
         setTrabajos(response.data);  
         setError(null);  
@@ -26,6 +25,7 @@ const TrabajosGrado = React.forwardRef((props, ref) => {
         setError('No se pudo obtener los trabajos de grado. Asegúrese de estar autenticado.');
       });
   }, []);
+  
 
   return (
     <section id="trabajos-grado" ref={ref} className="seccion trabajos-grado">
