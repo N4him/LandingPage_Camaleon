@@ -7,11 +7,15 @@ import logo from '../assets/images/logoS.png';
 const TrabajosGrado = React.forwardRef((props, ref) => { 
   const [trabajos, setTrabajos] = useState([]);
   const [error, setError] = useState(null);
-
+  const trabajosGradoApi = axios.create({
+    baseURL: import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}/trabajosGrado`
+      : "http://localhost:3000/trabajosGrado",
+    withCredentials: true,
+  });
+  
   useEffect(() => {
-    axios.get('http://localhost:3000/trabajosGrado', {
-      withCredentials: true,
-    })
+    trabajosGradoApi.get()  // Use the API instance directly here
       .then(response => {
         setTrabajos(response.data);  
         setError(null);  
@@ -21,6 +25,7 @@ const TrabajosGrado = React.forwardRef((props, ref) => {
         setError('No se pudo obtener los trabajos de grado. Asegúrese de estar autenticado.');
       });
   }, []);
+  
 
   return (
     <section id="trabajos-grado" ref={ref} className="seccion trabajos-grado">

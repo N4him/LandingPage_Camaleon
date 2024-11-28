@@ -5,9 +5,11 @@ import logo from '../assets/images/logoS.png'; // Asegúrate de tener el logo
 
 const Miembros = () => {
   const [miembros, setMiembros] = useState([]);
-
+  const miembrosApi = import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}/miembrosGrupo`
+      : "http://localhost:3000/miembrosGrupo";
   useEffect(() => {
-    fetch('http://localhost:3000/miembrosGrupo')
+    fetch(miembrosApi)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error en la respuesta del servidor');

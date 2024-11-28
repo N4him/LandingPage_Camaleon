@@ -6,12 +6,15 @@ import logo from '../assets/images/logoS.png'
 const InformacionGrupo = () => {
   const [grupoInfo, setGrupoInfo] = useState({ presentacion: [], caracteristicas: [] });
   const [calificacionInfo, setCalificacionInfo] = useState(null); // Para almacenar la calificación
-
+  const infoGrupoApi = 
+import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}`
+      : "http://localhost:3000";
   // Obtener información del grupo desde el backend
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/grupo'); // Ajusta la URL según tu backend
+        const response = await fetch(infoGrupoApi+'/grupo'); // Ajusta la URL según tu backend
         const data = await response.json();
         if (data.length > 0) {
           setGrupoInfo(data[0]); // Suponiendo que hay un solo documento
@@ -23,7 +26,7 @@ const InformacionGrupo = () => {
 
     const fetchCalificacion = async () => {
       try {
-        const response = await fetch('http://localhost:3000/calificacionGrupo'); // Ruta para obtener calificación
+        const response = await fetch(infoGrupoApi+'/calificacionGrupo'); // Ruta para obtener calificación
         const data = await response.json();
         if (data.length > 0) {
           setCalificacionInfo(data[0]); // Suponiendo que hay un solo documento de calificación

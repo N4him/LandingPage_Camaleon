@@ -122,7 +122,7 @@ export default function ProyectoInvestigacion() {
                     </button>
 
                     {/* Campos de Formulario */}
-                    {['objetivo', 'titulo', 'resultado', 'produccionAcademica']?.map((campo) => (
+                    {['titulo','objetivo','resultado', 'produccionAcademica']?.map((campo) => (
                         <div key={campo}>
                             <label className="block text-sm font-medium text-gray-700 capitalize">{campo}</label>
                             <input
@@ -202,7 +202,7 @@ export default function ProyectoInvestigacion() {
                             titulo: '',
                             resultado: '',
                             produccionAcademica: '',
-                            docentesDirectores: [{ nombre: '', apellido: '' }],
+                            docentes_directores: [{ nombre: '', apellido: '' }],
                             estudiantes: [{ nombre: '', apellido: '' }],
                             profesionales: [{ nombre: '', apellido: '', titulo: '' }]
                         });
@@ -216,7 +216,7 @@ export default function ProyectoInvestigacion() {
                 </div>
 
                 {/* Card para cada proyecto */}
-                {proyectos?.length > 0 ? (
+                {proyectos?.length > 0 &&
                     proyectos.map((proyecto) => (
                         <div
                             key={proyecto.id}
@@ -271,9 +271,7 @@ export default function ProyectoInvestigacion() {
                             </div>
                         </div>
                     ))
-                ) : (
-                    <p className="text-gray-500 text-center">No hay proyectos disponibles para mostrar.</p>
-                )}
+                }
 
             </div>
         </div>

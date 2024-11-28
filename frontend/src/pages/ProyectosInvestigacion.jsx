@@ -8,12 +8,18 @@ const ProyectosInvestigacion = () => {
   const [proyectos, setProyectos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const proyectosInvestigacionApi = axios.create({
+    baseURL: import.meta.env.VITE_API_URL
+      ? `${import.meta.env.VITE_API_URL}/proyectosInvestigacion`
+      : "http://localhost:3000/proyectosInvestigacion",
+    withCredentials: true,
+  });
+  
   useEffect(() => {
     // Función para cargar los proyectos desde el backend
     const fetchProyectos = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/proyectosInvestigacion'); // Ajusta la URL según tu configuración
+        const response = await proyectosInvestigacionApi.get(); // Corrected to use the API instance
         const proyectosData = response.data.map(item => {
           const { proyecto_de_investigacion } = item;
           return {
@@ -36,9 +42,10 @@ const ProyectosInvestigacion = () => {
         setLoading(false);
       }
     };
-
-    fetchProyectos();
+  
+    fetchProyectos(); // Call the function to fetch data when the component is mounted
   }, []);
+  
 
   const containerVariants = {
     hidden: { opacity: 0 },
