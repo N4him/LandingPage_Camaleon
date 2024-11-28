@@ -16,7 +16,7 @@ import grupoRoutes from './routes/infoGrupo.js';
 const app = express();
 
 app.use(cors({
-    origin: '*',  // Agregar el nuevo puerto
+    origin: ['http://localhost:5173', 'http://localhost:5273', 'https://landingpagecamaleondespliegue-keqxf179n.vercel.app/'],  // Agregar el nuevo puerto
     credentials: true
 }));
 
