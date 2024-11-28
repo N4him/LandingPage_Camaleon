@@ -120,16 +120,22 @@ const InformacionGrupo = () => {
               {calificacionInfo.calificacion.calificacion} <span>otorgada por MinCiencias</span>
             </p>
             <p>
-              <a
-                href={calificacionInfo.calificacion.masInformacion || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Más Información
-              </a>
+              {calificacionInfo.calificacion["Más información"] ? (
+                <a
+                  href={calificacionInfo.calificacion["Más información"]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#ffffff', textDecoration: 'underline' }} // Asegura que el enlace sea visible
+                >
+                  Más Información
+                </a>
+              ) : (
+                <span>No hay más información disponible</span>
+              )}
             </p>
           </motion.div>
         )}
+
 
 
 
