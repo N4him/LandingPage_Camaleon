@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 import { PencilIcon } from '@heroicons/react/24/outline';
+import { createCalificacionGrupo, getAllCalificacionesGrupo, updateCalificacionGrupo } from '../api/apis';
 
 export default function Calificacion() {
     const [calificaciones, setCalificaciones] = useState([]);
@@ -10,35 +9,23 @@ export default function Calificacion() {
     const [isEditing, setIsEditing] = useState(false);
     const [currentCalificacionId, setCurrentCalificacionId] = useState(null);
     const [formData, setFormData] = useState({
-        calificacion: '', // Esto debe ser un string vacío
-        masInformacion: '', // También un string vacío
+        calificacion: '', // Asegúrate de que sea un string vacío
+        masInformacion: '', // Asegúrate de que sea un string vacío
     });
 
     useEffect(() => {
         fetchCalificaciones();
     }, []);
 
-
     async function fetchCalificaciones() {
         try {
-            const querySnapshot = await getDocs(collection(db, 'Calificacion del Grupo de Investigacion'));
-
-            if (querySnapshot.empty) {
-                console.log('No se encontraron documentos.');
-            } else {
-                const calificacionesData = querySnapshot.docs.map((doc) => {
-                    const data = doc.data();
-                   
-                    return {
-                        id: doc.id,
-                        calificacion: data.calificacion || '',  // Verifica si el campo "calificacion" está presente
-                        masInformacion: data["Más información"] || '',  // Accede de forma correcta al campo "Más información"
-                    };
-                });
-
-             
-                setCalificaciones(calificacionesData);
-            }
+            const response = await getAllCalificacionesGrupo();
+            // Asegúrate de acceder a los valores correctamente en la respuesta
+            setCalificaciones(response.data.map(cal => ({
+                id: cal.id,
+                calificacion: cal.calificacion.calificacion, // Accede a "calificacion" directamente
+                masInformacion: cal.calificacion["Más información"] // Accede a "masInformacion" directamente
+            })));
         } catch (err) {
             setError('Error al cargar las calificaciones');
             console.error(err);
@@ -50,15 +37,28 @@ export default function Calificacion() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            // Aquí estamos asegurándonos de que los datos que envías coincidan con lo que espera el backend
+            const updatedCalificacion = {
+                calificacion: {
+                    calificacion: formData.calificacion,  // Valor de la calificación
+                    "Más información": formData.masInformacion  // URL
+                }
+            };
+            console.log(formData)
+
             if (isEditing && currentCalificacionId) {
-                const calificacionRef = doc(db, 'Calificacion del Grupo de Investigacion', currentCalificacionId);
-                await updateDoc(calificacionRef, {
-                    calificacion: formData.calificacion,  // Actualizamos el campo calificacion
-                    "Más información": formData.masInformacion,  // Actualizamos el campo más información
-                });
+                // Llamada a la API para actualizar la calificación en el backend
+                await updateCalificacionGrupo(currentCalificacionId, updatedCalificacion);
+
+                // Cerrar la edición y limpiar el estado
                 setIsEditing(false);
                 setCurrentCalificacionId(null);
+                setFormData({ calificacion: '', masInformacion: '' }); // Limpiar el formulario
+            }else{
+                await createCalificacionGrupo(updatedCalificacion)
             }
+
+            // Recargar las calificaciones después de la actualización
             await fetchCalificaciones();
         } catch (err) {
             setError('Error al guardar la calificación');

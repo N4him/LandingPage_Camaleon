@@ -12,6 +12,8 @@ import Calificacion from './pages/Calificacion';
 import Proyectos from './pages/Proyectos';
 import LineaDeInvestigacion from './pages/LineaDeInvestigacion';
 import Convenios from './pages/Convenios';
+import InformacionGrupo from './pages/infoGrupo';
+
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
                       <main className="p-6">
                         <Routes>
                           <Route path="/" element={<Dashboard />} />
+                          <Route path="/grupo" element={<InformacionGrupo/>}/>
                           <Route path="/practicas" element={<Practicas />} />
                           <Route path="/trabajos-grado" element={<TrabajosDeGrado/>} />
                           <Route path="/proyectos" element={<Proyectos/>} />

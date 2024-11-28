@@ -11,6 +11,12 @@ import {
 
 const features = [
   {
+    name: 'Grupo',
+    description: 'Gestión de información general del grupo',
+    icon: UserGroupIcon,
+    href: '/grupo'
+  },
+  {
     name: 'Prácticas',
     description: 'Gestión de prácticas académicas y profesionales',
     icon: AcademicCapIcon,

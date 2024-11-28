@@ -1,10 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaUsers, FaChartLine, FaLightbulb } from 'react-icons/fa';
 import '../assets/styles/InformacionGrupo.css';
 import logo from '../assets/images/logoS.png'
 
 const InformacionGrupo = () => {
+  const [grupoInfo, setGrupoInfo] = useState({ presentacion: [], caracteristicas: [] });
+  const [calificacionInfo, setCalificacionInfo] = useState(null); // Para almacenar la calificación
+
+  // Obtener información del grupo desde el backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/grupo'); // Ajusta la URL según tu backend
+        const data = await response.json();
+        if (data.length > 0) {
+          setGrupoInfo(data[0]); // Suponiendo que hay un solo documento
+        }
+      } catch (error) {
+        console.error('Error al obtener la información del grupo:', error);
+      }
+    };
+
+    const fetchCalificacion = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/calificacionGrupo'); // Ruta para obtener calificación
+        const data = await response.json();
+        if (data.length > 0) {
+          setCalificacionInfo(data[0]); // Suponiendo que hay un solo documento de calificación
+        }
+      } catch (error) {
+        console.error('Error al obtener la calificación del grupo:', error);
+      }
+    };
+
+    fetchData();
+    fetchCalificacion(); // Llamada para obtener la calificación
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -27,7 +59,7 @@ const InformacionGrupo = () => {
   return (
     <section id="informacion" className="seccion informacion-grupo">
       <div className="contenedor">
-        <motion.h2 
+        <motion.h2
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,68 +74,71 @@ const InformacionGrupo = () => {
           <div className="circulo-rojo"></div>
         </div>
 
-        <motion.div 
+        <motion.div
           className="presentacion"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.p variants={itemVariants}>
-            Camaleón tiene como objetivo proponer modelos y métodos de diseño e implementación de interfaces de usuario, así como técnicas de evaluación de la experiencia de usuario. Además, se interesa en estudiar los procesos de gestión de proyectos software relacionados con este tipo de interfaces.
-          </motion.p>
-          <motion.p variants={itemVariants}>
-            El grupo ofrece un espacio para actividades de investigación y desarrollo, enfocándose en interfaces innovadoras en los contextos de educación, arte y salud. También busca explorar diversas técnicas y métodos de gestión, aprovechando la naturaleza multidisciplinaria de estos proyectos.
-          </motion.p>
+          {grupoInfo.presentacion?.map((parrafo, index) => (
+            <motion.p key={index} variants={itemVariants}>
+              {parrafo}
+            </motion.p>
+          ))}
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="caracteristicas"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {/* Características del grupo */}
-          <motion.div 
-            className="caracteristica"
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FaUsers className="icono" />
-            <h3>Colaboración</h3>
-            <p>Fomentamos la colaboración interdisciplinaria para lograr resultados innovadores.</p>
-          </motion.div>
-          <motion.div 
-            className="caracteristica"
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FaChartLine className="icono" />
-            <h3>Innovación</h3>
-            <p>Buscamos constantemente nuevas formas de mejorar la interacción humano-computadora.</p>
-          </motion.div>
-          <motion.div 
-            className="caracteristica"
-            variants={itemVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FaLightbulb className="icono" />
-            <h3>Investigación</h3>
-            <p>Desarrollamos investigación de vanguardia en interfaces de usuario y experiencia de usuario.</p>
-          </motion.div>
+          {grupoInfo.caracteristicas?.map((caracteristica, index) => (
+            <motion.div
+              key={index}
+              className="caracteristica"
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <h3>{caracteristica.nombre}</h3>
+              <p>{caracteristica.descripcion}</p>
+            </motion.div>
+          ))}
         </motion.div>
 
-        <motion.div 
-          className="clasificacion"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <h3>Clasificación</h3>
-          <p>C (otorgada por Minciencias)</p>
-        </motion.div>
+        {/* Mostrar la calificación del grupo */}
+        {calificacionInfo && calificacionInfo.calificacion && (
+          <motion.div
+            className="clasificacion"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            <h3>Calificación</h3>
+            <p>
+              {calificacionInfo.calificacion.calificacion} <span>otorgada por MinCiencias</span>
+            </p>
+            <p>
+              {calificacionInfo.calificacion["Más información"] ? (
+                <a
+                  href={calificacionInfo.calificacion["Más información"]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#ffffff', textDecoration: 'underline' }} // Asegura que el enlace sea visible
+                >
+                  Más Información
+                </a>
+              ) : (
+                <span>No hay más información disponible</span>
+              )}
+            </p>
+          </motion.div>
+        )}
+
+
+
+
       </div>
     </section>
   );
