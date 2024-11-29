@@ -57,6 +57,13 @@ const features = [
     description: 'Gestión de convenios y alianzas',
     icon: BuildingLibraryIcon,
     href: '/convenios'
+  },
+
+  {
+    name: 'Usuarios',
+    description: 'Gestión de usuarios',
+    icon: BuildingLibraryIcon,
+    href: '/usuarios'
   }
 ];
 
