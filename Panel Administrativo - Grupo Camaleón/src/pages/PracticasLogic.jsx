@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const practicasApi = axios.create({
-  baseURL: "http://localhost:3000/practicas",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/practicas`
+    : "http://localhost:3000/practicas",
   withCredentials: true,
 });
 

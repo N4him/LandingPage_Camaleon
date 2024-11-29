@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const miembrosGrupoApi = axios.create({
-  baseURL: "http://localhost:3000/miembrosGrupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/miembrosGrupo`
+    : "http://localhost:3000/miembrosGrupo",
   withCredentials: true,
 });
 

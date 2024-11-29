@@ -3,7 +3,9 @@ import axios from 'axios';
 import { PencilIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 const calificacionGrupoApi = axios.create({
-  baseURL: "http://localhost:3000/calificacionGrupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/calificacionGrupo`
+    : "http://localhost:3000/calificacionGrupo",
   withCredentials: true,
 });
 
