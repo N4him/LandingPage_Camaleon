@@ -11,12 +11,13 @@ import miembrosGrupoRoutes from './routes/miembrosGrupo.js';
 import conveniosAlianzasRoutes from './routes/conveniosAlianzas.js';
 import authRoutes from './routes/auth.js'; 
 import grupoRoutes from './routes/infoGrupo.js'; 
+import userRoutes from './routes/users.js';
 
 
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5273'],  // Agregar el nuevo puerto
+    origin: ['http://localhost:5173', 'http://localhost:5273', 'https://landingpagecamaleondespliegue.vercel.app', 'https://landingpage-camaleon-admin-despliegue.vercel.app'],  // Agregar el nuevo puerto
     credentials: true
 }));
 
@@ -33,6 +34,7 @@ app.use(session({
 
 // Rutas de autenticación
 app.use('/auth', authRoutes);
+app.use('/users',userRoutes);
 
 // Rutas protegidas por autenticación
 app.use('/practicas',  practicasRoutes);
