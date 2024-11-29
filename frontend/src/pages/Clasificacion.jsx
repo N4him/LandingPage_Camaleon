@@ -4,12 +4,9 @@ import axios from 'axios';
 import '../assets/styles/clasificacion.css'; 
 
 const calificacionGrupoApi = axios.create({
-  baseURL: import.meta.env.VITE_API_URL
-    ? `${import.meta.env.VITE_API_URL}/calificacionGrupo`
-    : "http://localhost:3000/calificacionGrupo",
+  baseURL: "http://localhost:3000/calificacionGrupo",
   withCredentials: true,
 });
-
 
 const Clasificacion = () => {
   const [clasificacion, setClasificacion] = useState('');
@@ -79,4 +76,3 @@ const Clasificacion = () => {
 };
 
 export default Clasificacion;
-

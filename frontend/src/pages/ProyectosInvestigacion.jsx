@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios'; // Asegúrate de instalar axios: npm install axios
+import axios from 'axios'; // Ensure Axios is installed: npm install axios
 import '../assets/styles/ProyectosInvestigacion.css';
 import logo from '../assets/images/logoS.png';
 
@@ -8,18 +8,20 @@ const ProyectosInvestigacion = () => {
   const [proyectos, setProyectos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Creating an Axios instance with base URL from environment variables or localhost
   const proyectosInvestigacionApi = axios.create({
     baseURL: import.meta.env.VITE_API_URL
       ? `${import.meta.env.VITE_API_URL}/proyectosInvestigacion`
       : "http://localhost:3000/proyectosInvestigacion",
     withCredentials: true,
   });
-  
+
   useEffect(() => {
-    // Función para cargar los proyectos desde el backend
+    // Function to fetch the projects from the backend
     const fetchProyectos = async () => {
       try {
-        const response = await proyectosInvestigacionApi.get(); // Corrected to use the API instance
+        const response = await proyectosInvestigacionApi.get();
         const proyectosData = response.data.map(item => {
           const { proyecto_de_investigacion } = item;
           return {
@@ -42,11 +44,11 @@ const ProyectosInvestigacion = () => {
         setLoading(false);
       }
     };
-  
-    fetchProyectos(); // Call the function to fetch data when the component is mounted
-  }, []);
-  
 
+    fetchProyectos(); // Call the function when the component is mounted
+  }, []);
+
+  // Variants for Framer Motion animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -66,16 +68,18 @@ const ProyectosInvestigacion = () => {
     }
   };
 
+  // Render loading or error message if necessary
   if (loading) return <p>Cargando proyectos...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <section id="proyectos" className="seccion proyectos-investigacion">
       <div className="contenedor">
-      <div className="linea-separadora-contenedor-ProyectosI">
+        <div className="linea-separadora-contenedor-ProyectosI">
           <img src={logo} alt="Logo" className="logo-imagen" />
           <div className="linea-roja-Proy"></div>
         </div>
+
         <motion.h2 
           className="titulo-seccion"
           initial={{ opacity: 0, y: -20 }}
@@ -84,6 +88,7 @@ const ProyectosInvestigacion = () => {
         >
           Proyectos de Investigación
         </motion.h2>
+
         <motion.div 
           className="lista-proyectos"
           variants={containerVariants}
@@ -122,7 +127,7 @@ const ProyectosInvestigacion = () => {
                     ))}
                   </ul>
                 </motion.div>
-                <motion.div className="proyecto-section" whileHover={{ scale: 1.02 }}>
+                <motion.div className="proyecto-seccion" whileHover={{ scale: 1.02 }}>
                   <h4>Participantes:</h4>
                   <ul>
                     {proyecto.participantes.map((participante, i) => (
