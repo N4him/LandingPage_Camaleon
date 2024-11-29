@@ -2,42 +2,58 @@ import axios from 'axios';
 
 // Configuración de URLs base para cada API con withCredentials: true
 const trabajosGradoApi = axios.create({
-  baseURL: "http://localhost:3000/trabajosGrado",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/trabajosGrado`
+    : "http://localhost:3000/trabajosGrado",
   withCredentials: true,
 });
 
 const proyectosInvestigacionApi = axios.create({
-  baseURL: "http://localhost:3000/proyectosInvestigacion",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/proyectosInvestigacion`
+    : "http://localhost:3000/proyectosInvestigacion",
   withCredentials: true,
 });
 
 const lineasInvestigacionApi = axios.create({
-  baseURL: "http://localhost:3000/lineasInvestigacion",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/lineasInvestigacion`
+    : "http://localhost:3000/lineasInvestigacion",
   withCredentials: true,
 });
 
 const calificacionGrupoApi = axios.create({
-  baseURL: "http://localhost:3000/calificacionGrupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/calificacionGrupo`
+    : "http://localhost:3000/calificacionGrupo",
   withCredentials: true,
 });
 
 const miembrosGrupoApi = axios.create({
-  baseURL: "http://localhost:3000/miembrosGrupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/miembrosGrupo`
+    : "http://localhost:3000/miembrosGrupo",
   withCredentials: true,
 });
 
 const conveniosAlianzasApi = axios.create({
-  baseURL: "http://localhost:3000/conveniosAlianzas",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/conveniosAlianzas`
+    : "http://localhost:3000/conveniosAlianzas",
   withCredentials: true,
 });
 
 const practicasApi = axios.create({
-  baseURL: "http://localhost:3000/practicas",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/practicas`
+    : "http://localhost:3000/practicas",
   withCredentials: true,
 });
 
 const grupoInfoApi = axios.create({
-  baseURL: "http://localhost:3000/grupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/grupo`
+    : "http://localhost:3000/grupo",
   withCredentials: true,
 });
 
