@@ -29,11 +29,9 @@ const ProyectosInvestigacion = () => {
             objetivos: [proyecto_de_investigacion.objetivo],
             resultados: [proyecto_de_investigacion.resultado],
             produccion: [proyecto_de_investigacion.produccion_academica],
-            participantes: [
-              ...proyecto_de_investigacion.estudiantes.map(e => `${e.nombre} ${e.apellido}`),
-              ...proyecto_de_investigacion.profesionales.map(p => `${p.nombre} ${p.apellido}`),
-              ...proyecto_de_investigacion.docentes_directores.map(d => `${d.nombre} ${d.apellido}`)
-            ]
+            estudiantes: proyecto_de_investigacion.estudiantes.map(e => `${e.nombre} ${e.apellido}`),
+            profesionales: proyecto_de_investigacion.profesionales.map(p => `${p.nombre} ${p.apellido}`),
+            docentesDirectores: proyecto_de_investigacion.docentes_directores.map(d => `${d.nombre} ${d.apellido}`),
           };
         });
         setProyectos(proyectosData);
@@ -128,10 +126,26 @@ const ProyectosInvestigacion = () => {
                   </ul>
                 </motion.div>
                 <motion.div className="proyecto-seccion" whileHover={{ scale: 1.02 }}>
-                  <h4>Participantes:</h4>
+                  <h4>Estudiantes:</h4>
                   <ul>
-                    {proyecto.participantes.map((participante, i) => (
-                      <li key={i}>{participante}</li>
+                    {proyecto.estudiantes.map((estudiante, i) => (
+                      <li key={i}>{estudiante}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+                <motion.div className="proyecto-seccion" whileHover={{ scale: 1.02 }}>
+                  <h4>Profesionales:</h4>
+                  <ul>
+                    {proyecto.profesionales.map((profesional, i) => (
+                      <li key={i}>{profesional}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+                <motion.div className="proyecto-seccion" whileHover={{ scale: 1.02 }}>
+                  <h4>Docentes Directores:</h4>
+                  <ul>
+                    {proyecto.docentesDirectores.map((director, i) => (
+                      <li key={i}>{director}</li>
                     ))}
                   </ul>
                 </motion.div>
