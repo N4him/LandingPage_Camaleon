@@ -11,6 +11,7 @@ import miembrosGrupoRoutes from './routes/miembrosGrupo.js';
 import conveniosAlianzasRoutes from './routes/conveniosAlianzas.js';
 import authRoutes from './routes/auth.js'; 
 import grupoRoutes from './routes/infoGrupo.js'; 
+import userRoutes from './routes/users.js';
 
 
 const app = express();
@@ -33,6 +34,7 @@ app.use(session({
 
 // Rutas de autenticación
 app.use('/auth', authRoutes);
+app.use('/users',userRoutes);
 
 // Rutas protegidas por autenticación
 app.use('/practicas',  practicasRoutes);

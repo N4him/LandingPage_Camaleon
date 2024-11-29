@@ -13,7 +13,7 @@ import Proyectos from './pages/Proyectos';
 import LineaDeInvestigacion from './pages/LineaDeInvestigacion';
 import Convenios from './pages/Convenios';
 import InformacionGrupo from './pages/infoGrupo';
-
+import Users  from './pages/usuarios'
 
 function App() {
   return (
@@ -41,6 +41,7 @@ function App() {
                           <Route path="/calificaciones" element={<Calificacion/>} />
                           <Route path="/miembros" element={<MiembrosGrupo/>}  />
                           <Route path="/convenios" element={<Convenios/>} />
+                          <Route path="/usuarios" element={<Users/>} />
                         </Routes>
                       </main>
                     </div>

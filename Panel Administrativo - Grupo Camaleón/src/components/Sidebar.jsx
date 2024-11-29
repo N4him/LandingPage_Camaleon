@@ -12,7 +12,6 @@ import {
 import LogoCamaleon from "./../../public/Group.svg";
 
 const navigation = [
-  { name: 'Grupo', href: '/grupo', icon: UserGroupIcon },
   { name: 'Prácticas', href: '/practicas', icon: AcademicCapIcon },
   { name: 'Trabajos de Grado', href: '/trabajos-grado', icon: BookOpenIcon },
   { name: 'Proyectos', href: '/proyectos', icon: BeakerIcon },
@@ -20,6 +19,7 @@ const navigation = [
   { name: 'Calificaciones', href: '/calificaciones', icon: StarIcon },
   { name: 'Miembros', href: '/miembros', icon: UserGroupIcon },
   { name: 'Convenios', href: '/convenios', icon: BuildingLibraryIcon },
+  { name: 'Usuarios', href: '/usuarios', icon: BuildingLibraryIcon },
 ];
 
 
