@@ -10,6 +10,7 @@ import LineasInvestigacion from './pages/LineasInvestigacion';
 import Miembros from './pages/Miembros';
 import Convenios from './pages/Convenios';
 import PiePagina from './pages/PiePagina';
+import Clasificacion from './pages/Clasificacion';
 import './App.css';
 
 const sectionVariants = {
@@ -48,6 +49,18 @@ function App() {
         >
           <InformacionGrupo />
         </motion.div>
+
+        {/* Aquí se visualiza Clasificacion solo después de InformacionGrupo */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}  // Asegura que el componente se vea solo cuando entra en el viewport
+          variants={sectionVariants}
+        >
+          <Clasificacion />
+        </motion.div>
+
+        {/* El resto de las secciones, como LineasInvestigacion y Miembros, se pueden dejar como están. */}
         <motion.div
           initial="hidden"
           animate="visible"
@@ -55,6 +68,7 @@ function App() {
         >
           <LineasInvestigacion />
         </motion.div>
+
         <motion.div
           initial="hidden"
           animate="visible"
@@ -62,6 +76,7 @@ function App() {
         >
           <Miembros />
         </motion.div>
+
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -70,6 +85,7 @@ function App() {
         >
           <Convenios />
         </motion.div>
+
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -99,8 +115,6 @@ function App() {
         >
           <Practicas />
         </motion.div>
-
-       
       </main>
       <PiePagina />
     </div>

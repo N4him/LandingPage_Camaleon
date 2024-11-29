@@ -76,6 +76,7 @@
   margin-top: 0;
   margin-bottom: 15px;
   font-size: 1.2rem;
+  text-align: justify; /* Justifica el texto de los subtítulos */
 }
 
 .convenio-seccion ul {
@@ -88,6 +89,7 @@
   position: relative;
   padding-left: 25px;
   line-height: 1.6;
+  text-align: justify; /* Justifica el texto en cada ítem de lista */
 }
 
 .convenio-seccion li::before {
