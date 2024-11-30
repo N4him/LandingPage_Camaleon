@@ -1,0 +1,150 @@
+/* MiembrosGrupoInterface.css */
+
+.container {
+  max-width: 6xl; /* Reducir el ancho máximo */
+  margin: 0 auto;
+  padding: 0.5rem; /* Reducir el padding */
+}
+
+.form-container {
+  position: relative;
+  background-color: white;
+  padding: 1.5rem; /* Reducir padding */
+  border-radius: 0.5rem; /* Reducir el radio de borde */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem; /* Reducir el margen */
+  space-y: 1rem; /* Reducir espacio entre elementos */
+}
+
+.cancel-btn {
+  position: absolute;
+  top: 0.5rem; /* Reducir distancia desde arriba */
+  right: 0.5rem; /* Reducir distancia desde la derecha */
+  background-color: #e53e3e;
+  color: white;
+  padding: 0.3rem 0.75rem; /* Reducir el tamaño del botón */
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #c53030;
+}
+
+.form-input {
+  margin-top: 0.25rem; /* Reducir margen superior */
+  width: 100%;
+  padding: 0.5rem; /* Reducir padding */
+  border: 2px solid #e2e8f0;
+  border-radius: 0.25rem; /* Reducir radio de borde */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+}
+
+.form-submit-btn {
+  width: 100%;
+  background-color: #6366f1;
+  color: white;
+  padding: 0.5rem; /* Reducir padding */
+  border-radius: 0.25rem; /* Reducir el radio de borde */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.form-submit-btn:hover {
+  background-color: #4f46e5;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Reducir el tamaño mínimo de las columnas */
+  gap: 1rem; /* Reducir espacio entre columnas */
+  margin-top: 1.5rem; /* Reducir margen superior */
+}
+
+.new-member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 0.75rem; /* Reducir radio de borde */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem; /* Reducir padding */
+  min-height: 200px; /* Reducir altura mínima */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.new-member-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.member-card {
+  position: relative;
+  background-color: white;
+  border-radius: 0.75rem; /* Reducir radio de borde */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem; /* Reducir padding */
+  min-height: 200px; /* Reducir altura mínima */
+}
+
+.member-photo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem; /* Reducir el margen inferior */
+}
+
+.member-photo img {
+  width: 5rem; /* Reducir tamaño de la imagen */
+  height: 5rem; /* Reducir tamaño de la imagen */
+  border-radius: 50%;
+}
+
+.member-photo .placeholder {
+  width: 5rem; /* Reducir tamaño de la imagen de placeholder */
+  height: 5rem; /* Reducir tamaño de la imagen de placeholder */
+  background-color: #e2e8f0;
+  border-radius: 50%;
+}
+
+.member-details {
+  text-align: center;
+}
+
+.member-details h3 {
+  font-size: 1.1rem; /* Reducir el tamaño de la fuente */
+  font-weight: bold;
+  color: #2d3748;
+}
+
+.member-details p {
+  font-size: 0.9rem; /* Reducir el tamaño de la fuente */
+  color: #4a5568;
+}
+
+.member-actions {
+  position: relative;
+  display: flex; /* Usar flexbox para alineación */
+  gap: 0.8rem; /* Reducir espacio entre botones */
+  justify-content: flex-end; /* Alineación de botones a la derecha */
+  align-items: center;
+  margin-top: 0.5rem; /* Añadir un pequeño margen superior */
+}
+
+.member-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.member-actions button:hover {
+  opacity: 0.7;
+}
+
