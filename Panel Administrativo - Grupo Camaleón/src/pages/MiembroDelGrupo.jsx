@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import useMiembrosGrupo from '../pages/MiembrosGrupoLogic';
 
@@ -15,25 +15,47 @@ export default function MiembrosGrupoInterface() {
     handleSubmit,
     handleDelete,
     handleEdit,
+    resetForm, // Asumiendo que se ha creado una función resetForm en useMiembrosGrupo
   } = useMiembrosGrupo();
+
+  // Reseteamos la foto solo cuando el formulario se vuelve a abrir para edición
+  useEffect(() => {
+    if (isEditing && formData.foto === undefined) {
+      // Si estamos en edición y no se ha seleccionado una foto nueva, mantén la foto existente
+      setFormData((prevState) => ({
+        ...prevState,
+        foto: formData.foto || prevState.foto, // Usa la foto existente si no se carga una nueva
+      }));
+    }
+  }, [isEditing, formData.foto, setFormData]);
 
   if (loading) return <div className="text-center mt-8">Cargando...</div>;
   if (error) return <div className="text-red-600 text-center mt-8">{error}</div>;
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, foto: file });
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Formulario de creación/edición */}
       {showForm && (
         <form onSubmit={handleSubmit} className="relative bg-white p-8 rounded-lg shadow-xl mb-8 space-y-6">
-          {/* Botón Cancelar en la esquina superior derecha */}
-          <button
-            type="button"
-            onClick={() => setShowForm(false)}
-            className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
-          >
-            Cancelar
-          </button>
+          {/* Botón Cancelar en la esquina superior derecha, solo si no es edición */}
+          {!isEditing && (
+            <button
+              type="button"
+              onClick={() => {
+                setShowForm(false);
+                resetForm(); // Reseteamos el formulario cuando se cancela
+              }}
+              className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              Cancelar
+            </button>
+          )}
 
-          {/* Formulario de creación/edición */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">Nombre</label>
@@ -94,7 +116,7 @@ export default function MiembrosGrupoInterface() {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setFormData({ ...formData, foto: e.target.files[0] })}
+              onChange={handleFileChange} // Usamos la función manejadora para actualizar solo si hay una nueva foto
               className="mt-2 block w-full rounded-lg border-2 border-gray-300 shadow-sm"
             />
             {formData.foto && (
@@ -113,15 +135,14 @@ export default function MiembrosGrupoInterface() {
         </form>
       )}
 
+      {/* Vista de los miembros */}
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
           {/* Tarjeta para Nuevo Miembro */}
           <div
             onClick={() => {
               setShowForm(!showForm);
-              if (showForm) {
-                resetForm();
-              }
+              if (showForm) resetForm(); // Resetear formulario si se cierra el modal
             }}
             className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-6 cursor-pointer min-h-[250px] transition hover:shadow-xl order-last"
           >
@@ -129,6 +150,7 @@ export default function MiembrosGrupoInterface() {
             <p className="text-lg font-semibold text-indigo-600">Nuevo Miembro</p>
           </div>
 
+          {/* Miembros listados */}
           {miembros.map((miembro) => (
             <div
               key={miembro.id}
@@ -143,8 +165,7 @@ export default function MiembrosGrupoInterface() {
               </div>
               <div className="text-center">
                 <h3 className="text-xl font-bold text-gray-800">{miembro.nombre_completo}</h3>
-                {/* Mostrar apellidos */}
-                <p className="text-gray-600">{miembro.apellidos}</p> {/* Apellidos */}
+                <p className="text-gray-600">{miembro.apellidos}</p>
                 <p className="text-gray-600">{miembro.rol}</p>
                 <p className="text-gray-600">Línea de Investigación: {miembro.linea_de_investigacion}</p>
                 {miembro.cvlac && (
@@ -155,7 +176,7 @@ export default function MiembrosGrupoInterface() {
                   </p>
                 )}
               </div>
-              {/* Botones con iconos */}
+              {/* Botones de edición y eliminación */}
               <div className="absolute bottom-4 right-4 flex space-x-4">
                 <button
                   onClick={() => handleEdit(miembro)}
@@ -177,4 +198,3 @@ export default function MiembrosGrupoInterface() {
     </div>
   );
 }
-
