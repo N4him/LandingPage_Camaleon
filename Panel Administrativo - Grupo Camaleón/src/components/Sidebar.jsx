@@ -12,16 +12,15 @@ import {
 import LogoCamaleon from "./../../public/Group.svg";
 
 const navigation = [
-  { name: 'Prácticas', href: '/practicas', icon: AcademicCapIcon },
+  { name: 'Prácticas de Investigación', href: '/practicas', icon: AcademicCapIcon },
   { name: 'Trabajos de Grado', href: '/trabajos-grado', icon: BookOpenIcon },
-  { name: 'Proyectos', href: '/proyectos', icon: BeakerIcon },
+  { name: 'Proyectos de Investigación', href: '/proyectos', icon: BeakerIcon },
   { name: 'Líneas de Investigación', href: '/lineas', icon: LightBulbIcon },
-  { name: 'Calificaciones', href: '/calificaciones', icon: StarIcon },
-  { name: 'Miembros', href: '/miembros', icon: UserGroupIcon },
-  { name: 'Convenios', href: '/convenios', icon: BuildingLibraryIcon },
+  { name: 'Calificación ante Minciencias', href: '/calificaciones', icon: StarIcon },
+  { name: 'Miembros del Grupo de Investigación', href: '/miembros', icon: UserGroupIcon },
+  { name: 'Convenios del Grupo de Investigación', href: '/convenios', icon: BuildingLibraryIcon },
   { name: 'Usuarios', href: '/usuarios', icon: BuildingLibraryIcon },
 ];
-
 
 export default function Sidebar() {
   const location = useLocation();
@@ -60,7 +59,7 @@ export default function Sidebar() {
                 } h-8 w-8 transition-colors duration-300`}
                 aria-hidden="true"
               />
-              <span className="mt-2">{item.name}</span>
+              <span className="mt-2 text-center">{item.name}</span> {/* Centrado del nombre */}
             </Link>
           );
         })}
