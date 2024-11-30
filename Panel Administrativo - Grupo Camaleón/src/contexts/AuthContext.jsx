@@ -6,6 +6,11 @@ const AuthContext = createContext();
 export function useAuth() {
   return useContext(AuthContext);
 }
+const authApi = 
+import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/auth`
+    : "http://localhost:3000/auth"
+;
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -14,7 +19,8 @@ export function AuthProvider({ children }) {
   // Función para hacer login usando el backend
   async function login(email, password) {
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      console.log(authApi+'/login')
+      const response = await fetch(authApi+'/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +45,7 @@ export function AuthProvider({ children }) {
   // Función para hacer logout usando el backend
   async function logout() {
     try {
-      const response = await fetch('http://localhost:3000/auth/logout', {
+      const response = await fetch(authApi+'/logout', {
         method: 'POST',
         credentials: 'include', // Importante para enviar cookies de sesión
       });
@@ -61,7 +67,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch('http://localhost:3000/auth/check', {
+        const response = await fetch(authApi+'/check', {
           method: 'GET',
           credentials: 'include', // Importante para enviar cookies de sesión
         });

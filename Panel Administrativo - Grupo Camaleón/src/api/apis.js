@@ -2,49 +2,74 @@ import axios from 'axios';
 
 // Configuración de URLs base para cada API con withCredentials: true
 const trabajosGradoApi = axios.create({
-  baseURL: "http://localhost:3000/trabajosGrado",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/trabajosGrado`
+    : "http://localhost:3000/trabajosGrado",
   withCredentials: true,
 });
 
 const proyectosInvestigacionApi = axios.create({
-  baseURL: "http://localhost:3000/proyectosInvestigacion",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/proyectosInvestigacion`
+    : "http://localhost:3000/proyectosInvestigacion",
   withCredentials: true,
 });
 
 const lineasInvestigacionApi = axios.create({
-  baseURL: "http://localhost:3000/lineasInvestigacion",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/lineasInvestigacion`
+    : "http://localhost:3000/lineasInvestigacion",
   withCredentials: true,
 });
 
 const calificacionGrupoApi = axios.create({
-  baseURL: "http://localhost:3000/calificacionGrupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/calificacionGrupo`
+    : "http://localhost:3000/calificacionGrupo",
   withCredentials: true,
 });
 
 const miembrosGrupoApi = axios.create({
-  baseURL: "http://localhost:3000/miembrosGrupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/miembrosGrupo`
+    : "http://localhost:3000/miembrosGrupo",
   withCredentials: true,
 });
 
 const conveniosAlianzasApi = axios.create({
-  baseURL: "http://localhost:3000/conveniosAlianzas",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/conveniosAlianzas`
+    : "http://localhost:3000/conveniosAlianzas",
   withCredentials: true,
 });
 
 const practicasApi = axios.create({
-  baseURL: "http://localhost:3000/practicas",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/practicas`
+    : "http://localhost:3000/practicas",
   withCredentials: true,
 });
 
 const grupoInfoApi = axios.create({
-  baseURL: "http://localhost:3000/grupo",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/grupo`
+    : "http://localhost:3000/grupo",
   withCredentials: true,
 });
+
+// Nueva API de "users"
+const usersApi = axios.create({
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/users`
+    : "http://localhost:3000/users",
+  withCredentials: true,
+});
+
+export default usersApi;
 
 // Funciones para "grupoInfo"
 export const getGrupoInfo = () => grupoInfoApi.get("/");  // Obtener la información del grupo
 export const updateGrupoInfo = (id, grupoInfo) => grupoInfoApi.put(`/${id}`, grupoInfo);  // Actualizar información del grupo
-
 
 // Funciones para "trabajosGrado"
 export const getAllTrabajosGrado = () => trabajosGradoApi.get("/");
@@ -94,3 +119,10 @@ export const getPractica = (id) => practicasApi.get(`/${id}/`);
 export const createPractica = (practica) => practicasApi.post("/", practica);
 export const updatePractica = (id, practica) => practicasApi.put(`/${id}/`, practica);
 export const deletePractica = (id) => practicasApi.delete(`/${id}/`);
+
+// Funciones para "usuarios"
+export const getAllUsers = () => usersApi.get('/getUsers');
+export const getUser = (uid) => usersApi.get(`/getUser/${uid}`);
+export const createUser = (data) => usersApi.post('/createUser', data);
+export const updateUser = (uid, data) => usersApi.put(`/updateUser/${uid}`, data);
+export const deleteUser = (uid) => usersApi.delete(`/deleteUser/${uid}`);

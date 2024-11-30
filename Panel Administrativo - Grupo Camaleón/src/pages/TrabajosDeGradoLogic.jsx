@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const trabajosGradoApi = axios.create({
-  baseURL: "http://localhost:3000/trabajosGrado",
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/trabajosGrado`
+    : "http://localhost:3000/trabajosGrado",
   withCredentials: true,
 });
 
