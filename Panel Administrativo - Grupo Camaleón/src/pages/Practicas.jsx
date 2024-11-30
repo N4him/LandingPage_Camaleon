@@ -16,8 +16,7 @@ export default function Practicas() {
     handleDelete,
     handleEdit,
     addEstudiante,
-    getSortedPracticas,
-    addProfesor
+    getSortedPracticas
   } = usePracticas();
 
  
