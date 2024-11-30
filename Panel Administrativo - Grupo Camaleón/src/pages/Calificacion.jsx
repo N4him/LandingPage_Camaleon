@@ -89,7 +89,8 @@ export default function Calificacion() {
   const handleDelete = async (calificacionId) => {
     try {
       await calificacionGrupoApi.delete(`/${calificacionId}`);
-      setCalificaciones(calificaciones.filter((c) => c.id !== calificacionId));
+      setCalificaciones([]);  // Clear the current calificaciones after deletion
+      setIsFormVisible(true);  // Allow creating a new calificacion
     } catch (err) {
       setError('Error al eliminar la calificación');
       console.error(err);
@@ -142,17 +143,19 @@ export default function Calificacion() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-        <div
-          onClick={() => {
-            setIsFormVisible(true);
-            setIsEditing(false);
-            setFormData({ calificacion: '', masInformacion: '' });
-          }}
-          className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-6 cursor-pointer min-h-[250px] transition hover:shadow-xl order-last"
-        >
-          <PlusCircleIcon className="w-12 h-12 text-indigo-600 mb-4" />
-          <p className="text-lg font-semibold text-indigo-600">Nueva Calificación</p>
-        </div>
+        {!calificaciones.length && (
+          <div
+            onClick={() => {
+              setIsFormVisible(true);
+              setIsEditing(false);
+              setFormData({ calificacion: '', masInformacion: '' });
+            }}
+            className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-6 cursor-pointer min-h-[250px] transition hover:shadow-xl order-last"
+          >
+            <PlusCircleIcon className="w-12 h-12 text-indigo-600 mb-4" />
+            <p className="text-lg font-semibold text-indigo-600">Nueva Calificación</p>
+          </div>
+        )}
 
         {calificaciones.map((calificacion) => (
           <div

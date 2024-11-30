@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaCubes, FaVrCardboard, FaUserAlt, FaTasks } from 'react-icons/fa';
 import '../assets/styles/LineasInvestigacion.css';
 import logo from '../assets/images/logoS.png';
 
@@ -95,18 +94,6 @@ const LineasInvestigacion = () => {
               variants={itemVariants}
               whileHover={{ scale: 1.05 }}
             >
-              {/* Conditionally render the icon */}
-              <div className="linea-icono">
-                {index === 0 ? (
-                  <FaCubes />
-                ) : index === 1 ? (
-                  <FaVrCardboard />
-                ) : index === 2 ? (
-                  <FaUserAlt />
-                ) : (
-                  <FaTasks />
-                )}
-              </div>
               <h3>{linea.nombre}</h3>
               <p>{linea.descripcion}</p>
             </motion.div>
