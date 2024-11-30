@@ -57,10 +57,19 @@ const grupoInfoApi = axios.create({
   withCredentials: true,
 });
 
+// Nueva API de "users"
+const usersApi = axios.create({
+  baseURL: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/users`
+    : "http://localhost:3000/users",
+  withCredentials: true,
+});
+
+export default usersApi;
+
 // Funciones para "grupoInfo"
 export const getGrupoInfo = () => grupoInfoApi.get("/");  // Obtener la información del grupo
 export const updateGrupoInfo = (id, grupoInfo) => grupoInfoApi.put(`/${id}`, grupoInfo);  // Actualizar información del grupo
-
 
 // Funciones para "trabajosGrado"
 export const getAllTrabajosGrado = () => trabajosGradoApi.get("/");
@@ -110,3 +119,10 @@ export const getPractica = (id) => practicasApi.get(`/${id}/`);
 export const createPractica = (practica) => practicasApi.post("/", practica);
 export const updatePractica = (id, practica) => practicasApi.put(`/${id}/`, practica);
 export const deletePractica = (id) => practicasApi.delete(`/${id}/`);
+
+// Funciones para "usuarios"
+export const getAllUsers = () => usersApi.get('/getUsers');
+export const getUser = (uid) => usersApi.get(`/getUser/${uid}`);
+export const createUser = (data) => usersApi.post('/createUser', data);
+export const updateUser = (uid, data) => usersApi.put(`/updateUser/${uid}`, data);
+export const deleteUser = (uid) => usersApi.delete(`/deleteUser/${uid}`);
