@@ -45,13 +45,7 @@ export default function TrabajosDeGrado() {
       {showForm && (
         <form onSubmit={handleSubmit} className="relative bg-white p-8 rounded-lg shadow-lg mb-6 space-y-8">
           {/* Botón Cancelar en la esquina superior derecha */}
-          <button
-            type="button"
-            onClick={() => setShowForm(false)}
-            className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
-          >
-            Cancelar
-          </button>
+         
 
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700">Descripción</label>
@@ -89,7 +83,7 @@ export default function TrabajosDeGrado() {
             >
               <option value="meritoria">Meritoria</option>
               <option value="laureada">Laureada</option>
-              <option value="">""</option>
+              <option value="">NA</option>
             </select>
           </div>
 
