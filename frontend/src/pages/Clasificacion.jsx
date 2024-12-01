@@ -61,7 +61,7 @@ const Clasificacion = () => {
       {masInformacion ? (
         <div style={{ display: 'flex', alignItems: 'center', marginTop: '15px' }}>
           <p style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: 0 }}>
-            Más información disponible:
+          GrupLAC:
           </p>
           <button
             onClick={redirigirAlLink}

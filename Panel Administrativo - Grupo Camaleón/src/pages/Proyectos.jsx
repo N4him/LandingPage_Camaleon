@@ -10,7 +10,7 @@ export default function ProyectoInvestigacion() {
     const [showForm, setShowForm] = useState(false);
     const [currentProyectoId, setCurrentProyectoId] = useState(null);
     const [formData, setFormData] = useState({
-        docentes_directores: [],
+        docentes_nombrados: [],
         estudiantes: [],
         objetivo: '',
         produccionAcademica: '',
@@ -39,8 +39,8 @@ export default function ProyectoInvestigacion() {
         e.preventDefault();
         try {
             const proyectoData = {
-                docentes_directores: formData.docentes_directores,
-                estudiantes: formData.estudiantes,
+                docentes_nombrados: formData.docentes_nombrados,
+                directores: formData.directores,
                 objetivo: formData.objetivo,
                 produccion_academica: formData.produccionAcademica,
                 profesionales: formData.profesionales,
@@ -68,8 +68,8 @@ export default function ProyectoInvestigacion() {
         setShowForm(!showForm);
         setCurrentProyectoId(proyecto.id);
         setFormData({
-            docentes_directores: proyecto.proyecto_de_investigacion.docentes_directores,
-            estudiantes: proyecto.proyecto_de_investigacion.estudiantes,
+            docentes_nombrados: proyecto.proyecto_de_investigacion.docentes_nombrados,
+            directores: proyecto.proyecto_de_investigacion.directores,
             objetivo: proyecto.proyecto_de_investigacion.objetivo,
             produccionAcademica: proyecto.proyecto_de_investigacion.produccionAcademica,
             profesionales: proyecto.proyecto_de_investigacion.profesionales,
@@ -135,48 +135,40 @@ export default function ProyectoInvestigacion() {
                         </div>
                     ))}
 
-                    {/* Campos Dinámicos */}
-                    {['docentes_directores', 'estudiantes', 'profesionales']?.map((arrayKey) => (
-                        <div key={arrayKey}>
-                            <h3 className="font-semibold text-lg text-center capitalize">{arrayKey}</h3>
-                            {formData[arrayKey]?.map((item, index) => (
-                                <div key={index} className="flex flex-col space-y-2">
-                                    <div className="flex items-center space-x-2">
-                                        <input
-                                            type="text"
-                                            placeholder="Nombre"
-                                            value={item.nombre}
-                                            onChange={(e) => handleArrayChange(arrayKey, index, 'nombre', e.target.value)}
-                                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-md focus:ring-indigo-500 focus:border-indigo-500 p-4"
-                                        />
-                                        <input
-                                            type="text"
-                                            placeholder="Apellido"
-                                            value={item.apellido}
-                                            onChange={(e) => handleArrayChange(arrayKey, index, 'apellido', e.target.value)}
-                                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-md focus:ring-indigo-500 focus:border-indigo-500 p-4"
-                                        />
-                                        {arrayKey === 'profesionales' && (
-                                            <input
-                                                type="text"
-                                                placeholder="Título"
-                                                value={item.titulo}
-                                                onChange={(e) => handleArrayChange(arrayKey, index, 'titulo', e.target.value)}
-                                                className="mt-1 block w-full rounded-lg border-gray-300 shadow-md focus:ring-indigo-500 focus:border-indigo-500 p-4"
-                                            />
-                                        )}
-                                        <button type="button" onClick={() => removeArrayItem(arrayKey, index)} className="text-red-500 hover:text-red-700">
-                                            <TrashIcon className="w-6 h-6" />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                            <button type="button" onClick={() => addArrayItem(arrayKey)} className="flex items-center mt-2 text-blue-500 hover:text-blue-700">
-                                <PlusIcon className="w-6 h-6 mr-1" />
-                                Agregar {arrayKey.slice(0, -1)}
-                            </button>
-                        </div>
-                    ))}
+{['docentes_nombrados', 'directores', 'profesionales']?.map((arrayKey) => (
+    <div key={arrayKey}>
+        <h3 className="font-semibold text-lg text-center capitalize">{arrayKey}</h3>
+        {formData[arrayKey]?.map((item, index) => (
+            <div key={index} className="flex flex-col space-y-2">
+                <div className="flex items-center space-x-2">
+                    <input
+                        type="text"
+                        placeholder="Nombre"
+                        value={item.nombre}
+                        onChange={(e) => handleArrayChange(arrayKey, index, 'nombre', e.target.value)}
+                        className="mt-1 block w-full rounded-lg border-gray-300 shadow-md focus:ring-indigo-500 focus:border-indigo-500 p-4"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Apellido"
+                        value={item.apellido}
+                        onChange={(e) => handleArrayChange(arrayKey, index, 'apellido', e.target.value)}
+                        className="mt-1 block w-full rounded-lg border-gray-300 shadow-md focus:ring-indigo-500 focus:border-indigo-500 p-4"
+                    />
+                    {/* Eliminar el campo de "Título" para los profesionales */}
+                    <button type="button" onClick={() => removeArrayItem(arrayKey, index)} className="text-red-500 hover:text-red-700">
+                        <TrashIcon className="w-6 h-6" />
+                    </button>
+                </div>
+            </div>
+        ))}
+        <button type="button" onClick={() => addArrayItem(arrayKey)} className="flex items-center mt-2 text-blue-500 hover:text-blue-700">
+            <PlusIcon className="w-6 h-6 mr-1" />
+            Agregar {arrayKey.slice(0, -1)}
+        </button>
+    </div>
+))}
+
 
                     {/* Botón para guardar */}
                     <div className="mt-6">
@@ -202,8 +194,8 @@ export default function ProyectoInvestigacion() {
                             titulo: '',
                             resultado: '',
                             produccionAcademica: '',
-                            docentes_directores: [{ nombre: '', apellido: '' }],
-                            estudiantes: [{ nombre: '', apellido: '' }],
+                            docentes_nombrados: [{ nombre: '', apellido: '' }],
+                            directores: [{ nombre: '', apellido: '' }],
                             profesionales: [{ nombre: '', apellido: '', titulo: '' }]
                         });
 
@@ -226,7 +218,7 @@ export default function ProyectoInvestigacion() {
                             <p className="text-gray-600 mb-2">{proyecto.proyecto_de_investigacion.objetivo}</p>
                             <p className="text-sm text-gray-500">
                                 <strong>Docentes/Directores:</strong>
-                                {proyecto.proyecto_de_investigacion.docentes_directores?.map((dir, index) => (
+                                {proyecto.proyecto_de_investigacion.docentes_nombrados?.map((dir, index) => (
                                     <span key={index}>
                                         - {dir.nombre} {dir.apellido}
                                         <br />
@@ -234,8 +226,8 @@ export default function ProyectoInvestigacion() {
                                 ))}
                             </p>
                             <p className="text-sm text-gray-500">
-                                <strong>Estudiantes:</strong>
-                                {proyecto.proyecto_de_investigacion.estudiantes?.map((est, index) => (
+                                <strong>Director'(es)':</strong>
+                                {proyecto.proyecto_de_investigacion.directores?.map((est, index) => (
                                     <span key={index}>
                                         - {est.nombre} {est.apellido}
                                         <br />

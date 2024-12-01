@@ -10,9 +10,9 @@ function validarProyecto(data) {
     titulo, 
     produccion_academica, 
     objetivo, 
-    estudiantes, 
+    directores, 
     profesionales, 
-    docentes_directores, 
+    docentes_nombrados, 
     resultado 
   } = data;
 
@@ -33,16 +33,16 @@ function validarProyecto(data) {
     return 'El campo "resultado" es obligatorio y no puede estar vacío.';
   }
   
-  // Verificación de que los campos de estudiantes, profesionales y docentes sean arrays y no estén vacíos
-  if (!Array.isArray(estudiantes) || estudiantes.length === 0) {
-    return 'Debe haber al menos un estudiante.';
+  // Verificación de que los campos de directores, profesionales y docentes sean arrays y no estén vacíos
+  if (!Array.isArray(directores) || directores.length === 0) {
+    return 'Debe haber al menos un director(a).';
   }
-  estudiantes.forEach(estudiante => {
-    if (!estudiante.nombre || estudiante.nombre.trim() === '') {
-      return 'El campo "nombre(s)" del estudiante es obligatorio y no puede estar vacío.';
+  directores.forEach(director => {
+    if (!director.nombre || director.nombre.trim() === '') {
+      return 'El campo "nombre(s)" del director(a) es obligatorio y no puede estar vacío.';
     }
-    if (!estudiante.apellido || estudiante.apellido.trim() === '') {
-      return 'El campo "apellido(s)" del estudiante es obligatorio y no puede estar vacío.';
+    if (!director.apellido || director.apellido.trim() === '') {
+      return 'El campo "apellido(s)" del director(a) es obligatorio y no puede estar vacío.';
     }
   });
 
@@ -58,10 +58,10 @@ function validarProyecto(data) {
     }
   });
 
-  if (!Array.isArray(docentes_directores) || docentes_directores.length === 0) {
+  if (!Array.isArray(docentes_nombrados) || docentes_nombrados.length === 0) {
     return 'Debe haber al menos un docente director(a).';
   }
-  docentes_directores.forEach(docente => {
+  docentes_nombrados.forEach(docente => {
     if (!docente.nombre || docente.nombre.trim() === '') {
       return 'El campo "nombre(s)" del docente director(a) es obligatorio y no puede estar vacío.';
     }
