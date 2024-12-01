@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const miembrosGrupoApi = axios.create({
-  baseURL: import.meta.env.VITE_API_URL
-    ? `${import.meta.env.VITE_API_URL}/miembrosGrupo`
-    : "http://localhost:3000/miembrosGrupo",
+  baseURL: "http://localhost:3000/miembrosGrupo",
   withCredentials: true,
 });
 
@@ -12,7 +10,7 @@ export default function useMiembrosGrupo() {
   const [miembros, setMiembros] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null); // Agregar mensaje de éxito
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentMiembroId, setCurrentMiembroId] = useState(null);
@@ -33,7 +31,7 @@ export default function useMiembrosGrupo() {
     try {
       const response = await miembrosGrupoApi.get('/');
       setMiembros(response.data);
-      setError(null);
+      setError(null); // Limpiar error después de cargar
     } catch (err) {
       setError('Error al cargar los miembros del grupo');
       console.error(err);
@@ -44,7 +42,6 @@ export default function useMiembrosGrupo() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     const cleanedFormData = {
       nombre_completo: formData.nombre_completo.trim(),
       apellidos: formData.apellidos.trim(),
@@ -53,31 +50,35 @@ export default function useMiembrosGrupo() {
       cvlac: formData.cvlac.trim(),
       foto: formData.foto,
     };
-  
+
     const emptyFields = Object.entries(cleanedFormData)
       .filter(([key, value]) => !value)
       .map(([key]) => key);
-  
+
     if (emptyFields.length > 0) {
       setError(`Todos los campos son obligatorios. Los siguientes campos están vacíos: ${emptyFields.join(', ')}`);
       return;
     }
-  
+
     const formDataToSend = new FormData();
     formDataToSend.append('miembro_del_grupo[nombre_completo]', cleanedFormData.nombre_completo);
     formDataToSend.append('miembro_del_grupo[apellidos]', cleanedFormData.apellidos);
     formDataToSend.append('miembro_del_grupo[rol]', cleanedFormData.rol);
     formDataToSend.append('miembro_del_grupo[linea_de_investigacion]', cleanedFormData.linea_de_investigacion);
     formDataToSend.append('miembro_del_grupo[cvlac]', cleanedFormData.cvlac);
-  
-    // Solo agregar la foto si hay una nueva foto seleccionada
+
+    // Si la foto ha cambiado, se agrega la nueva foto al formulario
     if (cleanedFormData.foto && cleanedFormData.foto instanceof File) {
       formDataToSend.append('foto', cleanedFormData.foto);
+    } else if (!cleanedFormData.foto && !isEditing) { // Si no es una edición y no hay foto, poner foto predeterminada
+      const defaultPhoto = new File([""], "default.jpg", { type: "image/jpeg" });
+      formDataToSend.append('foto', defaultPhoto);
+    } else if (isEditing && !cleanedFormData.foto) { // Si es edición y no se seleccionó nueva foto, usar la foto actual
+      formDataToSend.append('foto', formData.foto);
     }
-  
+
     try {
       if (isEditing && currentMiembroId) {
-        // Si estamos editando, no enviamos la foto si no se ha cargado una nueva
         await miembrosGrupoApi.put(`/${currentMiembroId}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
@@ -88,7 +89,7 @@ export default function useMiembrosGrupo() {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
-  
+
       await fetchMiembros();
       setShowForm(false);
       resetForm();
@@ -99,7 +100,6 @@ export default function useMiembrosGrupo() {
       console.error(err);
     }
   };
-  
 
   const handleDelete = async (id, photoURL) => {
     try {
@@ -154,11 +154,10 @@ export default function useMiembrosGrupo() {
   };
 
   return {
-    resetForm,
     miembros,
     loading,
     error,
-    successMessage,
+    successMessage, // Devolver el mensaje de éxito
     showForm,
     setShowForm,
     formData,
