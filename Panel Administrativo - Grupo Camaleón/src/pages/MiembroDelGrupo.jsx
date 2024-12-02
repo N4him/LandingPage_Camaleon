@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import useMiembrosGrupo from '../pages/MiembrosGrupoLogic';
 
@@ -34,6 +34,19 @@ export default function MiembrosGrupoInterface() {
     handleSubmit(e); // Llamar a la función original de handleSubmit
   };
 
+  // Función para cancelar y salir del formulario
+  const handleCancel = () => {
+    setShowForm(false);  // Cierra el formulario
+    setFormData({
+      nombre_completo: '',
+      apellidos: '',
+      rol: '',
+      linea_de_investigacion: '',
+      cvlac: '',
+      foto: null
+    }); // Restablece los datos del formulario
+  };
+
   if (loading) return <div className="text-center mt-8">Cargando...</div>;
   if (error) return <div className="text-red-600 text-center mt-8">{error}</div>;
 
@@ -42,7 +55,13 @@ export default function MiembrosGrupoInterface() {
       {showForm && (
         <form onSubmit={handleFormSubmit} className="relative bg-white p-8 rounded-lg shadow-xl mb-8 space-y-6">
           {/* Botón Cancelar en la esquina superior derecha */}
-
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow hover:bg-red-700"
+          >
+            Cancelar
+          </button>
           {/* Formulario de creación/edición */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -188,3 +207,4 @@ export default function MiembrosGrupoInterface() {
     </div>
   );
 }
+
