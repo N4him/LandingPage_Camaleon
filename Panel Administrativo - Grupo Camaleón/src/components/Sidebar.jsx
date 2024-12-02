@@ -12,6 +12,7 @@ import {
 import LogoCamaleon from "./../../public/Group.svg";
 
 const navigation = [
+  { name: 'Informacion del grupo de Investigacion', href: '/grupo', icon: BookOpenIcon },
   { name: 'Prácticas de Investigación', href: '/practicas', icon: AcademicCapIcon },
   { name: 'Trabajos de Grado', href: '/trabajos-grado', icon: BookOpenIcon },
   { name: 'Proyectos de Investigación', href: '/proyectos', icon: BeakerIcon },
