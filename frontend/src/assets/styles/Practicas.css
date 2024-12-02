@@ -74,3 +74,9 @@
     grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
   }
 }
+
+/* Define la clase para las palabras en rojo */
+.highlight {
+  color: red;
+  font-weight: bold;
+}

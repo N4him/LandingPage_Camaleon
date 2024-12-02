@@ -6,33 +6,43 @@ const router = express.Router();
 
 // Middleware para validar los datos de la práctica
 const validarPractica = (req, res, next) => {
-  const { profesor, resultadoInvestigacion, estudiantes, tituloPractica } = req.body.practica;  // Asegúrate de acceder a req.body.practica
+  const { profesor, resultadoInvestigacion, estudiante, tituloPractica } = req.body.practica;  // Accede a los nuevos campos
 
-  if (!profesor || !profesor.nombres || !profesor.apellidos) {
-    return res.status(400).json({ error: 'El nombre y apellido del profesor son obligatorios.' });
+  // Validar que haya al menos un profesor
+  if (!profesor || !Array.isArray(profesor) || profesor.length === 0) {
+    return res.status(400).json({ error: 'Debe haber al menos un profesor.' });
   }
+
+  // Validar que cada profesor tenga nombres y apellidos
+  for (const prof of profesor) {
+    if (!prof.nombres || prof.nombres.trim() === '') {
+      return res.status(400).json({ error: 'El nombre del profesor es obligatorio.' });
+    }
+    if (!prof.apellidos || prof.apellidos.trim() === '') {
+      return res.status(400).json({ error: 'El apellido del profesor es obligatorio.' });
+    }
+  }
+
+  // Validar el resultado de la investigación
   if (!resultadoInvestigacion || resultadoInvestigacion.trim() === '') {
     return res.status(400).json({ error: 'El resultado de la investigación es obligatorio.' });
   }
+
+  // Validar el título de la práctica
   if (!tituloPractica || tituloPractica.trim() === '') {
     return res.status(400).json({ error: 'El título de la práctica es obligatorio.' });
   }
-  if (!Array.isArray(estudiantes) || estudiantes.length === 0) {
-    return res.status(400).json({ error: 'Debe haber al menos un estudiante.' });
-  }
 
-  for (const estudiante of estudiantes) {
-    if (!estudiante.nombres || estudiante.nombres.trim() === '') {
-      return res.status(400).json({ error: 'El nombre del estudiante es obligatorio.' });
-    }
-    if (!estudiante.apellidos || estudiante.apellidos.trim() === '') {
-      return res.status(400).json({ error: 'El apellido del estudiante es obligatorio.' });
-    }
+  // Validar que haya un estudiante
+  if (!estudiante || !estudiante.nombres || estudiante.nombres.trim() === '') {
+    return res.status(400).json({ error: 'El nombre del estudiante es obligatorio.' });
+  }
+  if (!estudiante.apellidos || estudiante.apellidos.trim() === '') {
+    return res.status(400).json({ error: 'El apellido del estudiante es obligatorio.' });
   }
 
   next();
 };
-
 
 // Ruta para obtener todas las prácticas
 router.get('/', async (req, res) => {
@@ -49,7 +59,7 @@ router.get('/', async (req, res) => {
 
 // Ruta para crear una nueva práctica
 router.post('/', validarPractica, async (req, res) => {
-  const data = req.body.practica; // Aquí accedemos a los datos de la práctica desde el cuerpo de la solicitud
+  const data = req.body.practica; // Datos de la práctica con múltiples profesores y un estudiante
   try {
     const collectionRef = collection(db, 'Practicas');
     const docRef = await addDoc(collectionRef, data);
@@ -59,7 +69,6 @@ router.post('/', validarPractica, async (req, res) => {
     res.status(500).json({ error: 'Error al crear la práctica' });
   }
 });
-
 
 // Ruta para obtener una práctica por ID
 router.get('/:id', async (req, res) => {
@@ -82,8 +91,8 @@ router.get('/:id', async (req, res) => {
 // Ruta para actualizar una práctica
 router.put('/:id', validarPractica, async (req, res) => {
   const { id } = req.params;
-  const { profesor, resultadoInvestigacion, estudiantes, tituloPractica } = req.body.practica;  // Acceder al objeto "practica"
-  const data = { profesor, resultadoInvestigacion, estudiantes, tituloPractica };  // Crear un objeto con solo los campos necesarios
+  const { profesor, resultadoInvestigacion, estudiante, tituloPractica } = req.body.practica;
+  const data = { profesor, resultadoInvestigacion, estudiante, tituloPractica }; // Crear un objeto con los datos actualizados
 
   try {
     const docRef = doc(db, 'Practicas', id);
@@ -94,7 +103,6 @@ router.put('/:id', validarPractica, async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar la práctica' });
   }
 });
-
 
 // Ruta para eliminar una práctica
 router.delete('/:id', async (req, res) => {

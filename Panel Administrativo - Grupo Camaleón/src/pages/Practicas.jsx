@@ -15,12 +15,9 @@ export default function Practicas() {
     handleSubmit,
     handleDelete,
     handleEdit,
-    addEstudiante,
+    addProfesor,
     getSortedPracticas
   } = usePracticas();
-
- 
-
 
   if (loading)
     return (
@@ -40,13 +37,11 @@ export default function Practicas() {
           <button
             onClick={() => {
               setShowForm(false);
-              setIsEditing(false);
-              setCurrentPracticaId(null);
               setFormData({
-                profesor: { nombres: "", apellidos: "" },
+                estudiante: { nombres: "", apellidos: "" }, // Renombrado a 'estudiante'
                 resultadoInvestigacion: "",
                 tituloPractica: "",
-                estudiantes: [{ nombres: "", apellidos: "" }],
+                profesor: [{ nombres: "", apellidos: "" }],
               });
             }}
             className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -57,17 +52,17 @@ export default function Practicas() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <label className="block text-sm font-semibold text-gray-700">
-                  Nombres del Profesor
+                  Nombres del Estudiante
                 </label>
                 <input
                   type="text"
-                  value={formData.profesor.nombres}
+                  value={formData.estudiante.nombres} // Ajustado para 'estudiante'
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      profesor: {
-                        ...formData.profesor,
-                        nombres: e.target.value,
+                      estudiante: { 
+                        ...formData.estudiante, 
+                        nombres: e.target.value 
                       },
                     })
                   }
@@ -77,17 +72,17 @@ export default function Practicas() {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700">
-                  Apellidos del Profesor
+                  Apellidos del Estudiante
                 </label>
                 <input
                   type="text"
-                  value={formData.profesor.apellidos}
+                  value={formData.estudiante.apellidos} // Ajustado para 'estudiante'
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      profesor: {
-                        ...formData.profesor,
-                        apellidos: e.target.value,
+                      estudiante: { 
+                        ...formData.estudiante, 
+                        apellidos: e.target.value 
                       },
                     })
                   }
@@ -130,28 +125,25 @@ export default function Practicas() {
             <div>
               <div className="flex justify-between items-center mb-4">
                 <label className="block text-sm font-semibold text-gray-700">
-                  Estudiantes
+                  Profesores
                 </label>
                 <button
                   type="button"
-                  onClick={addEstudiante}
+                  onClick={addProfesor}
                   className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
                 >
-                  + Agregar Estudiante
+                  + Agregar Profesor
                 </button>
               </div>
-              {formData.estudiantes.map((estudiante, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4"
-                >
+              {formData.profesor.map((profesor, index) => (
+                <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                   <input
                     type="text"
-                    value={estudiante.nombres}
+                    value={profesor.nombres}
                     onChange={(e) => {
-                      const newEstudiantes = [...formData.estudiantes];
-                      newEstudiantes[index].nombres = e.target.value;
-                      setFormData({ ...formData, estudiantes: newEstudiantes });
+                      const newProfesor = [...formData.profesor];
+                      newProfesor[index].nombres = e.target.value;
+                      setFormData({ ...formData, profesor: newProfesor });
                     }}
                     placeholder="Nombres"
                     className="mt-2 block w-full rounded-xl border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-400 focus:ring-opacity-50"
@@ -159,11 +151,11 @@ export default function Practicas() {
                   />
                   <input
                     type="text"
-                    value={estudiante.apellidos}
+                    value={profesor.apellidos}
                     onChange={(e) => {
-                      const newEstudiantes = [...formData.estudiantes];
-                      newEstudiantes[index].apellidos = e.target.value;
-                      setFormData({ ...formData, estudiantes: newEstudiantes });
+                      const newProfesor = [...formData.profesor];
+                      newProfesor[index].apellidos = e.target.value;
+                      setFormData({ ...formData, profesor: newProfesor });
                     }}
                     placeholder="Apellidos"
                     className="mt-2 block w-full rounded-xl border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-400 focus:ring-opacity-50"
@@ -184,24 +176,24 @@ export default function Practicas() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {getSortedPracticas().map((practica) => (
           <div
-            key={practica.name}
+            key={practica.id}
             className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 min-h-[200px] flex flex-col justify-between"
           >
             <h3 className="text-lg font-semibold text-indigo-700 mb-4">
               {practica.tituloPractica}
             </h3>
             <p className="text-sm text-gray-600 mb-2">
-              <strong>Profesor:</strong> {practica.profesor.nombres}{" "}
-              {practica.profesor.apellidos}
+              <strong>Estudiante:</strong> {practica.estudiante.nombres}{" "}
+              {practica.estudiante.apellidos}
             </p>
             <div className="mb-4">
               <h4 className="text-sm font-semibold text-gray-700 mb-1">
-                Estudiantes:
+                Profesores:
               </h4>
               <ul className="list-disc list-inside text-sm text-gray-600">
-                {practica.estudiantes.map((estudiante, index) => (
-                  <li key={index}>
-                    {estudiante.nombres} {estudiante.apellidos}
+                {practica.profesor.map((prof, idx) => (
+                  <li key={idx}>
+                    {prof.nombres} {prof.apellidos}
                   </li>
                 ))}
               </ul>
@@ -238,17 +230,15 @@ export default function Practicas() {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                strokeWidth="2"
                 d="M12 4v16m8-8H4"
               />
             </svg>
-            <p className="text-sm font-medium text-indigo-600 mt-4">
-              Agregar Nueva Práctica
-            </p>
+            <p className="text-indigo-600 font-semibold">Agregar Práctica</p>
           </div>
         </div>
       </div>

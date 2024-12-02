@@ -16,10 +16,10 @@ export default function usePracticas() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentPracticaId, setCurrentPracticaId] = useState(null);
   const [formData, setFormData] = useState({
-    profesor: { nombres: "", apellidos: "" },
+    profesor: [{ nombres: "", apellidos: "" }], // Múltiples profesores permitidos
     resultadoInvestigacion: "",
     tituloPractica: "",
-    estudiantes: [{ nombres: "", apellidos: "" }],
+    estudiante: { nombres: "", apellidos: "" }, // Solo un estudiante
   });
 
   useEffect(() => {
@@ -50,27 +50,27 @@ export default function usePracticas() {
           profesor: formData.profesor,
           resultadoInvestigacion: formData.resultadoInvestigacion,
           tituloPractica: formData.tituloPractica,
-          estudiantes: formData.estudiantes,
+          estudiante: formData.estudiante, // Solo un estudiante
         },
       };
 
-      // Validate the form data before submitti
-      if (!formData.tituloPractica || !formData.profesor.nombres || !formData.profesor.apellidos) {
+      // Validar los datos del formulario
+      if (!formData.tituloPractica || formData.profesor.some(prof => !prof.nombres || !prof.apellidos)) {
         setError("Por favor complete todos los campos obligatorios");
         return;
       }
 
       if (isEditing && currentPracticaId) {
-        // PUT request to update the existing práctica
+        // PUT request para actualizar la práctica existente
         await practicasApi.put(`/${currentPracticaId}`, dataToSend);
         setIsEditing(false);
         setCurrentPracticaId(null);
       } else {
-        // POST request to create a new práctica
+        // POST request para crear una nueva práctica
         await practicasApi.post("/", dataToSend);
       }
 
-      // Fetch updated list of practicas
+      // Obtener la lista actualizada de prácticas
       await fetchPracticas();
       setShowForm(false);
       resetFormData();
@@ -102,15 +102,15 @@ export default function usePracticas() {
       profesor: practica.profesor,
       resultadoInvestigacion: practica.resultadoInvestigacion,
       tituloPractica: practica.tituloPractica,
-      estudiantes: practica.estudiantes,
+      estudiante: practica.estudiante,
     });
     setShowForm(true);
   };
 
-  const addEstudiante = () => {
+  const addProfesor = () => {
     setFormData((prevData) => ({
       ...prevData,
-      estudiantes: [...prevData.estudiantes, { nombres: "", apellidos: "" }],
+      profesor: [...prevData.profesor, { nombres: "", apellidos: "" }],
     }));
   };
 
@@ -122,10 +122,10 @@ export default function usePracticas() {
 
   const resetFormData = () => {
     setFormData({
-      profesor: { nombres: "", apellidos: "" },
+      profesor: [{ nombres: "", apellidos: "" }],
       resultadoInvestigacion: "",
       tituloPractica: "",
-      estudiantes: [{ nombres: "", apellidos: "" }],
+      estudiante: { nombres: "", apellidos: "" },
     });
   };
 
@@ -142,7 +142,7 @@ export default function usePracticas() {
     handleSubmit,
     handleDelete,
     handleEdit,
-    addEstudiante,
+    addProfesor,
     getSortedPracticas,
   };
 }
