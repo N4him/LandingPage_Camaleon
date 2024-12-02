@@ -20,7 +20,7 @@ const navigation = [
   { name: 'Calificación ante Minciencias', href: '/calificaciones', icon: StarIcon },
   { name: 'Miembros del Grupo de Investigación', href: '/miembros', icon: UserGroupIcon },
   { name: 'Convenios del Grupo de Investigación', href: '/convenios', icon: BuildingLibraryIcon },
-  { name: 'Usuarios', href: '/usuarios', icon: BuildingLibraryIcon },
+  { name: ' Gestion de Usuarios', href: '/usuarios', icon: BuildingLibraryIcon },
 ];
 
 export default function Sidebar() {

@@ -11,13 +11,13 @@ import {
 
 const features = [
   {
-    name: 'Grupo',
+    name: 'Informacion del Grupo de investigacion',
     description: 'Gestión de información general del grupo',
     icon: UserGroupIcon,
     href: '/grupo'
   },
   {
-    name: 'Prácticas',
+    name: 'Prácticas de Investigacion',
     description: 'Gestión de prácticas académicas y profesionales',
     icon: AcademicCapIcon,
     href: '/practicas'
@@ -29,7 +29,7 @@ const features = [
     href: '/trabajos-grado'
   },
   {
-    name: 'Proyectos',
+    name: 'Proyectos de Investigacion',
     description: 'Control de proyectos de investigación',
     icon: BeakerIcon,
     href: '/proyectos'
@@ -41,26 +41,26 @@ const features = [
     href: '/lineas'
   },
   {
-    name: 'Calificaciones',
+    name: 'Calificacion ante Minciencias',
     description: 'Calificación del grupo de investigación',
     icon: StarIcon,
     href: '/calificaciones'
   },
   {
-    name: 'Miembros',
+    name: 'Miembros del Grupo de investigación',
     description: 'Administración de miembros del grupo',
     icon: UserGroupIcon,
     href: '/miembros'
   },
   {
-    name: 'Convenios',
+    name: 'Convenios del Grupo de investigación',
     description: 'Gestión de convenios y alianzas',
     icon: BuildingLibraryIcon,
     href: '/convenios'
   },
 
   {
-    name: 'Usuarios',
+    name: 'Gestion de Usuarios',
     description: 'Gestión de usuarios',
     icon: BuildingLibraryIcon,
     href: '/usuarios'

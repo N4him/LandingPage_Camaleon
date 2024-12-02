@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import useMiembrosGrupo from '../pages/MiembrosGrupoLogic';
 
@@ -17,15 +17,31 @@ export default function MiembrosGrupoInterface() {
     handleEdit,
   } = useMiembrosGrupo();
 
+  // Estado para manejar el mensaje de error
+  const [fotoError, setFotoError] = useState("");
+
+  // Función para manejar la validación de la foto
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    // Verificar si la foto es necesaria
+    if (!formData.foto) {
+      setFotoError("La foto es necesaria.");
+      return;
+    }
+
+    setFotoError(""); // Limpiar el mensaje de error
+    handleSubmit(e); // Llamar a la función original de handleSubmit
+  };
+
   if (loading) return <div className="text-center mt-8">Cargando...</div>;
   if (error) return <div className="text-red-600 text-center mt-8">{error}</div>;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {showForm && (
-        <form onSubmit={handleSubmit} className="relative bg-white p-8 rounded-lg shadow-xl mb-8 space-y-6">
+        <form onSubmit={handleFormSubmit} className="relative bg-white p-8 rounded-lg shadow-xl mb-8 space-y-6">
           {/* Botón Cancelar en la esquina superior derecha */}
-         
 
           {/* Formulario de creación/edición */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -94,6 +110,8 @@ export default function MiembrosGrupoInterface() {
             {formData.foto && (
               <div className="mt-2 text-sm text-gray-600">{formData.foto.name}</div>
             )}
+            {/* Mostrar el mensaje de error si no hay foto */}
+            {fotoError && <div className="text-red-600 text-sm mt-2">{fotoError}</div>}
           </div>
 
           <div>
@@ -137,8 +155,7 @@ export default function MiembrosGrupoInterface() {
               </div>
               <div className="text-center">
                 <h3 className="text-xl font-bold text-gray-800">{miembro.nombre_completo}</h3>
-                {/* Mostrar apellidos */}
-                <p className="text-gray-600">{miembro.apellidos}</p> {/* Apellidos */}
+                <p className="text-gray-600">{miembro.apellidos}</p>
                 <p className="text-gray-600">{miembro.rol}</p>
                 <p className="text-gray-600">Línea de Investigación: {miembro.linea_de_investigacion}</p>
                 {miembro.cvlac && (
